@@ -160,7 +160,6 @@ function checkLocalStorage() {
 function hasLatAndLongInLocalStorage() {
     var lat = localStorage.getItem('lat');
     var long = localStorage.getItem('long');
-    //console.log(`${lat}, ${long}`);
     return lat != null && long != null;
 }
 
@@ -212,6 +211,7 @@ function getWeatherData(url, type) {
         url: url,
         type: 'GET',
         success: function(resultData) {
+            console.log(type);
             console.log(resultData);
             if (type === 'current') {
                 showCurrentData(resultData);

@@ -1,20 +1,9 @@
-@font-face {
-    font-family: HnU; /* Helvica Neue Ultralight*/
-    src: url('../fonts/HelveticaNeue-UltraLight.woff');
-}
-
-@font-face {
-    font-family: Hn; /* Helvetica Neue */
-    src: url('../fonts/HelveticaNeue.woff');
-}
-
 body {
-    font-family: Hn, 'Helvetica Neue', 'Open-Light', sans-serif !important;
+    font-family: 'Helvetica Neue', 'Open-Light', sans-serif !important;
 }
 
 h1, h2, h3 {
-    font-family: HnU, 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif !important;
-    /*color: #555555 !important; /* only needed for cerulean theme */
+    font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif !important;
 }
 
 h1 {
@@ -99,7 +88,6 @@ input {
 
 .btn, .btn-lg, .btn-default {
     width: 70px !important;
-    /*padding: 17.5px 0px 17.5px 0px !important;*/
     padding: 17.5px 0px 17.5px 0px !important;
     font-size: 25px;
     margin: 0 !important;
