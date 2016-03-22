@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Start Page</title>
+    <!--<link rel="stylesheet" href="./css/bootstrap.css">-->
+    <link rel="stylesheet" href="./css/yeti.min.css">
+    <!-- CHOOSE FROM:
+        cerulean, cosmo, cyborg, darkly, flatly, journal, lumen, paper, readable,
+        sandstone, simplex, slate, spacelab, superhero, united, yeti
+    -->
+    <!--<link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">-->
+            <!-- favorites: cerulean, paper -->
+    <link rel="stylesheet" href="./css/start.css">
+</head>
+
+<body>
+    <div class="center-block text-center">        
+        <div id="myModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                        <h3 class="modal-title">Search</h3>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="name-input" aria-describedby="basic-addon1" onkeypress="onKeyPress(event)">
+                        <div id="modalText"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h1>Welcome, <span id="welcome"></span>!</h1>
+        <a href="./time.html"><h2 id="time">Generating time...</h2></a>
+        <h3 id="date">Generating date...</h3>
+        <hr>
+        <div id="weather-header">Weather Data</div>
+        <div id="weather-content">Generating weather data...</div>
+        <div id="weather-forecast" style="padding-bottom: 80px">Generating weather forecast...</div> <!-- temporary style to account for course buttons on bottom of page -->
+        
+        <div class="outer">
+        <div class="middle">
+        <div class="inner">
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://my.calpoly.edu/"
+               data-toggle="tooltip" data-placement="right" title="Portal">Pr</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://docs.google.com/spreadsheets/d/1iJBFshNawvpG4JOUBNa9tkxefSHW8a67lVleAWVwH3Y/"
+               data-toggle="tooltip" data-placement="right" title="Grades Spreadsheet">Gr</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://my.calpoly.edu/cas/login?service=https://cmsweb.calpoly.edu/psp/HSLOPRD/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?FolderPath=PORTAL_ROOT_OBJECT.CO_EMPLOYEE_SELF_SERVICE.HC_SSS_STUDENT_CENTER%26IsFolder=false%26IgnoreParamTempl=FolderPath%2cIsFolder%26RL=%26target=main0%26navc=2398?clg=login%26languageCd=ENG%26userid=PS%26pwd=z"
+               data-toggle="tooltip" data-placement="right" title="Student Center">St</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://my.calpoly.edu/cas/login?service=http://pass.calpoly.edu/j_spring_cas_security_check"
+               data-toggle="tooltip" data-placement="right" title="PASS">Pa</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://polyplanner.calpoly.edu/"
+               data-toggle="tooltip" data-placement="right" title="Poly Planner">Pp</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="http://catalog.calpoly.edu/collegesandprograms/collegeofengineering/computerscience/bscomputerscience/"
+               data-toggle="tooltip" data-placement="right" title="Degree Requirements">Dg</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="http://flowcharts.calpoly.edu/downloads/mymap/15-17.52CSCBSU.pdf"
+               data-toggle="tooltip" data-placement="right" title="Flowchart">Fl</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://my.calpoly.edu/cas/limitedLayout"
+               data-toggle="tooltip" data-placement="right" title="Hella Links">Li</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="http://registrar.calpoly.edu/2015-16-academic-calendar"
+               data-toggle="tooltip" data-placement="right" title="15-16 Calendar">Ca</a>
+        </div>
+        </div>
+        </div>
+
+        <div class="courses btn-group text-center" role="group">
+            <a id="c1" class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=13177">P1</a>
+            <a id="c2" class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=7211">P2</a>
+            <a id="c3" class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=9585">C4</a>
+            <a id="c4" class="btn btn-lg btn-default" role="button"
+               href="http://users.csc.calpoly.edu/~eaugusti/pages/102-winter16/index.php">Cp</a>
+            <a id="c5" class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=8725">Ps</a>
+        </div>
+        <div class="physics-lec">
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/pluginfile.php/410270/mod_resource/content/0/Waves%20Exam2%20Solutions%20W16.pdf"
+               data-toggle="tooltip" data-placement="right" title="Midterm 2 Solutions">M2</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://www.masteringphysics.com/site/login.html"
+               data-toggle="tooltip" data-placement="right" title="Mastering Physics">MP</a>
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=13177&userid=95263"
+               data-toggle="tooltip" data-placement="right" title="Grades">Gr</a>
+        </div>
+        <div class="physics-lab">
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=7211&userid=95263"
+               data-toggle="tooltip" data-placement="right" title="Grades">Gr</a>
+        </div>
+        <div class="calc-4">
+            <a class="one btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=9585&userid=95263"
+               data-toggle="tooltip" data-placement="right" title="Grades">Gr</a>
+        </div>
+        <div class="cpe-102">
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://docs.google.com/spreadsheets/d/1kvWE6yQ16EUGBJBLiC4-yMT0mNxadIBnqKp31JWyssI/pubhtml"
+               data-toggle="tooltip" data-placement="right" title="Schedule">Sc</a>
+            <a class="one btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=13894&userid=95263"
+               data-toggle="tooltip" data-placement="right" title="Grades">Gr</a>
+        </div>
+        <div class="public-speaking">
+            <a class="btn btn-lg btn-default" role="button"
+               href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=8725&userid=95263"
+               data-toggle="tooltip" data-placement="right" title="Grades">Gr</a>
+        </div>
+    </div>
+
+    <script src="./js/jquery-2.2.1.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/start.js"></script>
+    <!--<script src="./eriq_pw.js"></script>-->
+</body>
+</html>
