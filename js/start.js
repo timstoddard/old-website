@@ -2,6 +2,7 @@
 
 $(function() {
     $('[data-toggle="tooltip"]').tooltip();
+    
     $(window).keydown(function(event) {
         if (($('#myModal').data('bs.modal') || {}).isShown) return;
         if (event.which === 83) {
@@ -11,6 +12,19 @@ $(function() {
             setTimeout(function() {$('#name-input').val('')}, 0);
         }
     });
+    
+    $('#name-input').keypress(function (event) {
+        let keynum = event.which;
+        var query = $('#name-input').val();
+        if (keynum === 13 && query && query.trim().length > 0) {
+            let index = query.indexOf('/');
+            if (index === -1) return;
+            let type = query.substring(0, index);
+            if (!canDoCommand(type)) return;
+            window.open(`${urls[getKeyIndex(type)].url}${query.substring(index + 1).trim()}`);
+            }
+        }
+    );
     
     $('.physics-lec, .physics-lab, .calc-4, .cpe-102, .public-speaking').hide();
     
@@ -85,18 +99,6 @@ var urls = [
     {'key': 'w', 'url': 'https://en.wikipedia.org/wiki/', 'name': 'Wikipedia'},
     {'key': 'y', 'url': 'https://www.youtube.com/results?search_query=', 'name': 'Youtube'}
 ];
-
-function onKeyPress(e) {
-    let keynum = e.which;
-    var query = $('#name-input').val();
-    if (keynum === 13 && query && query.trim().length > 0) {
-        let index = query.indexOf('/');
-        if (index === -1) return;
-        let type = query.substring(0, index);
-        if (!canDoCommand(type)) return;
-        window.open(`${urls[getKeyIndex(type)].url}${query.substring(index + 1).trim()}`);
-    }
-}
 
 function canDoCommand(key) {
     var can = false;
