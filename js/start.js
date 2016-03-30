@@ -26,60 +26,49 @@ $(function() {
         }
     );
     
-    $('.physics-lec, .physics-lab, .calc-4, .cpe-102, .public-speaking').hide();
+    $('#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items').hide();
     
     var c1Timer;
-    $('#c1, .physics-lec').on({
+    $('#c1, #c1-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c1Timer);
-            $('.physics-lec').show();
+            $('#c1-menu-items').show();
         },
         mouseleave: function() {
-            c1Timer = setTimeout(function() { $('.physics-lec').hide(); }, 10);
+            c1Timer = setTimeout(function() { $('#c1-menu-items').hide(); }, 10);
         }
     });
     
     var c2Timer;
-    $('#c2, .physics-lab').on({
+    $('#c2, #c2-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c2Timer);
-            $('.physics-lab').show();
+            $('#c2-menu-items').show();
         },
         mouseleave: function() {
-            c2Timer = setTimeout(function() { $('.physics-lab').hide(); }, 10);
+            c2Timer = setTimeout(function() { $('#c2-menu-items').hide(); }, 10);
         }
     });
     
     var c3Timer;
-    $('#c3, .calc-4').on({
+    $('#c3, #c3-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c3Timer);
-            $('.calc-4').show();
+            $('#c3-menu-items').show();
         },
         mouseleave: function() {
-            c3Timer = setTimeout(function() { $('.calc-4').hide(); }, 10);
+            c3Timer = setTimeout(function() { $('#c3-menu-items').hide(); }, 10);
         }
     });
     
     var c4Timer;
-    $('#c4, .cpe-102').on({
+    $('#c4, #c4-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c4Timer);
-            $('.cpe-102').show();
+            $('#c4-menu-items').show();
         },
         mouseleave: function() {
-            c4Timer = setTimeout(function() { $('.cpe-102').hide(); }, 10);
-        }
-    });
-    
-    var c5Timer;
-    $('#c5, .public-speaking').on({
-        mouseenter: function(e) {
-            clearTimeout(c5Timer);
-            $('.public-speaking').show();
-        },
-        mouseleave: function() {
-            c5Timer = setTimeout(function() { $('.public-speaking').hide(); }, 10);
+            c4Timer = setTimeout(function() { $('#c4-menu-items').hide(); }, 10);
         }
     });
 });

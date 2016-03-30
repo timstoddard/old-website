@@ -47,43 +47,35 @@ input {
 
 .inner {}
 
-.physics-lec, .physics-lab, .calc-4, .cpe-102, .public-speaking {
+#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items {
     position: fixed;
     width: 70px;
     bottom: 70px;
     left: 50%;
-}
-
-.physics-lec {
-    height: 210px;
-    margin-left: -175px;
-}
-
-.physics-lab {
     height: 70px;
-    margin-left: -105px;
 }
 
-.calc-4 {
-    height: 70px;
-    margin-left: -35px;
+#c1-menu-items {
+    margin-left: -140px;
 }
 
-.cpe-102 {
-    height: 140px;
-    margin-left: 35px;
+#c2-menu-items {
+    margin-left: -70px;
 }
 
-.public-speaking {
-    height: 70px;
-    margin-left: 105px;
+#c3-menu-items {
+    margin-left: 0px;
+}
+
+#c4-menu-items {
+    margin-left: 70px;
 }
 
 .courses {
     position: fixed;
-    margin-left: -175px;
+    margin-left: -140px;
     bottom: 0;
-    width: 350px;
+    width: 280px;
 }
 
 .btn, .btn-lg, .btn-default {
