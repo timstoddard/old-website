@@ -4,12 +4,14 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
     
     $(window).keydown(function(event) {
-        if (($('#myModal').data('bs.modal') || {}).isShown) return;
-        if (event.which === 83) {
+        if (event.which === 83) { // 's' key
+            if (($('#myModal').data('bs.modal') || {}).isShown) return;
             showModalText();
             $('#myModal').modal();
             $('#name-input').focus();
             setTimeout(function() {$('#name-input').val('')}, 0);
+        } else if (event.which === 87) { // 'w' key
+            $('.outer-right').toggle();
         }
     });
     
@@ -26,6 +28,7 @@ $(function() {
         }
     );
     
+    $('.outer-right').hide();
     $('#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items').hide();
     
     var c1Timer;
