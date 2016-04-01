@@ -10,8 +10,11 @@ $(function() {
             $('#myModal').modal();
             $('#name-input').focus();
             setTimeout(function() {$('#name-input').val('')}, 0);
+            $('.outer-right').hide();
         } else if (event.which === 87) { // 'w' key
-            $('.outer-right').toggle();
+            if (!$('#myModal').is(':visible')) {
+                $('.outer-right').toggle();
+            }
         }
     });
     
