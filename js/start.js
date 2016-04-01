@@ -4,17 +4,20 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
     
     $(window).keydown(function(event) {
-        if (event.which === 83) { // 's' key
+        var key = event.which;
+        if (key === 83) { // 's' key
             if (($('#myModal').data('bs.modal') || {}).isShown) return;
             showModalText();
             $('#myModal').modal();
             $('#name-input').focus();
             setTimeout(function() {$('#name-input').val('')}, 0);
             $('.outer-right').hide();
-        } else if (event.which === 87) { // 'w' key
+        } else if (key === 87) { // 'w' key
             if (!$('#myModal').is(':visible')) {
                 $('.outer-right').toggle();
             }
+        } else if (key === 27) {
+            $('.outer-right').hide();
         }
     });
     
