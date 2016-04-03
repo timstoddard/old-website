@@ -170,7 +170,6 @@ function showWeatherByLocation(extended = false) {
         return;
     }
     if (navigator.geolocation) {
-        let zip = 93410; // fallback in case lat/long doesn't work
         navigator.geolocation.getCurrentPosition(
             function (pos) {
                 var currLat = pos.coords.latitude;
@@ -197,6 +196,12 @@ function showWeatherByLocation(extended = false) {
                 }
             },
             function (err) {
+                var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
+                if (zip === null) {
+                    $('#weather-content').html('Weather data failed to load');
+                    $('#weather-forecast').html('Weather forecast failed to load');
+                }
+                zip = zip.replace(/[^0-9]/g, '');
                 if (!extended) {
                     getInitialWeatherData(`${zip}`);
                 } else {
@@ -205,6 +210,12 @@ function showWeatherByLocation(extended = false) {
             },
             {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
     } else {
+        var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
+        if (zip === null) {
+            $('#weather-content').html('Weather data failed to load');
+            $('#weather-forecast').html('Weather forecast failed to load');
+        }
+        zip = zip.replace(/[^0-9]/g, '');
         if (!extended) {
             getInitialWeatherData(`${zip}`);
         } else {
@@ -232,7 +243,6 @@ function getWeatherData(url, extended = false) {
             showWeatherData(resultData, extended);
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            console.log('error');
             $('#weather-content').html('Weather data failed to load');
             $('#weather-forecast').html('Weather forecast failed to load');
         },
