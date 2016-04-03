@@ -164,11 +164,6 @@ function showTime() {
     setTimeout('showTime()', 1000 - millis < 10 ? 1000 : 1000 - millis);
 }
 
-$('#show-more').click(function() {
-    showWeatherByLocation(true);
-    $('#show-more-div').html('');
-});
-
 function showWeatherByLocation(extended = false) {
     if (extended && hasLatAndLongInLocalStorage()) {
         showMoreWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
@@ -263,7 +258,7 @@ function showWeatherData(resultData, extended = false) {
 
         // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
 
-        var header = '';
+        var header = '<tr>';
         var body = '<tr>';
         for (let i = 0; i < resultData.forecast.simpleforecast.forecastday.length; i++) {
             header += `<td class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</td>`;
@@ -274,15 +269,20 @@ function showWeatherData(resultData, extended = false) {
                     <div class="humidity">Hum: ${resultData.forecast.simpleforecast.forecastday[i].avehumidity}%</div>
                 </td>`;
         }
-        body += '</tr><tr>'
+        header += '</tr>';
+        body += '</tr>';
 
-        body += '</td></tr>';
         $('#weather-forecast').html(`
-            <br><div class="weather-title">Forecast</div>
-            <table>
-            <thead>${header}</thead>
-            <tbody>${body}</tbody>
-            </table>`);
+            <div>
+                <span class="weather-title">Forecast</span>
+                <span class="show-more-parent">(<a id="show-more">Show complete forecast</a>)</span>
+            </div>
+            <div id="weather-forecast-data">
+                <table>
+                    <thead>${header}</thead>
+                    <tbody>${body}</tbody>
+                </table>
+            </div>`);
         
     } else {
         
@@ -303,10 +303,15 @@ function showWeatherData(resultData, extended = false) {
             lastDate = tempDate;
         }
         
-        var tableBody = $('#weather-forecast > table');
+        var tableBody = $('#weather-forecast > #weather-forecast-data > table > tbody');
         tableBody.html(`${tableBody.html()}${body}`);
     }
 }
+
+$('#weather-forecast').on('click', '#show-more', function() {
+    showWeatherByLocation(true);
+    $(this).closest('span').remove();
+});
 
 function formatHours(date) {
     var hr = date.hour;
@@ -331,8 +336,7 @@ function formatDay(date, short = false) { // pass in a JavaScript date object
     if (short) {
         return `${dayString(dayOfWeek, true)} ${month}/${day}`;
     } else {
-        var year = date.getFullYear();
-        return `${dayString(dayOfWeek)} ${monthString(month)} ${day}, ${year}`;
+        return `${dayString(dayOfWeek)} ${monthString(month)} ${day}, ${date.getFullYear()}`;
     }
 }
 

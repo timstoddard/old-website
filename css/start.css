@@ -36,16 +36,20 @@ h3 {
 
 .current-temp:not(:empty) {
     background-color: #ff4d4d;
-    margin-right: 0.4em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
 }
 
 .current-humidity:not(:empty) {
     background-color: #8080ff;
-    margin-right: 0.4em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
 }
 
 .current-wind:not(:empty) {
     background-color: #a6a6a6;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
 }
 
 #weather-forecast, table {
