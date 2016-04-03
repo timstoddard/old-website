@@ -18,6 +18,40 @@ h3 {
     font-size: 300%;
 }
 
+.weather-title {
+    font-size: 200%;
+}
+
+#weather-content {
+    display: inline-flex;
+    align-items: center;
+}
+
+.current-temp:not(:empty), .current-humidity:not(:empty), .current-wind:not(:empty) {
+    padding: 5px;
+    font-size: 120%;
+    border-radius: 1em;
+    text-align: center;
+}
+
+.current-temp:not(:empty) {
+    background-color: #ff4d4d;
+    margin-right: 0.4em;
+}
+
+.current-humidity:not(:empty) {
+    background-color: #8080ff;
+    margin-right: 0.4em;
+}
+
+.current-wind:not(:empty) {
+    background-color: #a6a6a6;
+}
+
+#weather-forecast, table {
+    margin: 0 auto;
+}
+
 .bottom {
     padding-bottom: 5px;
 }
@@ -100,4 +134,60 @@ a:link, a:visited, a:hover, a:active {
 
 .tooltip > .tooltip-inner {
     white-space: nowrap;
+}
+
+.pred-header {
+    font-size: 150%;
+    padding: 10px 10px 0px 10px;
+}
+
+table {
+    border: 1px solid black /* ????? */;
+}
+
+.pred-first-day {
+    vertical-align: bottom;
+}
+
+.pred-other-days {
+    vertical-align: top;
+}
+
+.pred-detail-top {
+    border-top: 1px solid black;
+}
+
+td {
+    width: 6em;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 10px;
+}
+
+.forecast-icon {
+    display: block;
+    margin: 0 auto;
+    padding-bottom: 5px;
+}
+
+.temperature, .humidity {
+    display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 125%;
+    border-radius: 1em;
+}
+
+.temperature {
+    background-color: #ff4d4d;
+    margin-bottom: 0.1em;
+}
+
+.humidity {
+    background-color: #8080ff;
+}
+
+a {
+    cursor: pointer;
+    margin-bottom: 80px;
 }

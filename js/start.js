@@ -1,6 +1,10 @@
 "use strict";
 
 $(function() {
+    
+    $('.outer-right').hide();
+    $('#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items').hide();
+    
     $('[data-toggle="tooltip"]').tooltip();
     
     $(window).keydown(function(event) {
@@ -33,9 +37,6 @@ $(function() {
             }
         }
     );
-    
-    $('.outer-right').hide();
-    $('#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items').hide();
     
     var c1Timer;
     $('#c1, #c1-menu-items').on({
@@ -147,110 +148,172 @@ function checkForCustomName() {
 /**********   CALL METHODS HERE   **********/
 checkForCustomName();
 showTime();
-checkLocalStorage();
 showWeatherByLocation();
 /*******************************************/
 
-function checkLocalStorage() {
-    if (hasLatAndLongInLocalStorage()) {
-        getAllWeatherData(`lat=${localStorage.getItem('lat')}&lon=${localStorage.getItem('long')}`);
-    }
-}
-
 function hasLatAndLongInLocalStorage() {
-    var lat = localStorage.getItem('lat');
-    var long = localStorage.getItem('long');
-    return lat != null && long != null;
+    return localStorage.getItem('lat') != null && localStorage.getItem('long') != null;
 }
 
 function showTime() {
     var now = new Date();
-    document.getElementById('time').innerHTML = currTime(now);
-    document.getElementById('date').innerHTML = currDay(now);
+    $('#time').html(formatTime(now));
+    $('#date').html(formatDay(now));
     
     var millis = now.getMilliseconds();
     setTimeout('showTime()', 1000 - millis < 10 ? 1000 : 1000 - millis);
 }
 
-function showWeatherByLocation() {
+$('#show-more').click(function() {
+    showWeatherByLocation(true);
+    $('#show-more-div').html('');
+});
+
+function showWeatherByLocation(extended = false) {
+    if (extended && hasLatAndLongInLocalStorage()) {
+        showMoreWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
+        return;
+    }
     if (navigator.geolocation) {
-        let zip = 93410;
+        let zip = 93410; // fallback in case lat/long doesn't work
         navigator.geolocation.getCurrentPosition(
             function (pos) {
+                var currLat = pos.coords.latitude;
+                var currLong = pos.coords.longitude;
                 if (hasLatAndLongInLocalStorage()) {
                     var lat = localStorage.getItem('lat');
                     var long = localStorage.getItem('long');
                     var epsilon = 0.001;
-                    if (Math.abs(lat - pos.coords.latitude) > epsilon || Math.abs(long - pos.coords.longitude) > epsilon) {
-                        getAllWeatherData(`lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-                        localStorage.setItem('lat', pos.coords.latitude);
-                        localStorage.setItem('long', pos.coords.longitude);
+                    if (Math.abs(lat - currLat) > epsilon || Math.abs(long - currLong) > epsilon) {
+                        getInitialWeatherData(`${currLat},${currLong}`);
+                        localStorage.setItem('lat', currLat);
+                        localStorage.setItem('long', currLong);
+                    } else {
+                        getInitialWeatherData(`${lat},${long}`);
                     }
                 } else {
-                    getAllWeatherData(`lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-                    localStorage.setItem('lat', pos.coords.latitude);
-                    localStorage.setItem('long', pos.coords.longitude);
+                    if (!extended) {
+                        getInitialWeatherData(`${currLat},${currLong}`);
+                    } else {
+                        showMoreWeatherData(`${currLat},${currLong}`);
+                    }
+                    localStorage.setItem('lat', currLat);
+                    localStorage.setItem('long', currLong);
                 }
             },
             function (err) {
-                getAllWeatherData(`zip=${zip},us`);
+                if (!extended) {
+                    getInitialWeatherData(`${zip}`);
+                } else {
+                    showMoreWeatherData(`${zip}`);
+                }
             },
             {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
     } else {
-        getAllWeatherData(`zip=${zip},us`);
+        if (!extended) {
+            getInitialWeatherData(`${zip}`);
+        } else {
+            showMoreWeatherData(`${zip}`);
+        }
     }
 }
 
-function getAllWeatherData(locationData) {
-    getWeatherData(`http://api.openweathermap.org/data/2.5/weather?${locationData}&units=imperial&APPID=b14b4595be25f378d5f28c8d44ccd3ea`, 'current');
-    getWeatherData(`http://api.openweathermap.org/data/2.5/forecast/city?${locationData}&units=imperial&APPID=3f9835cccb9c523227adf305a40a7fdb`, 'forecast'); // created a second api key (app id) so to prevent 429 error
+function getInitialWeatherData(locationData) {
+    //getWeatherData(''); // need to change url to './data.json' to use this
+    getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
 }
 
-function getWeatherData(url, type) {
+function showMoreWeatherData(locationData) {
+    //getWeatherData('', true); // need to change url to './data.json' to use this
+    getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/hourly10day/q/${locationData}.json`, true);
+}
+
+function getWeatherData(url, extended = false) {
     jQuery.ajax({
         url: url,
         type: 'GET',
         success: function(resultData) {
-            console.log(type);
-            console.log(resultData);
-            if (type === 'current') {
-                showCurrentData(resultData);
-            } else if (type === 'forecast') {
-                showForecastData(resultData);
-            }
+            delete resultData.response;
+            showWeatherData(resultData, extended);
         },
         error : function(jqXHR, textStatus, errorThrown) {
-            if (type === 'current') {
-                document.getElementById('weather-content').innerHTML = 'Weather data failed to load';
-            } else if (type === 'forecast') {
-                document.getElementById('weather-forecast').innerHTML = 'Weather forecast failed to load';
-            }
+            console.log('error');
+            $('#weather-content').html('Weather data failed to load');
+            $('#weather-forecast').html('Weather forecast failed to load');
         },
         timeout: 10000
     });
 }
 
-function showCurrentData(resultData) {
-    document.getElementById('weather-header').innerHTML = `Weather in ${resultData.name}`;
-    document.getElementById('weather-content').innerHTML = `
-        Currently ${resultData.weather[0].main} (${resultData.weather[0].description})<br>
-        Temperature: ${resultData.main.temp}&deg;F<br>
-        Wind: ${resultData.wind.speed} mph ${windDir(resultData.wind.deg)}<br>
-        Cloudiness: ${resultData.clouds.all}%<br>
-        Humidity: ${resultData.main.humidity}%<br>
-        Sunrise: ${currTime(new Date(resultData.sys.sunrise * 1000), true)}<br>
-        Sunset: ${currTime(new Date(resultData.sys.sunset * 1000), true)}`;
-}
+function showWeatherData(resultData, extended = false) {
 
-function showForecastData(resultData) {
-    var idk = '';
-    for (var prop in resultData.list) {
-        idk += `${resultData.list[prop].weather[0].main} (${resultData.list[prop].weather[0].description})! ${resultData.list[prop].main.temp}&deg;F (${currDate(new Date(resultData.list[prop].dt * 1000), true)})<br>Wind: ${resultData.list[prop].wind.speed} mph ${windDir(resultData.list[prop].wind.deg)}, Humidity: ${resultData.list[prop].main.humidity}%<br><br>`;
+    if (!extended) {
+    
+        // current weather --> resultData.current_observation
+
+        $('#weather-header').html(`<div class="weather-title">Weather in ${resultData.current_observation.display_location.city}</div>`);
+        $('#weather-content').html(`
+            <img src="${resultData.current_observation.icon_url}">
+            <div class="current-temp">Temp: ${resultData.current_observation.temp_f}&deg;F
+            ${Math.abs(resultData.current_observation.temp_f - resultData.current_observation.feelslike_f) > 1 ?
+                `(Feels like ${resultData.current_observation.feelslike_f}&deg;F)` : ''}</div>
+            <div class="current-humidity">Humidity: ${resultData.current_observation.relative_humidity}</div>
+            <div class="current-wind">${resultData.current_observation.wind_mph > 0 ?
+                `Wind: ${resultData.current_observation.wind_mph} mph ${resultData.current_observation.wind_dir}` : ''}</div>`);
+
+        // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
+
+        var header = '';
+        var body = '<tr>';
+        for (let i = 0; i < resultData.forecast.simpleforecast.forecastday.length; i++) {
+            header += `<td class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</td>`;
+            body += `
+                <td>
+                    <img class="forecast-icon" src="${resultData.forecast.simpleforecast.forecastday[i].icon_url}">
+                    <div class="temperature">${resultData.forecast.simpleforecast.forecastday[i].low.fahrenheit}-${resultData.forecast.simpleforecast.forecastday[i].high.fahrenheit}&deg;F</div>
+                    <div class="humidity">Hum: ${resultData.forecast.simpleforecast.forecastday[i].avehumidity}%</div>
+                </td>`;
+        }
+        body += '</tr><tr>'
+
+        body += '</td></tr>';
+        $('#weather-forecast').html(`
+            <br><div class="weather-title">Forecast</div>
+            <table>
+            <thead>${header}</thead>
+            <tbody>${body}</tbody>
+            </table>`);
+        
+    } else {
+        
+        // hourly forecast --> resultData.hourly_forecast[0-239]
+
+        let lastDate = formatHourlyForecastDay(resultData.hourly_forecast[0].FCTTIME);
+        body += '<td class="pred-first-day pred-detail-top">';
+        for (let i = 0; i < resultData.hourly_forecast.length; i++) {
+            if (resultData.hourly_forecast[i].FCTTIME.mday - (new Date()).getDate() > 9) {
+                body += '</td>';
+                break;
+            }
+            let tempDate = formatHourlyForecastDay(resultData.hourly_forecast[i].FCTTIME);
+            if (tempDate !== lastDate) {
+                body += '</td><td class="pred-other-days pred-detail-top">';
+            }
+            body += `<img src="${resultData.hourly_forecast[i].icon_url}"><br>`;
+            lastDate = tempDate;
+        }
+        
+        var tableBody = $('#weather-forecast > table');
+        tableBody.html(`${tableBody.html()}${body}`);
     }
-    document.getElementById('weather-forecast').innerHTML = `-------------------<br>Forecast:<br>${idk}`;
 }
 
-function currTime(date, short = false) { // pass in a JavaScript date object
+function formatHours(date) {
+    var hr = date.hour;
+    return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)}${date.ampm}`;
+}
+
+function formatTime(date, short = false) { // pass in a JavaScript date object
     var hours = date.getHours();
     var minutes = date.getMinutes();
     if (short) {
@@ -261,30 +324,24 @@ function currTime(date, short = false) { // pass in a JavaScript date object
     }
 }
 
-function currDay(date, short = false) { // pass in a JavaScript date object
+function formatDay(date, short = false) { // pass in a JavaScript date object
     var dayOfWeek = date.getDay();
     var month = date.getMonth();
     var day = date.getDate();
     if (short) {
-        return `${dayString(dayOfWeek, true)} ${month < 10 ? '0' : ''}${month}/${day < 10 ? '0' : ''}${day}`;
+        return `${dayString(dayOfWeek, true)} ${month}/${day}`;
     } else {
         var year = date.getFullYear();
         return `${dayString(dayOfWeek)} ${monthString(month)} ${day}, ${year}`;
     }
 }
 
-function currDate(date, short) { // pass in a JavaScript date object
-    return `${currTime(date, short)} on ${currDay(date, short)}`
+function formatForecastDay(date) {
+    return `${date.weekday_short} ${date.month}/${date.day}`;
 }
 
-function windDir(dir) {
-    var directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-    dir %= 360;
-    for (var i = 0; i < 10; i++) {
-        if (45 * i - 22.5 > dir) {
-            return directions[(i - 1) % 8];
-        }
-    }
+function formatHourlyForecastDay(date) {
+    return `${date.weekday_name_abbrev} ${date.mon}/${date.mday}`;
 }
 
 function dayString(day, short = false) {
