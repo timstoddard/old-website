@@ -169,6 +169,7 @@ function showWeatherByLocation(extended = false) {
         showMoreWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
         return;
     }
+    let posErrCount = 0;
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function (pos) {
@@ -196,30 +197,36 @@ function showWeatherByLocation(extended = false) {
                 }
             },
             function (err) {
+                console.log(err);
+                if (posErrCount > 0) return;
+                posErrCount++;
                 var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
-                if (zip === null) {
+                if (!zip) {
                     $('#weather-content').html('Weather data failed to load');
                     $('#weather-forecast').html('Weather forecast failed to load');
+                    return;
                 }
                 zip = zip.replace(/[^0-9]/g, '');
                 if (!extended) {
-                    getInitialWeatherData(`${zip}`);
+                    getInitialWeatherData(zip);
                 } else {
-                    showMoreWeatherData(`${zip}`);
+                    showMoreWeatherData(zip);
                 }
-            },
-            {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
+            }, {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
     } else {
+        if (posErrCount > 0) return;
+        posErrCount++;
         var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
         if (zip === null) {
             $('#weather-content').html('Weather data failed to load');
             $('#weather-forecast').html('Weather forecast failed to load');
+            return;
         }
         zip = zip.replace(/[^0-9]/g, '');
         if (!extended) {
-            getInitialWeatherData(`${zip}`);
+            getInitialWeatherData(zip);
         } else {
-            showMoreWeatherData(`${zip}`);
+            showMoreWeatherData(zip);
         }
     }
 }
