@@ -1,0 +1,11 @@
+#working, #nonworking {
+    width: 50%;
+}
+
+#working {
+    float: left;
+}
+
+#nonworking {
+    float: right;
+}
