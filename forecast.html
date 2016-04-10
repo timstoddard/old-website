@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Forecast</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style>
+        body { font-family: 'Helvetica Neue', 'Open-Light', sans-serif !important; min-width: 650px; }
+        .weather-title { font-size: 200%; }
+        #weather-content { display: inline-flex; align-items: center; margin: 20px 0 20px 0; }
+        #current-temp:not(:empty), #current-humidity:not(:empty), #current-wind:not(:empty) {
+            display: inline-block; padding: 2px 5px; font-size: 135%; border-radius: 1em; text-align: center;
+            margin-left: 0.2em; margin-right: 0.2em; border-radius: 1em; text-align: center; }
+        #weather-city { display: inline-block; padding: 5px; }
+        #weather-img { margin-left: 0.5em; margin-right: 0.2em; }
+        #current-temp:not(:empty) { background-color: #ff4d4d; }
+        #current-humidity:not(:empty) { background-color: #8080ff; }
+        #current-wind:not(:empty) { background-color: #a6a6a6; }
+        #weather-forecast, table { margin: 0 auto; }
+        .pred-header { font-size: 150%; padding: 10px 10px 0px 10px; }
+        table { border: 1px solid black; }
+        td { vertical-align: top; width: 6em; padding: 10px;
+            border-left: 1px solid black; border-right: 1px solid black; }
+        td:nth-child(1) { vertical-align: bottom; }
+        .pred-detail-top { border-top: 1px solid black; }
+        .forecast-icon { display: block; margin: 0 auto; width: 70%; height: auto;
+            padding-bottom: 5px; }
+        .temperature-low, .temperature-high, .humidity { display: inline-block; font-size: 125%; border-radius: 1em;
+            padding: 2px 5px; }
+        .temperature-low, .temperature-high { margin-bottom: 0.15em; }
+        .temperature-low { background-color: #33d6ff; }
+        .temperature-high { background-color: #ff4d4d; }
+        .humidity { background-color: #8080ff; }
+        .forecast-img { width: 50%; height: auto; }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <div id="weather-content">
+            <div id="weather-city" class="weather-title"></div>
+            <img id="weather-img">
+            <div id="current-temp"></div>
+            <div id="current-humidity"></div>
+            <div id="current-wind"></div>
+        </div>
+        <div id="weather-forecast">
+            <div class="weather-title">Forecast</div>
+            <table>
+                <thead id="forecast-header"></thead>
+                <tbody id="forecast-body"></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="./js/jquery-2.2.1.min.js"></script>
+    <script>
+        function showFullWeatherForecast(locationData) {
+            getWeatherData('data.json');
+            //getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/hourly10day/q/${locationData}.json`);
+        }
+        
+        function getWeatherData(url) {
+            jQuery.ajax({
+                url: 'data.json', //url,
+                type: 'GET',
+                success: function(resultData) {
+                    showWeatherData(resultData);
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    $('#weather-content').html('Weather data failed to load');
+                    $('#weather-forecast').html('Weather forecast failed to load');
+                },
+                timeout: 10000
+            });
+        }
+        
+        function showWeatherData(resultData) {
+    
+            // current weather
+            let curr = resultData.current_observation; // object
+            $('#weather-city').html(`${curr.display_location.city}: `);
+            $('#weather-img').attr('src', curr.icon_url);
+            $('#current-temp').html(`${curr.temp_f}&deg;F
+                ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}`);
+            $('#current-humidity').html(`${curr.relative_humidity}`);
+            $('#current-wind').html(`${curr.wind_mph > 0 ?
+                    `Wind: ${curr.wind_mph} mph ${curr.wind_dir}` : ''}`);
+
+            // daily forecast
+            let forecast = resultData.forecast.simpleforecast.forecastday; // array[0 - 9]
+            var header = '';
+            var upperBody = '';
+            for (let i = 0; i < forecast.length; i++) {
+                header += `<td class="pred-header">${formatForecastDay(forecast[i].date)}</td>`;
+                upperBody += `
+                    <td>
+                        <img class="forecast-icon" src="${forecast[i].icon_url}">
+                        <div class="temperature-low">${forecast[i].low.fahrenheit}&deg;F</div>
+                        <div class="temperature-high">${forecast[i].high.fahrenheit}&deg;F</div>
+                        <div class="humidity"><span>${forecast[i].avehumidity}%</span></div>
+                    </td>`;
+            }
+
+            $('#forecast-header').html(`<tr>${header}</tr>`);
+
+            // hourly forecast
+            let hForecast = resultData.hourly_forecast; // array[0 - 239]
+            let lastDate = formatHourlyForecastDay(hForecast[0].FCTTIME);
+            let daysCount = 1;
+            var lowerBody = '<td class="pred-first-day pred-detail-top">';
+            for (let i = 0; i < hForecast.length; i++) {
+                if (hForecast[i].FCTTIME.mday - (new Date()).getDate() > 9) {
+                    lowerBody += '</td>';
+                    break;
+                }
+                let tempDate = formatHourlyForecastDay(hForecast[i].FCTTIME);
+                if (tempDate !== lastDate) {
+                    lowerBody += '</td><td class="pred-other-days pred-detail-top">';
+                }
+                lowerBody += `<img class="forecast-img" src="${hForecast[i].icon_url}"><br>`;
+                lastDate = tempDate;
+            }
+            
+            $('#forecast-body').html(`<tr>${upperBody}</tr><tr>${lowerBody}</tr>`);
+            
+            // get rid of any extraneous extra rows
+            while ($('table').children('tbody').children('tr').children('td').length > 20) {
+                $('table').find("tr:last").find("td:last").remove();
+            }
+            
+            // set opacity of the daily humidity forecast background
+            $('.humidity').each(function() {
+                let text = $(this).text();
+                let str = text.substring(0, text.length - 1);
+                $(this).css({opacity: parseInt(str) / 100});
+                // TODO: set text opacity back to 1
+            });
+        }
+        
+        function formatForecastDay(date) {
+            return `${date.weekday_short}<br>${date.month}/${date.day}`;
+        }
+        
+        function formatHourlyForecastDay(date) {
+            return `${date.weekday_name_abbrev} ${date.mon}/${date.mday}`;
+        }
+        
+        showFullWeatherForecast('');
+    </script>
+</body>
+</html>

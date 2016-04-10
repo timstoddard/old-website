@@ -1,3 +1,6 @@
+// TODO: store weather data in local storage along with timestamp,
+//       and fetch new data only if stored data is > 15 mins old
+
 "use strict";
 
 $(function() {
@@ -126,23 +129,17 @@ function showModalText() {
 function checkForCustomName() {
     let url = window.location.href;
     let index = url.indexOf('?');
-    if (index === -1) {
-        $('#welcome').html('Timothy');
-        return;
-    }
+    if (index === -1) return;
+    
     let name = url.substring(index + 1).trim();
-    if (name.length == 0) {
-        $('#welcome').html('Timothy');
-        return;
-    }
+    if (name.length == 0) return;
+    
     try {
         name = decodeURIComponent(name);
     }
-    catch(err) {
-        $('#welcome').html('Timothy');
-        return;
-    }
-    $('#welcome').html(name);
+    catch(err) { return; }
+    
+    $('#welcome').html(`Welcome, ${name}`);
 }
 
 /**********   CALL METHODS HERE   **********/
@@ -164,11 +161,7 @@ function showTime() {
     setTimeout('showTime()', 1000 - millis < 10 ? 1000 : 1000 - millis);
 }
 
-function showWeatherByLocation(extended = false) {
-    if (extended && hasLatAndLongInLocalStorage()) {
-        showMoreWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
-        return;
-    }
+function showWeatherByLocation() {
     let posErrCount = 0;
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -187,11 +180,7 @@ function showWeatherByLocation(extended = false) {
                         getInitialWeatherData(`${lat},${long}`);
                     }
                 } else {
-                    if (!extended) {
-                        getInitialWeatherData(`${currLat},${currLong}`);
-                    } else {
-                        showMoreWeatherData(`${currLat},${currLong}`);
-                    }
+                    getInitialWeatherData(`${currLat},${currLong}`);
                     localStorage.setItem('lat', currLat);
                     localStorage.setItem('long', currLong);
                 }
@@ -207,11 +196,7 @@ function showWeatherByLocation(extended = false) {
                     return;
                 }
                 zip = zip.replace(/[^0-9]/g, '');
-                if (!extended) {
-                    getInitialWeatherData(zip);
-                } else {
-                    showMoreWeatherData(zip);
-                }
+                getInitialWeatherData(zip);
             }, {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
     } else {
         if (posErrCount > 0) return;
@@ -223,31 +208,21 @@ function showWeatherByLocation(extended = false) {
             return;
         }
         zip = zip.replace(/[^0-9]/g, '');
-        if (!extended) {
-            getInitialWeatherData(zip);
-        } else {
-            showMoreWeatherData(zip);
-        }
+        getInitialWeatherData(zip);
     }
 }
 
 function getInitialWeatherData(locationData) {
-    //getWeatherData(''); // need to change url to './data.json' to use this
-    getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
+    getWeatherData('data.json');
+    //getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
 }
 
-function showMoreWeatherData(locationData) {
-    //getWeatherData('', true); // need to change url to './data.json' to use this
-    getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/hourly10day/q/${locationData}.json`, true);
-}
-
-function getWeatherData(url, extended = false) {
+function getWeatherData(url) {
     jQuery.ajax({
         url: url,
         type: 'GET',
         success: function(resultData) {
-            delete resultData.response;
-            showWeatherData(resultData, extended);
+            showWeatherData(resultData);
         },
         error : function(jqXHR, textStatus, errorThrown) {
             $('#weather-content').html('Weather data failed to load');
@@ -257,78 +232,50 @@ function getWeatherData(url, extended = false) {
     });
 }
 
-function showWeatherData(resultData, extended = false) {
-
-    if (!extended) {
+function showWeatherData(resultData) {
     
-        // current weather --> resultData.current_observation
+    // current weather --> resultData.current_observation
 
-        $('#weather-header').html(`<div class="weather-title">Weather in ${resultData.current_observation.display_location.city}</div>`);
-        $('#weather-content').html(`
-            <img src="${resultData.current_observation.icon_url}">
-            <div class="current-temp">Temp: ${resultData.current_observation.temp_f}&deg;F
-            ${Math.abs(resultData.current_observation.temp_f - resultData.current_observation.feelslike_f) > 1 ?
-                `(Feels like ${resultData.current_observation.feelslike_f}&deg;F)` : ''}</div>
-            <div class="current-humidity">Humidity: ${resultData.current_observation.relative_humidity}</div>
-            <div class="current-wind">${resultData.current_observation.wind_mph > 0 ?
-                `Wind: ${resultData.current_observation.wind_mph} mph ${resultData.current_observation.wind_dir}` : ''}</div>`);
+    $('#weather-header').html(`<div class="weather-title">Weather in ${resultData.current_observation.display_location.city}</div>`);
+    $('#weather-content').html(`
+        <img src="${resultData.current_observation.icon_url}">
+        <div class="current-temp">Temp: ${resultData.current_observation.temp_f}&deg;F
+        ${Math.abs(resultData.current_observation.temp_f - resultData.current_observation.feelslike_f) > 2 ?
+            `(Feels like ${resultData.current_observation.feelslike_f}&deg;F)` : ''}</div>
+        <div class="current-humidity">Humidity: ${resultData.current_observation.relative_humidity}</div>
+        <div class="current-wind">${resultData.current_observation.wind_mph > 0 ?
+            `Wind: ${resultData.current_observation.wind_mph} mph ${resultData.current_observation.wind_dir}` : ''}</div>`);
 
-        // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
+    // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
 
-        var header = '<tr>';
-        var body = '<tr>';
-        for (let i = 0; i < resultData.forecast.simpleforecast.forecastday.length; i++) {
-            header += `<td class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</td>`;
-            body += `
-                <td>
-                    <img class="forecast-icon" src="${resultData.forecast.simpleforecast.forecastday[i].icon_url}">
-                    <div class="temperature">${resultData.forecast.simpleforecast.forecastday[i].low.fahrenheit}-${resultData.forecast.simpleforecast.forecastday[i].high.fahrenheit}&deg;F</div>
-                    <div class="humidity">Hum: ${resultData.forecast.simpleforecast.forecastday[i].avehumidity}%</div>
-                </td>`;
-        }
-        header += '</tr>';
-        body += '</tr>';
-
-        $('#weather-forecast').html(`
-            <div>
-                <span class="weather-title">Forecast</span>
-                <span class="show-more-parent">(<a id="show-more">Show complete forecast</a>)</span>
-            </div>
-            <div id="weather-forecast-data">
-                <table>
-                    <thead>${header}</thead>
-                    <tbody>${body}</tbody>
-                </table>
-            </div>`);
-        
-    } else {
-        
-        // hourly forecast --> resultData.hourly_forecast[0-239]
-
-        let lastDate = formatHourlyForecastDay(resultData.hourly_forecast[0].FCTTIME);
-        body += '<td class="pred-first-day pred-detail-top">';
-        for (let i = 0; i < resultData.hourly_forecast.length; i++) {
-            if (resultData.hourly_forecast[i].FCTTIME.mday - (new Date()).getDate() > 9) {
-                body += '</td>';
-                break;
-            }
-            let tempDate = formatHourlyForecastDay(resultData.hourly_forecast[i].FCTTIME);
-            if (tempDate !== lastDate) {
-                body += '</td><td class="pred-other-days pred-detail-top">';
-            }
-            body += `<img src="${resultData.hourly_forecast[i].icon_url}"><br>`;
-            lastDate = tempDate;
-        }
-        
-        var tableBody = $('#weather-forecast > #weather-forecast-data > table > tbody');
-        tableBody.html(`${tableBody.html()}${body}`);
+    var header = '<tr>';
+    var body = '<tr>';
+    for (let i = 0; i < resultData.forecast.simpleforecast.forecastday.length; i++) {
+        header += `<td class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</td>`;
+        body += `
+            <td>
+                <img class="forecast-icon" src="${resultData.forecast.simpleforecast.forecastday[i].icon_url}">
+                <div class="temperature">${resultData.forecast.simpleforecast.forecastday[i].low.fahrenheit}-${resultData.forecast.simpleforecast.forecastday[i].high.fahrenheit}&deg;F</div>
+                <div class="humidity">Hum: ${resultData.forecast.simpleforecast.forecastday[i].avehumidity}%</div>
+            </td>`;
     }
+    header += '</tr>';
+    body += '</tr>';
+
+    $('#weather-forecast').html(`
+        <div class="weather-title"><a href="forecast.html">Forecast</a></div>
+        <div id="weather-forecast-data">
+            <table>
+                <thead>${header}</thead>
+                <tbody>${body}</tbody>
+            </table>
+        </div>`);
 }
 
-$('#weather-forecast').on('click', '#show-more', function() {
-    showWeatherByLocation(true);
-    $(this).closest('span').remove();
-});
+$('#weather-forecast')
+    .on('click', '#weather-title', function() {
+        window.open('forecast.html');
+    });
 
 function formatHours(date) {
     var hr = date.hour;
@@ -359,10 +306,6 @@ function formatDay(date, short = false) { // pass in a JavaScript date object
 
 function formatForecastDay(date) {
     return `${date.weekday_short} ${date.month}/${date.day}`;
-}
-
-function formatHourlyForecastDay(date) {
-    return `${date.weekday_name_abbrev} ${date.mon}/${date.mday}`;
 }
 
 function dayString(day, short = false) {

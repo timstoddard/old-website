@@ -8,10 +8,15 @@ h1, h2, h3 {
 
 h1 {
     font-size: 600%;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 h2 {
     font-size: 900%;
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 h3 {
@@ -147,7 +152,7 @@ a:link, a:visited, a:hover, a:active {
 }
 
 table {
-    border: 1px solid black /* ????? */;
+    border: 1px solid black;
 }
 
 .pred-first-day {
