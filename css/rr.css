@@ -2,6 +2,11 @@ h1, h2, h3 {
     text-align: center;
 }
 
+h3 {
+    margin-top: -5px;
+    margin-bottom: 30px;
+}
+
 h4 {
     margin-top: 0;
     margin-bottom: 5px;
@@ -10,4 +15,8 @@ h4 {
 div > ul {
     display: table;
     margin: 0 auto;
+}
+
+ul > li > ul {
+    padding-bottom: 15px;
 }
