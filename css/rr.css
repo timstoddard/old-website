@@ -1,11 +1,13 @@
-#working, #nonworking {
-    width: 50%;
+h1, h2, h3 {
+    text-align: center;
 }
 
-#working {
-    float: left;
+h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
 }
 
-#nonworking {
-    float: right;
+div > ul {
+    display: table;
+    margin: 0 auto;
 }
