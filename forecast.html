@@ -22,7 +22,7 @@
         td { vertical-align: top; width: 6em; padding: 10px;
             border-left: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0; }
         td:nth-child(1) { vertical-align: bottom; }
-        .pred-detail-top { border-top: 1px solid black; }
+        .pred-detail-top { border-top: 1px solid black; padding: 0; }
         .forecast-icon { display: block; margin: auto; margin-top: -10px; padding-bottom: 5px; }
         .temperature-low, .temperature-high, .humidity { display: inline-block; font-size: 125%; border-radius: 1em;
             padding: 2px 5px; }
@@ -30,7 +30,8 @@
         .temperature-low { background-color: #33d6ff; }
         .temperature-high { background-color: #ff8c1a; }
         .humidity { background-color: #8080ff; }
-        .forecast-img { height: 50px; width: auto; display: block; margin: auto; }
+        .forecast-img { height: 50px; width: auto; margin: auto; }
+        .forecast-img-wrapper { display: block; }
         #weather-details { width: 110px; height: 110px; position: fixed; right: 0; top: 0; background-color: #e0e0e0; text-align: center; border-radius: 0.42em; margin-top: 8px; }
         @media (min-width: 900px) { #weather-details { position: fixed; left: 50%; margin-left: 340px; } }
         #weather-details > span { display: block; }
@@ -228,13 +229,15 @@
                     daysCount++;
                 }
                 lowerBody += `
-                    <img class="forecast-img" src="${hForecast[i].icon_url}"
-                        onmouseenter="
-                            $('#weather-details').show();
-$('#weather-details').html('<span>${tempDate}</span><span>${formatHours(hForecast[i].FCTTIME)}</span><span><div>${hForecast[i].temp.english}&deg;F</div></span><span><div>${hForecast[i].humidity}%</div></span><span><div>${hForecast[i].wspd.english} mph ${hForecast[i].wdir.dir}</div></span>');"
-                        onmouseout="
-                            $('#weather-details').hide();
-                            $('#weather-details').html('');">`;
+                    <div class="forecast-img-wrapper"
+                        onmouseover="
+                                $('#weather-details').show();
+    $('#weather-details').html('<span>${tempDate}</span><span>${formatHours(hForecast[i].FCTTIME)}</span><span><div>${hForecast[i].temp.english}&deg;F</div></span><span><div>${hForecast[i].humidity}%</div></span><span><div>${hForecast[i].wspd.english} mph ${hForecast[i].wdir.dir}</div></span>');"
+                            onmouseout="
+                                $('#weather-details').hide();
+                                $('#weather-details').html('');">
+                        <img class="forecast-img" src="${hForecast[i].icon_url}">
+                    </div>`;
                 lastDate = tempDate;
             }
 
