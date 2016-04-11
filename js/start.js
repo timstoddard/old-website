@@ -150,7 +150,7 @@ function hasLatAndLongInLocalStorage() {
 }
 
 function hasWeatherDataInLocalStorage() {
-    return localStorage.getItem('weatherData') !== null && localStorage.getItem('weatherDataTimestamp') !== null;
+    return localStorage.getItem('weatherData') !== null && localStorage.getItem('weatherDataTimestamp') !== null && localStorage.getItem('weatherDataType') !== null;
 }
 
 function dateDiffMins(date1, date2) {

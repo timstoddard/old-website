@@ -160,12 +160,15 @@
                 showWeatherData(JSON.parse(localStorage.getItem('weatherData')));
                 return;
             }
+            console.log('here');
             jQuery.ajax({
                 url: url,
                 type: 'GET',
                 success: function(resultData) {
+                    console.log('here 2');
                     if (hasWeatherDataInLocalStorage()) {
-                        if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) > 30) {
+                        if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) > 30 || localStorage.getItem('weatherDataType') !== 'Extended') {
+                            console.log('here 3');
                             localStorage.setItem('weatherData', JSON.stringify(resultData));
                             localStorage.setItem('weatherDataTimestamp', Date.now());
                             localStorage.setItem('weatherDataType', 'Extended');
