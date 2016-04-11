@@ -8,8 +8,6 @@ $(function() {
     $('.outer-right').hide();
     $('#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items').hide();
     
-    $('[data-toggle="tooltip"]').tooltip();
-    
     $(window).keydown(function(event) {
         var key = event.which;
         if (key === 83) { // 's' key
@@ -94,7 +92,7 @@ var urls = [
     //{'key': 'fox', 'url': 'http://www.foxnews.com/search-results/search?q=', 'name': 'Fox News'},
     {'key': 'g', 'url': 'https://www.google.com/?gws_rd=ssl#q=', 'name': 'Google'},
     {'key': 'git', 'url': 'https://github.com/search?q=', 'name': 'GitHub'},
-    {'key': 'im', 'url': 'http://www.imdb.com/find?s=all&q=', 'name': 'IMDb'},
+    {'key': 'i', 'url': 'http://www.imdb.com/find?s=all&q=', 'name': 'IMDb'},
     {'key': 'sc', 'url': 'https://soundcloud.com/search?q=', 'name': 'Soundcloud'},
     {'key': 'st', 'url': 'https://stackoverflow.com/search?q=', 'name': 'Stack Overflow'},
     {'key': 't', 'url': 'https://twitter.com/search?q=', 'name': 'Twitter'},
@@ -134,9 +132,7 @@ function checkForCustomName() {
     let name = url.substring(index + 1).trim();
     if (name.length == 0) return;
     
-    try {
-        name = decodeURIComponent(name);
-    }
+    try { name = decodeURIComponent(name); }
     catch(err) { return; }
     
     $('#welcome').html(`Welcome, ${name}`);
@@ -145,11 +141,32 @@ function checkForCustomName() {
 /**********   CALL METHODS HERE   **********/
 checkForCustomName();
 showTime();
-showWeatherByLocation();
+showWeather();
+// NOTE: Lat/long data lasts for an hour before it is refreshed. Weather data lasts for 30 mins.
 /*******************************************/
 
 function hasLatAndLongInLocalStorage() {
-    return localStorage.getItem('lat') != null && localStorage.getItem('long') != null;
+    return localStorage.getItem('lat') !== null && localStorage.getItem('long') !== null && localStorage.getItem('latLongTimestamp') !== null;
+}
+
+function hasWeatherDataInLocalStorage() {
+    return localStorage.getItem('weatherData') !== null && localStorage.getItem('weatherDataTimestamp') !== null;
+}
+
+function dateDiffMins(date1, date2) {
+    return Math.floor(Math.abs(date2 - date1) / (60 * 1000));
+}
+
+function showWeather() { // time before update: 30m
+    if (hasWeatherDataInLocalStorage()) {
+        if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) <= 30) {
+            showWeatherData(JSON.parse(localStorage.getItem('weatherData')));
+        } else {
+            showWeatherByLocation();
+        }
+    } else {
+        showWeatherByLocation();
+    }
 }
 
 function showTime() {
@@ -163,6 +180,10 @@ function showTime() {
 
 function showWeatherByLocation() {
     let posErrCount = 0;
+    if (hasLatAndLongInLocalStorage() && dateDiffMins(localStorage.getItem('latLongTimestamp'), Date.now()) <= 60) {
+        getWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
+        return;
+    }
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function (pos) {
@@ -173,16 +194,18 @@ function showWeatherByLocation() {
                     var long = localStorage.getItem('long');
                     var epsilon = 0.001;
                     if (Math.abs(lat - currLat) > epsilon || Math.abs(long - currLong) > epsilon) {
-                        getInitialWeatherData(`${currLat},${currLong}`);
+                        getWeatherData(`${currLat},${currLong}`);
                         localStorage.setItem('lat', currLat);
                         localStorage.setItem('long', currLong);
+                        localStorage.setItem('latLongTimestamp', Date.now());
                     } else {
-                        getInitialWeatherData(`${lat},${long}`);
+                        getWeatherData(`${lat},${long}`);
                     }
                 } else {
-                    getInitialWeatherData(`${currLat},${currLong}`);
+                    getWeatherData(`${currLat},${currLong}`);
                     localStorage.setItem('lat', currLat);
                     localStorage.setItem('long', currLong);
+                    localStorage.setItem('latLongTimestamp', Date.now());
                 }
             },
             function (err) {
@@ -195,8 +218,7 @@ function showWeatherByLocation() {
                     $('#weather-forecast').html('Weather forecast failed to load');
                     return;
                 }
-                zip = zip.replace(/[^0-9]/g, '');
-                getInitialWeatherData(zip);
+                getWeatherData(zip.replace(/[^0-9]/g, ''));
             }, {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
     } else {
         if (posErrCount > 0) return;
@@ -207,21 +229,35 @@ function showWeatherByLocation() {
             $('#weather-forecast').html('Weather forecast failed to load');
             return;
         }
-        zip = zip.replace(/[^0-9]/g, '');
-        getInitialWeatherData(zip);
+        getWeatherData(zip.replace(/[^0-9]/g, ''));
     }
 }
 
-function getInitialWeatherData(locationData) {
-    getWeatherData('data.json');
-    //getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
+function getWeatherData(locationData) {
+    //getWeatherResultData('data.json', true);
+    getWeatherResultData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
 }
 
-function getWeatherData(url) {
+function getWeatherResultData(url) {
+    if (hasWeatherDataInLocalStorage() && dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) <= 30) {
+        showWeatherData(JSON.parse(localStorage.getItem('weatherData')));
+        return;
+    }
     jQuery.ajax({
         url: url,
         type: 'GET',
         success: function(resultData) {
+            if (hasWeatherDataInLocalStorage()) {
+                if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) > 30) {
+                    localStorage.setItem('weatherData', JSON.stringify(resultData));
+                    localStorage.setItem('weatherDataTimestamp', Date.now());
+                    localStorage.setItem('weatherDataType', 'Regular');
+                }
+            } else {
+                localStorage.setItem('weatherData', JSON.stringify(resultData));
+                localStorage.setItem('weatherDataTimestamp', Date.now());
+                localStorage.setItem('weatherDataType', 'Regular');
+            }
             showWeatherData(resultData);
         },
         error : function(jqXHR, textStatus, errorThrown) {

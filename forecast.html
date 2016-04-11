@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <style>
         body { font-family: 'Helvetica Neue', 'Open-Light', sans-serif !important; min-width: 650px; }
-        .weather-title { font-size: 200%; }
+        .weather-title { font-size: 200%; display: inline-block; }
         #weather-content { display: inline-flex; align-items: center; margin: 20px 0 20px 0; }
         #current-temp:not(:empty), #current-humidity:not(:empty), #current-wind:not(:empty) {
             display: inline-block; padding: 2px 5px; font-size: 135%; border-radius: 1em; text-align: center;
@@ -18,20 +18,27 @@
         #current-wind:not(:empty) { background-color: #a6a6a6; }
         #weather-forecast, table { margin: 0 auto; }
         .pred-header { font-size: 150%; padding: 10px 10px 0px 10px; }
-        table { border: 1px solid black; }
+        table { border: 1px solid #c0c0c0; max-width: 900px; margin-bottom: 20px;}
         td { vertical-align: top; width: 6em; padding: 10px;
-            border-left: 1px solid black; border-right: 1px solid black; }
+            border-left: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0; }
         td:nth-child(1) { vertical-align: bottom; }
         .pred-detail-top { border-top: 1px solid black; }
-        .forecast-icon { display: block; margin: 0 auto; width: 70%; height: auto;
-            padding-bottom: 5px; }
+        .forecast-icon { display: block; margin: auto; margin-top: -10px; padding-bottom: 5px; }
         .temperature-low, .temperature-high, .humidity { display: inline-block; font-size: 125%; border-radius: 1em;
             padding: 2px 5px; }
         .temperature-low, .temperature-high { margin-bottom: 0.15em; }
         .temperature-low { background-color: #33d6ff; }
-        .temperature-high { background-color: #ff4d4d; }
+        .temperature-high { background-color: #ff8c1a; }
         .humidity { background-color: #8080ff; }
-        .forecast-img { width: 50%; height: auto; }
+        .forecast-img { height: 50px; width: auto; display: block; margin: auto; }
+        #weather-details { width: 110px; height: 110px; position: fixed; right: 0; top: 0; background-color: #e0e0e0; text-align: center; border-radius: 0.42em; margin-top: 8px; }
+        @media (min-width: 900px) { #weather-details { position: fixed; left: 50%; margin-left: 340px; } }
+        #weather-details > span { display: block; }
+        #weather-details > span > div { display: inline; padding: 2px 5px; border-radius: 1em; }
+        #weather-details > span:nth-child(n+3):nth-child(-n+4) { margin-bottom: 2px; }
+        #weather-details > span:nth-child(3) > div { background-color: #ff4d4d; }
+        #weather-details > span:nth-child(4) > div { background-color: #8080ff; }
+        #weather-details > span:nth-child(5) > div { background-color: #a6a6a6; }
     </style>
 </head>
 <body>
@@ -51,18 +58,122 @@
             </table>
         </div>
     </div>
+    <div id="weather-details"></div>
     <script src="./js/jquery-2.2.1.min.js"></script>
     <script>
-        function showFullWeatherForecast(locationData) {
-            getWeatherData('data.json');
-            //getWeatherData(`http://api.wunderground.com/api/8d7d14e295f9150a/hourly10day/q/${locationData}.json`);
+        $(function(){ $('#weather-details').hide(); });
+        showWeather();
+        
+        function hasLatAndLongInLocalStorage() {
+            return localStorage.getItem('lat') !== null && localStorage.getItem('long') !== null && localStorage.getItem('latLongTimestamp') !== null;
+        }
+
+        function hasWeatherDataInLocalStorage() {
+            return localStorage.getItem('weatherData') !== null && localStorage.getItem('weatherDataTimestamp') !== null && localStorage.getItem('weatherDataType') !== null;
+        }
+
+        function dateDiffMins(date1, date2) {
+            return Math.floor(Math.abs(date2 - date1) / (60 * 1000));
         }
         
-        function getWeatherData(url) {
+        function showWeather() { // time before update: 30m
+            if (hasWeatherDataInLocalStorage()) {
+                if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) <= 30) {
+                    if (localStorage.getItem('weatherDataType') !== 'Extended') {
+                        showWeatherByLocation();
+                    } else {
+                        showWeatherData(JSON.parse(localStorage.getItem('weatherData')));
+                    }
+                } else {
+                    showWeatherByLocation();
+                }
+            } else {
+                showWeatherByLocation();
+            }
+        }
+        
+        function showWeatherByLocation() {
+            let posErrCount = 0;
+            if (hasLatAndLongInLocalStorage() && dateDiffMins(localStorage.getItem('latLongTimestamp'), Date.now()) <= 60) {
+                getWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
+                return;
+            }
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (pos) {
+                        var currLat = pos.coords.latitude;
+                        var currLong = pos.coords.longitude;
+                        if (hasLatAndLongInLocalStorage()) {
+                            var lat = localStorage.getItem('lat');
+                            var long = localStorage.getItem('long');
+                            var epsilon = 0.001;
+                            if (Math.abs(lat - currLat) > epsilon || Math.abs(long - currLong) > epsilon) {
+                                getWeatherData(`${currLat},${currLong}`);
+                                localStorage.setItem('lat', currLat);
+                                localStorage.setItem('long', currLong);
+                                localStorage.setItem('latLongTimestamp', Date.now());
+                            } else {
+                                getWeatherData(`${lat},${long}`);
+                            }
+                        } else {
+                            getWeatherData(`${currLat},${currLong}`);
+                            localStorage.setItem('lat', currLat);
+                            localStorage.setItem('long', currLong);
+                            localStorage.setItem('latLongTimestamp', Date.now());
+                        }
+                    },
+                    function (err) {
+                        console.log(err);
+                        if (posErrCount > 0) return;
+                        posErrCount++;
+                        var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
+                        if (!zip) {
+                            $('#weather-content').html('Weather data failed to load');
+                            $('#weather-forecast').html('Weather forecast failed to load');
+                            return;
+                        }
+                        getWeatherData(zip.replace(/[^0-9]/g, ''));
+                    }, {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
+            } else {
+                if (posErrCount > 0) return;
+                posErrCount++;
+                var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
+                if (zip === null) {
+                    $('#weather-content').html('Weather data failed to load');
+                    $('#weather-forecast').html('Weather forecast failed to load');
+                    return;
+                }
+                getWeatherData(zip.replace(/[^0-9]/g, ''));
+            }
+        }
+        
+        function getWeatherData(locationData) {
+            //getWeatherResultData('data.json');
+            getWeatherResultData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/q/${locationData}.json`, true);
+        }
+        
+        function getWeatherResultData(url) {
+            if (hasWeatherDataInLocalStorage()
+                    && dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) <= 30
+                    && localStorage.getItem('weatherDataType') === 'Extended') {
+                showWeatherData(JSON.parse(localStorage.getItem('weatherData')));
+                return;
+            }
             jQuery.ajax({
-                url: 'data.json', //url,
+                url: url,
                 type: 'GET',
                 success: function(resultData) {
+                    if (hasWeatherDataInLocalStorage()) {
+                        if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) > 30) {
+                            localStorage.setItem('weatherData', JSON.stringify(resultData));
+                            localStorage.setItem('weatherDataTimestamp', Date.now());
+                            localStorage.setItem('weatherDataType', 'Extended');
+                        }
+                    } else {
+                        localStorage.setItem('weatherData', JSON.stringify(resultData));
+                        localStorage.setItem('weatherDataTimestamp', Date.now());
+                        localStorage.setItem('weatherDataType', 'Extended');
+                    }
                     showWeatherData(resultData);
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
@@ -74,7 +185,7 @@
         }
         
         function showWeatherData(resultData) {
-    
+            
             // current weather
             let curr = resultData.current_observation; // object
             $('#weather-city').html(`${curr.display_location.city}: `);
@@ -82,8 +193,7 @@
             $('#current-temp').html(`${curr.temp_f}&deg;F
                 ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}`);
             $('#current-humidity').html(`${curr.relative_humidity}`);
-            $('#current-wind').html(`${curr.wind_mph > 0 ?
-                    `Wind: ${curr.wind_mph} mph ${curr.wind_dir}` : ''}`);
+            $('#current-wind').html(`${curr.wind_mph > 0 ? `${curr.wind_mph} mph ${curr.wind_dir}` : ''}`);
 
             // daily forecast
             let forecast = resultData.forecast.simpleforecast.forecastday; // array[0 - 9]
@@ -108,43 +218,53 @@
             let daysCount = 1;
             var lowerBody = '<td class="pred-first-day pred-detail-top">';
             for (let i = 0; i < hForecast.length; i++) {
-                if (hForecast[i].FCTTIME.mday - (new Date()).getDate() > 9) {
+                if (daysCount > 10) {
                     lowerBody += '</td>';
                     break;
                 }
                 let tempDate = formatHourlyForecastDay(hForecast[i].FCTTIME);
                 if (tempDate !== lastDate) {
                     lowerBody += '</td><td class="pred-other-days pred-detail-top">';
+                    daysCount++;
                 }
-                lowerBody += `<img class="forecast-img" src="${hForecast[i].icon_url}"><br>`;
+                lowerBody += `
+                    <img class="forecast-img" src="${hForecast[i].icon_url}"
+                        onmouseenter="
+                            $('#weather-details').show();
+$('#weather-details').html('<span>${tempDate}</span><span>${formatHours(hForecast[i].FCTTIME)}</span><span><div>${hForecast[i].temp.english}&deg;F</div></span><span><div>${hForecast[i].humidity}%</div></span><span><div>${hForecast[i].wspd.english} mph ${hForecast[i].wdir.dir}</div></span>');"
+                        onmouseout="
+                            $('#weather-details').hide();
+                            $('#weather-details').html('');">`;
                 lastDate = tempDate;
             }
-            
+
             $('#forecast-body').html(`<tr>${upperBody}</tr><tr>${lowerBody}</tr>`);
-            
+
             // get rid of any extraneous extra rows
             while ($('table').children('tbody').children('tr').children('td').length > 20) {
                 $('table').find("tr:last").find("td:last").remove();
             }
-            
+
             // set opacity of the daily humidity forecast background
             $('.humidity').each(function() {
                 let text = $(this).text();
                 let str = text.substring(0, text.length - 1);
-                $(this).css({opacity: parseInt(str) / 100});
-                // TODO: set text opacity back to 1
+                $(this).css({background: `rgba(128, 128, 255, ${parseInt(str) / 100})`});
             });
         }
         
         function formatForecastDay(date) {
             return `${date.weekday_short}<br>${date.month}/${date.day}`;
         }
-        
+
         function formatHourlyForecastDay(date) {
             return `${date.weekday_name_abbrev} ${date.mon}/${date.mday}`;
         }
         
-        showFullWeatherForecast('');
+        function formatHours(date) {
+            var hr = date.hour;
+            return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)} ${date.ampm}`;
+        }
     </script>
 </body>
 </html>
