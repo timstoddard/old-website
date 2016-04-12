@@ -304,7 +304,7 @@ function showWeatherData(resultData) {
     body += '</tr>';
 
     $('#weather-forecast').html(`
-        <div class="weather-title"><a href="forecast.html" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
+        <div class="weather-title"><a href="../forecast.html" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
         <div id="weather-forecast-data">
             <table>
                 <thead>${header}</thead>
@@ -313,11 +313,6 @@ function showWeatherData(resultData) {
         </div>`);
     $('[data-toggle="tooltip"]').tooltip();
 }
-
-$('#weather-forecast')
-    .on('click', '#weather-title', function() {
-        window.open('forecast.html');
-    });
 
 function formatHours(date) {
     var hr = date.hour;
