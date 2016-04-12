@@ -1,6 +1,5 @@
 $(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-
+    
     $('#contact').click(function() {
         let phone = ['1','2','4','1',' ','4','9','3',' ','8','0','4'];
         let school = ['u','d','e','.','y','l','o','p','l','a','c','@','r','a','d','d','o','t','s','t'];
@@ -12,6 +11,7 @@ $(function() {
         $('#personal').html(`<a href="mailto:${personal.reverse().join('')}">${personal.join('')}</a>`);
         $('#myModal').modal();
     });
+    
     $('#send').click(function() {
         if (!$('#name').val()) {
             alert('Please enter your name.');
@@ -57,4 +57,5 @@ $(function() {
             $('#message').val('');
         });
     });
+
 });
