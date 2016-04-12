@@ -1,0 +1,92 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700);
+
+html {
+    background: #1fc8db;
+    background: -webkit-linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    background: -o-linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    background: -moz-linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    height: 100%;
+}
+
+body {
+    background: none;
+    color: #f1f1f1;
+    font-family: sans-serif;
+    font-weight: 300;
+    height: 100%;
+    position: relative;
+    text-align: center;
+}
+
+#main-table {
+    font-weight: 400;
+    margin: auto;
+    width: 80vw;
+}
+
+h1 { 
+    font-size: 1200%;
+    font-size: 13vw;
+    font-weight: 200;
+}
+
+h2 {
+    font-size: 350%;
+    font-size: 3.5vw;
+    font-weight: 200;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+    background-color: transparent;
+    border-color: #cccccc;
+    color: #f3f3f3;
+    font-size: 2vw;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+}
+
+.btn:hover, .btn:focus, .btn:active {
+    background-color: transparent !important;
+    border-color: #cccccc !important;
+}
+
+.btn-group {
+    margin: 0 auto;
+    margin-top: 1em;
+}
+
+h2 > div:nth-child(2) {
+    font-weight: 400;
+}
+
+td {
+    text-align: center;
+
+}
+
+tr:nth-child(2) > td {
+    text-align: center;
+    border-top: 1px solid #f3f3f3;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.outer {
+    display:flex;justify-content:center;align-items:center;
+    height: 100%;
+}
+
+.content { display: inline-block; vertical-align: middle; }
+#name, #sender-email, #subject, #message { border-radius: 3px; border: 1px solid #ccc; }
+#name, #sender-email { display: inline; width: 40%; margin-bottom: 15px; }
+#name { margin-right: 5px; }
+#sender-email { margin-left: 5px; }
+#subject, #message { display: block; margin: auto; width: 82.5%; margin-bottom: 15px; }
+#message { padding-bottom: 100px; }
+#contact-info-table { margin: 0 auto; }
+.left-column { text-align: right; padding-right: 8px; }
+.right-column { text-align: left; padding-left: 8px; }
+.modal-title-custom { font-size: 200%; }
+.modal-content { color: black; }
+#DM-title { margin-bottom: 16px; font-size: 150%; }
+#send { display: inline; font-size: 125%; cursor: pointer; font-weight: 400;}

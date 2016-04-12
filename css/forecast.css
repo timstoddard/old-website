@@ -1,0 +1,35 @@
+body { font-family: 'Helvetica Neue', 'Open-Light', sans-serif !important; min-width: 650px; }
+.weather-title { font-size: 200%; display: inline-block; }
+#weather-content { display: inline-flex; align-items: center; margin: 20px 0 20px 0; }
+#current-temp:not(:empty), #current-humidity:not(:empty), #current-wind:not(:empty) {
+    display: inline-block; padding: 2px 5px; font-size: 135%; border-radius: 1em; text-align: center;
+    margin-left: 0.2em; margin-right: 0.2em; border-radius: 1em; text-align: center; }
+#weather-city { display: inline-block; padding: 5px; }
+#weather-img { margin-left: 0.5em; margin-right: 0.2em; }
+#current-temp:not(:empty) { background-color: #ff4d4d; }
+#current-humidity:not(:empty) { background-color: #8080ff; }
+#current-wind:not(:empty) { background-color: #a6a6a6; }
+#weather-forecast, table { margin: 0 auto; }
+.pred-header { font-size: 150%; padding: 10px 10px 0px 10px; }
+table { border: 10px solid #c0c0c0; max-width: 900px; margin-bottom: 20px;}
+td { vertical-align: top; width: 6em; padding: 10px;
+    border-left: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0; }
+td:nth-child(1) { vertical-align: bottom; }
+.pred-detail-top { border-top: 1px solid black; padding: 0; }
+.forecast-icon { display: block; margin: auto; margin-top: -10px; padding-bottom: 5px; }
+.temperature-low, .temperature-high, .humidity { display: inline-block; font-size: 125%; border-radius: 1em;
+    padding: 2px 5px; }
+.temperature-low, .temperature-high { margin-bottom: 0.15em; }
+.temperature-low { background-color: #33d6ff; }
+.temperature-high { background-color: #ff8c1a; }
+.humidity { background-color: #8080ff; }
+.forecast-img { height: 50px; width: auto; margin: auto; }
+.forecast-img-wrapper { display: block; }
+#weather-details { width: 110px; height: 110px; position: fixed; right: 0; top: 0; background-color: #e0e0e0; text-align: center; border-radius: 0.42em; margin-top: 8px; }
+@media (min-width: 900px) { #weather-details { position: fixed; left: 50%; margin-left: 340px; } }
+#weather-details > span { display: block; }
+#weather-details > span > div { display: inline; padding: 2px 5px; border-radius: 1em; }
+#weather-details > span:nth-child(n+3):nth-child(-n+4) { margin-bottom: 2px; }
+#weather-details > span:nth-child(3) > div { background-color: #ff4d4d; }
+#weather-details > span:nth-child(4) > div { background-color: #8080ff; }
+#weather-details > span:nth-child(5) > div { background-color: #a6a6a6; }

@@ -1,6 +1,3 @@
-// TODO: store weather data in local storage along with timestamp,
-//       and fetch new data only if stored data is > 15 mins old
-
 "use strict";
 
 $(function() {
@@ -11,23 +8,25 @@ $(function() {
     $(window).keydown(function(event) {
         var key = event.which;
         if (key === 83) { // 's' key
-            if (($('#myModal').data('bs.modal') || {}).isShown) return;
+            if (($('#myModal').data('bs.modal') || {}).isShown) {
+                return;
+            }
             showModalText();
             $('#myModal').modal();
             $('#name-input').focus();
-            setTimeout(function() {$('#name-input').val('')}, 0);
+            setTimeout(function() { $('#name-input').val(''); }, 0);
             $('.outer-right').hide();
         } else if (key === 87) { // 'w' key
             if (!$('#myModal').is(':visible')) {
                 $('.outer-right').toggle();
             }
-        } else if (key === 27) {
+        } else if (key === 27) { // esc key
             $('.outer-right').hide();
         }
     });
     
     $('#name-input').keypress(function (event) {
-        let keynum = event.which;
+        var keynum = event.which;
         var query = $('#name-input').val();
         if (keynum === 13 && query && query.trim().length > 0) {
             let index = query.indexOf('/');
@@ -135,7 +134,7 @@ function checkForCustomName() {
     try { name = decodeURIComponent(name); }
     catch(err) { return; }
     
-    $('#welcome').html(`Welcome, ${name}`);
+    $('#welcome').html(`Welcome, ${name}!`);
 }
 
 /**********   CALL METHODS HERE   **********/
@@ -146,11 +145,15 @@ showWeather();
 /*******************************************/
 
 function hasLatAndLongInLocalStorage() {
-    return localStorage.getItem('lat') !== null && localStorage.getItem('long') !== null && localStorage.getItem('latLongTimestamp') !== null;
+    return localStorage.getItem('lat') !== null
+        && localStorage.getItem('long') !== null
+        && localStorage.getItem('latLongTimestamp') !== null;
 }
 
 function hasWeatherDataInLocalStorage() {
-    return localStorage.getItem('weatherData') !== null && localStorage.getItem('weatherDataTimestamp') !== null && localStorage.getItem('weatherDataType') !== null;
+    return localStorage.getItem('weatherData') !== null
+        && localStorage.getItem('weatherDataTimestamp') !== null
+        && localStorage.getItem('weatherDataType') !== null;
 }
 
 function dateDiffMins(date1, date2) {
@@ -180,7 +183,8 @@ function showTime() {
 
 function showWeatherByLocation() {
     let posErrCount = 0;
-    if (hasLatAndLongInLocalStorage() && dateDiffMins(localStorage.getItem('latLongTimestamp'), Date.now()) <= 60) {
+    if (hasLatAndLongInLocalStorage()
+            && dateDiffMins(localStorage.getItem('latLongTimestamp'), Date.now()) <= 60) {
         getWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
         return;
     }
@@ -193,7 +197,8 @@ function showWeatherByLocation() {
                     var lat = localStorage.getItem('lat');
                     var long = localStorage.getItem('long');
                     var epsilon = 0.001;
-                    if (Math.abs(lat - currLat) > epsilon || Math.abs(long - currLong) > epsilon) {
+                    if (Math.abs(lat - currLat) > epsilon
+                            || Math.abs(long - currLong) > epsilon) {
                         getWeatherData(`${currLat},${currLong}`);
                         localStorage.setItem('lat', currLat);
                         localStorage.setItem('long', currLong);
