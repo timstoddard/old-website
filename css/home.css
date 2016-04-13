@@ -52,9 +52,10 @@ a, a:link, a:visited, a:hover, a:active {
 }
 
 .btn-group > a:hover {
-    background-color: #08A5E1 !important;
+    background-color: transparent !important;
     border: 1px solid #f3f3f3 !important;
     color: #f3f3f3;
+    text-decoration: underline;
 }
 
 .detail-text, .detail-text > a {
@@ -69,11 +70,6 @@ a, a:link, a:visited, a:hover, a:active {
 .detail-text > a {
     padding: 0;
     text-decoration: underline;
-}
-
-.btn:hover, .btn:focus, .btn:active {
-    background-color: transparent !important;
-    border-color: #cccccc !important;
 }
 
 h2 > div:nth-child(2) {
