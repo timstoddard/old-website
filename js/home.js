@@ -76,10 +76,15 @@ $('td > span').click(function() {
                         '-o-transform': `rotate(${180 - prog * 180}deg)`,
                         'transform': `rotate(${180 - prog * 180}deg)`
                     });
+                },
+                done: function() {
+                    console.debug('wtf');
+                    $('td > span').addClass('semi-transparent');
                 }
             });
     } else {
         $('td > span').removeClass('hover-wiggle');
+        $('td > span').removeClass('semi-transparent');
         $('.detail-text').slideToggle({
                 duration: 500,
                 progress: function(anim, prog) {
