@@ -62,6 +62,7 @@ $(function() {
 
 });
 
+var canAddWiggleClass = false;
 $('td > span').click(function() {
     if ($('.detail-text').is(':visible')) {
         $('.detail-text').slideToggle(
@@ -75,9 +76,6 @@ $('td > span').click(function() {
                         '-o-transform': `rotate(${180 - prog * 180}deg)`,
                         'transform': `rotate(${180 - prog * 180}deg)`
                     });
-                },
-                done: function() {
-                    $('td > span').addClass('hover-wiggle');
                 }
             });
     } else {
