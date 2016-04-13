@@ -1,5 +1,7 @@
 $(function() {
     
+    $('.detail-text').hide();
+    
     $('#contact').click(function() {
         let phone = ['1','2','4','1',' ','4','9','3',' ','8','0','4'];
         let school = ['u','d','e','.','y','l','o','p','l','a','c','@','r','a','d','d','o','t','s','t'];
@@ -58,4 +60,39 @@ $(function() {
         });
     });
 
+});
+
+$('td > span').click(function() {
+    if ($('.detail-text').is(':visible')) {
+        $('.detail-text').slideToggle(
+            {
+                duration: 500,
+                progress: function(anim, prog) {
+                    $('td > span').css({
+                        '-webkit-transform': `rotate(${180 - prog * 180}deg)`,
+                        '-moz-transform': `rotate(${180 - prog * 180}deg)`,
+                        '-ms-transform': `rotate(${180 - prog * 180}deg)`,
+                        '-o-transform': `rotate(${180 - prog * 180}deg)`,
+                        'transform': `rotate(${180 - prog * 180}deg)`
+                    });
+                },
+                done: function() {
+                    $('td > span').addClass('hover-wiggle');
+                }
+            });
+    } else {
+        $('td > span').removeClass('hover-wiggle');
+        $('.detail-text').slideToggle({
+                duration: 500,
+                progress: function(anim, prog) {
+                    $('td > span').css({
+                        '-webkit-transform': `rotate(${prog * 180}deg)`,
+                        '-moz-transform': `rotate(${prog * 180}deg)`,
+                        '-ms-transform': `rotate(${prog * 180}deg)`,
+                        '-o-transform': `rotate(${prog * 180}deg)`,
+                        'transform': `rotate(${prog * 180}deg)`
+                    });
+                }
+            });
+    }
 });
