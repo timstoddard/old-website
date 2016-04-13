@@ -108,7 +108,7 @@ td > span {
 
 @keyframes shake {
     20% {
-        transform: translate3d(0, 3px, 0);
+        transform: translate3d(0, 0.5vw, 0);
     }
     
     40% {
@@ -116,7 +116,7 @@ td > span {
     }
 
     55% {
-        transform: translate3d(0, 2px, 0);
+        transform: translate3d(0, 0.3vw, 0);
     }
     
     70% {
@@ -124,7 +124,7 @@ td > span {
     }
 
     85% {
-        transform: translate3d(0, 1px, 0);
+        transform: translate3d(0, 0.15vw, 0);
     }
     
     100% {
