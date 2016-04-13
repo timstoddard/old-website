@@ -163,9 +163,7 @@ td > span {
 #message { padding-bottom: 100px; }
 
 .modal-body > div:first-child {
-    align-items: center;
-    display: flex;
-    justify-content: center;
+    margin: 0 auto;
 }
 
 #contact-info-table {

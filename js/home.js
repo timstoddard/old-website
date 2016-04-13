@@ -78,7 +78,6 @@ $('td > span').click(function() {
                     });
                 },
                 done: function() {
-                    console.debug('wtf');
                     $('td > span').addClass('semi-transparent');
                 }
             });
