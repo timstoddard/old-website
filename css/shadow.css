@@ -9,10 +9,10 @@ h1 {
     color: black;
     opacity: 0.2;
     position: fixed;
-    top: 11px;
-    left: 101px;
+    top: 34px;
+    left: 97px;
     -ms-transform: skew(-70deg, 0deg) scale(1, 0.42) translate(10vw, 10vh);
     -webkit-transform: skew(-70deg, 0deg) scale(1, 0.42) translate(10vw, 10vh);
-    transform: skew(-70deg, 0deg) scale(1, 0.42) translate(10vw, 10vh);    
+    transform: skew(-70deg, 0deg) scale(1, 0.42) translate(10vw, 10vh);
     z-index: -1;
 }
