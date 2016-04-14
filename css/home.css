@@ -25,25 +25,22 @@ body {
 
 #main-table {
     margin: auto;
+    max-width: 740px;
+    min-width: 236.8px;
     width: 74vw;
-}
-
-h1, h2 {
-    font-weight: 200;
-    margin: 0 auto;
 }
 
 h1 {
     font-family: 'Amatic SC', sans-serif;
-    font-size: 1200%;
     font-size: 20vw;
 }
 
 h2 {
     font-family: 'Yanone Kaffeesatz', sans-serif;
-    font-size: 350%;
     font-size: 6vw;
     font-weight: 200;
+    margin-bottom: 0;
+    margin-top: 1.5vw;
 }
 
 a, a:link, a:visited, a:hover, a:active {
@@ -71,8 +68,8 @@ a, a:link, a:visited, a:hover, a:active {
 .detail-text {
     margin-bottom: 1.5vw;
     margin-top: 1vw;
-    padding-left: 1.3vw;
-    padding-right: 1.3vw;
+    padding-left: 1.25vw;
+    padding-right: 1.25vw;
 }
 
 .detail-text > a {
@@ -88,7 +85,6 @@ a, a:link, a:visited, a:hover, a:active {
     border-top: 1px solid #f3f3f3;
     border-bottom: 1px solid #f3f3f3;
     padding-bottom: 2vw;
-    padding-top: 2vw;
 }
 
 #main-table > tbody > tr:nth-child(2) > td:nth-child(2n+1) {
@@ -203,4 +199,32 @@ td > span {
     display: inline;
     font-size: 125%;
     font-weight: 400;
+}
+
+@media(max-width: 320px) {
+    h1 { font-size: 64px; }
+    h2 { font-size: 19.2px; margin-top: 4.8px; }
+    a, a:link, a:visited, a:hover, a:active { font-size: 6.4px; }
+    .detail-text, .detail-text > a { font-size: 4.8px; }
+    .detail-text { margin-bottom: 4.8px; margin-top: 3.2px; padding-left: 4px; padding-right: 4px; }
+    #main-table > tbody > tr:nth-child(1) > td { padding-bottom: -3.2px; }
+    #main-table > tbody > tr:nth-child(2) > td { padding-bottom: 6.4px; }
+    #main-table > tbody > tr:nth-child(2) > td:nth-child(2n+1) { width: 128px; }
+    #main-table > tbody > tr:nth-child(2) > td:nth-child(2) { bottom: -2.56px; }
+    #main-table > tbody > tr:nth-child(3) > td { padding-top: 8px; }
+    td > span { font-size: 5.76px; }    
+}
+
+@media(min-width: 1000px) {
+    h1 { font-size: 200px; }
+    h2 { font-size: 60px; margin-top: 15px; }
+    a, a:link, a:visited, a:hover, a:active { font-size: 20px; }
+    .detail-text, .detail-text > a { font-size: 15px; }
+    .detail-text { margin-bottom: 15px; margin-top: 10px; padding-left: 12.5px; padding-right: 12.5px; }
+    #main-table > tbody > tr:nth-child(1) > td { padding-bottom: -10px; }
+    #main-table > tbody > tr:nth-child(2) > td { padding-bottom: 20px; }
+    #main-table > tbody > tr:nth-child(2) > td:nth-child(2n+1) { width: 400px; }
+    #main-table > tbody > tr:nth-child(2) > td:nth-child(2) { bottom: -8px; }
+    #main-table > tbody > tr:nth-child(3) > td { padding-top: 25px; }
+    td > span { font-size: 18px; }
 }
