@@ -62,7 +62,6 @@ $(function() {
 
 });
 
-var canAddWiggleClass = false;
 $('td > span').click(function() {
     if ($('.detail-text').is(':visible')) {
         $('.detail-text').slideToggle(
@@ -78,6 +77,7 @@ $('td > span').click(function() {
                     });
                 },
                 done: function() {
+                    //$('td > span').addClass('hover-wiggle');
                     $('td > span').addClass('semi-transparent');
                 }
             });
