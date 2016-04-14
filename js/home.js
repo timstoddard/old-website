@@ -38,17 +38,17 @@ $(function() {
             data: {
                 'key': 'J5O1Hvb_BAVJa73BtCJm3g',
                 'message': {
-                'from_email': 'homepage-contact@tstoddard.com',
-                'from_name': `${$('#name').val()}`,
-                'to': [
-                    {
-                        'email': 'tim.stoddard2@gmail.com',
-                        'name': 'Tim',
-                        'type': 'to'
-                    }
-                ],
-                'subject': `${$('#subject').val()}`,
-                'html': `"${$('#name').val()}" (${$('#sender-email').val()}) says: ${$('#message').val()}`
+                    'from_email': 'homepage-contact@tstoddard.com',
+                    'from_name': `${$('#name').val()}`,
+                    'to': [
+                        {
+                            'email': 'tim.stoddard2@gmail.com',
+                            'name': 'Tim',
+                            'type': 'to'
+                        }
+                    ],
+                    'subject': `${$('#subject').val()}`,
+                    'html': `"${$('#name').val()}" (${$('#sender-email').val()}) says: ${sanitizeText($('#message').val())}`
                 }
             }
         }).done(function() {
@@ -61,6 +61,10 @@ $(function() {
     });
 
 });
+
+function sanitizeText(str) {
+    return document.createElement('div').appendChild(document.createTextNode(str)).innerHTML;
+}
 
 $('td > span').click(function() {
     if ($('.detail-text').is(':visible')) {
