@@ -39,7 +39,7 @@ h1 {
 
 .shadow-header {
     color: black;
-    opacity: 0.2;
+    opacity: 0.15;
     position: fixed;
     -ms-transform: skew(-70deg, 0deg) scale(1, 0.42);
     -webkit-transform: skew(-70deg, 0deg) scale(1, 0.42);
