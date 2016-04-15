@@ -33,6 +33,18 @@ body {
 h1 {
     font-family: 'Amatic SC', sans-serif;
     font-size: 20vw;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.shadow-header {
+    color: black;
+    opacity: 0.2;
+    position: fixed;
+    -ms-transform: skew(-70deg, 0deg) scale(1, 0.42);
+    -webkit-transform: skew(-70deg, 0deg) scale(1, 0.42);
+    transform: skew(-70deg, 0deg) scale(1, 0.42);
+    z-index: -1;
 }
 
 h2 {
@@ -111,29 +123,12 @@ td > span {
 }
 
 .hover-wiggle:hover {
-    animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+    animation: shake 0.25s linear both;
 }
 
 @keyframes shake {
-    0% {
-        transform: translate3d(0, 0, 0);
-    }
-    
-    25% {
-        transform: translate3d(0, -0.25vw, 0);
-    }
-    
-    50% {
-        transform: translate3d(0, 0, 0);
-    }
-
-    75% {
-        transform: translate3d(0, 0.15vw, 0);
-    }
-    
-    100% {
-        transform: translate3d(0, 0, 0);
-    }
+    25%  {transform: rotate(20deg)}
+    75%  {transform: rotate(-20deg)}
 }
 
 .outer {
@@ -143,13 +138,40 @@ td > span {
     justify-content: center;
 }
 
-.content { display: inline-block; vertical-align: middle; }
-#name, #sender-email, #subject, #message { border-radius: 3px; border: 1px solid #ccc; }
-#name, #sender-email { display: inline; width: 40%; margin-bottom: 15px; }
-#name { margin-right: 5px; }
-#sender-email { margin-left: 5px; }
-#subject, #message { display: block; margin: auto; width: 82.5%; margin-bottom: 15px; }
-#message { padding-bottom: 100px; }
+.content {
+    display: inline-block;
+    vertical-align: middle;
+}
+    
+#name, #sender-email, #subject, #message {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#name, #sender-email {
+    display: inline;
+    margin-bottom: 15px;
+    width: 40%;
+}
+
+#name {
+    margin-right: 5px;
+}
+
+#sender-email {
+    margin-left: 5px;
+}
+
+#subject, #message {
+    display: block;
+    margin: auto;
+    margin-bottom: 15px;
+    width: 82.5%;
+}
+
+#message {
+    padding-bottom: 100px;
+}
 
 .modal-body > div:first-child {
     margin: 0 auto;

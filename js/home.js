@@ -1,6 +1,12 @@
 $(function() {
     
-    $('.detail-text').hide();
+    $('.shadow-header').html('TIM STODDARD');
+    if ($().slideToggle) {
+        $('.detail-text').hide();
+        $('td > span').addClass('glyphicon-chevron-down');
+    }
+    console.log($().slideToggle);
+    initPositionShadow();
     
     $('#contact').click(function() {
         let phone = ['1','2','4','1',' ','4','9','3',' ','8','0','4'];
@@ -62,6 +68,39 @@ $(function() {
 
 });
 
+$(window).resize(function() {
+    positionShadow();
+});
+
+function initPositionShadow() {
+    var header = $('.reg-header');
+    var x = header.offset().left;
+    var y = header.offset().top;
+    var wid = header.width();
+    var hgt = header.height();
+    $('.shadow-header').css({
+        top: y + hgt * 0.11,
+        left: x + wid * 0.324
+    });
+}
+
+function positionShadow() {
+    var header = $('.reg-header');
+    var x = header.position().left;
+    var y = header.position().top;
+    var wid = header.width();
+    var hgt = header.height();
+    var shadowHeader = $('.shadow-header');
+    var sh_x = shadowHeader.position().left;
+    var sh_y = shadowHeader.position().top;
+    var sh_wid = shadowHeader.width();
+    var sh_hgt = shadowHeader.height();
+    $('.shadow-header').css({
+        top: y + hgt * 0.2,
+        left: x + wid * 0.14
+    });
+}
+
 function sanitizeText(str) {
     return document.createElement('div').appendChild(document.createTextNode(str)).innerHTML;
 }
@@ -79,6 +118,7 @@ $('td > span').click(function() {
                         '-o-transform': `rotate(${180 - prog * 180}deg)`,
                         'transform': `rotate(${180 - prog * 180}deg)`
                     });
+                    positionShadow();
                 },
                 done: function() {
                     //$('td > span').addClass('hover-wiggle');
@@ -98,6 +138,7 @@ $('td > span').click(function() {
                         '-o-transform': `rotate(${prog * 180}deg)`,
                         'transform': `rotate(${prog * 180}deg)`
                     });
+                    positionShadow();
                 }
             });
     }
