@@ -19,10 +19,16 @@ hr {
 	font-family: Courier New, Courier, monospace;
 	font-size: 14px;
 	line-height: 14px;
+	padding-left: 10px;
 	white-space: pre;
 }
 
-.tree > span {
+.normal {
+	font-family: sans-serif;
+	font-size: 16px;
+}
+
+.tree > span:not(:nth-child(2)) {
 	background-color: springgreen;
 	font-weight: 800;
 }

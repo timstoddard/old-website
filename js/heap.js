@@ -100,9 +100,9 @@ Node = function(i) {
 
 var BTreePrinter = {
 	printNode: function(root) {
-		this.printNodeInternal([root], 1, this.maxLevel(root));
+		this.printNodeInternal([root], 1, this.maxLevel(root), this.countElements(root));
 	},
-	printNodeInternal: function(nodes, level, maxLevel) {
+	printNodeInternal: function(nodes, level, maxLevel, countElements) {
 		if (nodes.length === 0 || BTreePrinter.isAllElementsNull(nodes)) {
 			return '';
 		}
@@ -167,7 +167,7 @@ var BTreePrinter = {
 		if (level === 1) {
 			oneLongString = oneLongString.replace(/ /g, '&nbsp;').replace(/,/g, '<br>');
 			oneLongString = oneLongString.substr(0, oneLongString.length - 4).replace(/(?:&nbsp;)+$/,'');
-			$('.tree').html(`<br>${oneLongString}<br>`);
+			$('.tree').html(`<br><span class="normal">Number of elements: ${countElements}<br>Number of levels: ${maxLevel}</span><br><br>${oneLongString}<br>`);
 		}
 		return oneLongString;
 	},
@@ -177,6 +177,12 @@ var BTreePrinter = {
 			temp += ' ';
 		}
 		return temp;
+	},
+	countElements: function(node) {
+		if (node === null) {
+			return 0;
+		}
+		return 1 + this.countElements(node.left) + this.countElements(node.right);
 	},
 	maxLevel: function(node) {
 		return node === null ? 0 : Math.max(this.maxLevel(node.left), this.maxLevel(node.right)) + 1;
