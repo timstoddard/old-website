@@ -96,6 +96,8 @@ Node = function(i) {
 	this.right = null;
 };
 
+// BTreePrinter is based on code found here: http://stackoverflow.com/a/4973083/5781945
+
 var BTreePrinter = {
 	printNode: function(root) {
 		this.printNodeInternal([root], 1, this.maxLevel(root));
@@ -116,7 +118,7 @@ var BTreePrinter = {
 		for (var i = 0; i < nodes.length; i++) {
 			var val = nodes[i];
 			if (val !== null) {
-				oneLongString += val.i + '';
+				oneLongString += `<span>${val.i}</span>`;
                 newNodes.push(val.left);
                 newNodes.push(val.right);
             } else {
@@ -165,7 +167,7 @@ var BTreePrinter = {
 		if (level === 1) {
 			oneLongString = oneLongString.replace(/ /g, '&nbsp;').replace(/,/g, '<br>');
 			oneLongString = oneLongString.substr(0, oneLongString.length - 4).replace(/(?:&nbsp;)+$/,'');
-			$('.tree').html(oneLongString);
+			$('.tree').html(`<br>${oneLongString}<br>`);
 		}
 		return oneLongString;
 	},
