@@ -1,0 +1,10 @@
+.input-div {
+	display: inline-block;
+	margin: 0 auto;
+}
+
+.tree {
+	font-family: Courier New, Courier, monospace;
+	font-weight: 400;
+	white-space: pre;
+}

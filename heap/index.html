@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Heap.js</title>
+        <link rel="stylesheet" href="../css/bootstrap.css">
+        <link rel="stylesheet" href="../css/heap.css">
+    </head>
+
+    <body>
+		<div class="input-div">
+			<span>Paste your heap contents here: </span>
+			<input id="user-input" type="text">
+			<button onclick="inputArray()">Generate tree</button>
+			<span><br>Accepted format: 1, 2, 3 (no enclosing brackets, spaces optional)</span>
+			<span><br>Notes:
+				<ul>
+					<li>This tool will not order your heap if it is our of order. It is only meant to help you better visualize the data structure.</li>
+					<li>Numbers greater than longer than 3 characters will mess up the spacing.</li>
+				</ul>
+			</span>
+		</div>
+		<hr>
+        <div class="tree"></div>
+        <script src="../js/jquery-2.2.1.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/heap.js"></script>
+    </body>
+</html>
