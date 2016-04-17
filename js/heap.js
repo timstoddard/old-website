@@ -35,27 +35,27 @@ var Heap = {
 		//this.driftUp(this.size);
 		return;
 	},
-	findMax: function() {
-		return this.add[1];
+	/*findMax: function() {
+		return this.arr[1];
 	},
 	deleteMax: function() {
 		if (this.isEmpty()) {
 			return;
 		}
 		var temp = this.arr[1];
-		this.arr[1] = this.arr[heapSize];
-		heapSize--;
-		driftDown(1);
+		this.arr[1] = this.arr[this.size];
+		this.size--;
+		this.driftDown(1);
 		return;
 	},
 	isEmpty: function() {
 		return this.size === 0;
-	},
+	},*/
 	isFull: function() {
 		return this.size === this.max_capacity;
 	},
 	heapSize: function() {
-		return size;
+		return this.size;
 	},
 	driftDown: function(hole) {
 		var child;
@@ -87,6 +87,13 @@ var Heap = {
 			}
 		}
 		this.arr[hole] = temp;
+	},
+	toString: function() {
+		var str = '';
+		for (var i = 1; i < this.arr.length; i++) {
+			str += `${this.arr[i]}${(i < this.arr.length - 1 ? ', ' : '')}`;
+		}
+		return str;
 	}
 };
 
@@ -100,9 +107,9 @@ Node = function(i) {
 
 var BTreePrinter = {
 	printNode: function(root) {
-		this.printNodeInternal([root], 1, this.maxLevel(root), this.countElements(root));
+		this.printNodeInternal([root], 1, this.maxLevel(root));
 	},
-	printNodeInternal: function(nodes, level, maxLevel, countElements) {
+	printNodeInternal: function(nodes, level, maxLevel) {
 		if (nodes.length === 0 || BTreePrinter.isAllElementsNull(nodes)) {
 			return '';
 		}
@@ -167,7 +174,7 @@ var BTreePrinter = {
 		if (level === 1) {
 			oneLongString = oneLongString.replace(/ /g, '&nbsp;').replace(/,/g, '<br>');
 			oneLongString = oneLongString.substr(0, oneLongString.length - 4).replace(/(?:&nbsp;)+$/,'');
-			$('.tree').html(`<br><span class="normal">Number of elements: ${countElements}<br>Number of levels: ${maxLevel}</span><br><br>${oneLongString}<br>`);
+			$('.tree').html(`<br><span class="normal">Array: ${Heap.toString()}<br>Number of elements: ${Heap.heapSize()}<br>Number of levels: ${maxLevel}</span><br><br>${oneLongString}<br>`);
 		}
 		return oneLongString;
 	},
@@ -177,12 +184,6 @@ var BTreePrinter = {
 			temp += ' ';
 		}
 		return temp;
-	},
-	countElements: function(node) {
-		if (node === null) {
-			return 0;
-		}
-		return 1 + this.countElements(node.left) + this.countElements(node.right);
 	},
 	maxLevel: function(node) {
 		return node === null ? 0 : Math.max(this.maxLevel(node.left), this.maxLevel(node.right)) + 1;
