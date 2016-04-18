@@ -114,10 +114,10 @@ Node = function(i) {
 // BTreePrinter is based on code found here: http://stackoverflow.com/a/4973083/5781945
 
 var BTreePrinter = {
-	printNode: function(root, inputHeap, sortedHeap) {
-		this.printNodeInternal([root], 1, this.maxLevel(root), inputHeap, sortedHeap);
+	printNode: function(root) {
+		this.printNodeInternal([root], 1, this.maxLevel(root));
 	},
-	printNodeInternal: function(nodes, level, maxLevel, inputHeap, sortedHeap) {
+	printNodeInternal: function(nodes, level, maxLevel) {
 		if (nodes.length === 0 || BTreePrinter.isAllElementsNull(nodes)) {
 			return '';
 		}
@@ -182,7 +182,12 @@ var BTreePrinter = {
 		if (level === 1) {
 			oneLongString = oneLongString.replace(/ /g, '&nbsp;').replace(/,/g, '<br>');
 			oneLongString = oneLongString.substr(0, oneLongString.length - 4).replace(/(?:&nbsp;)+$/,'');
-			$('.tree').html(`<br><span class="normal">Your input array:          ${inputHeap}  <button onclick="showHeapOnTree(inputHeap, inputHeap, sortedHeap)">Show on tree</button><br>Heap-formatted array: ${sortedHeap}  <button onclick="showHeapOnTree(sortedHeap, inputHeap, sortedHeap)">Show on tree</button><br>Number of elements: ${inputHeap.heapSize()}<br>Number of levels: ${maxLevel}</span><br><br>${oneLongString}<br>`);
+			$('.tree').html(`
+<span class="normal"><a onclick="showHeapOnTree(inputHeap)">Your input array</a>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${inputHeap}
+<br><a onclick="showHeapOnTree(sortedHeap)">Heap-formatted array</a>: ${sortedHeap}
+<br>Number of elements: ${inputHeap.heapSize()}
+<br>Number of levels: ${maxLevel}</span>
+<br><br>${oneLongString}<br>`);
 		}
 		return oneLongString;
 	},
@@ -194,7 +199,9 @@ var BTreePrinter = {
 		return temp;
 	},
 	maxLevel: function(node) {
-		return node === null ? 0 : Math.max(this.maxLevel(node.left), this.maxLevel(node.right)) + 1;
+		return node === null
+			? 0
+			: Math.max(this.maxLevel(node === null ? node : node.left), this.maxLevel(node === null ? node : node.right)) + 1;
 	},
 	isAllElementsNull: function(list) {
 		var allNull = true;
@@ -295,7 +302,7 @@ function test1(arr) {
 	return data[1];
 }
 
-function showHeapOnTree(heap, inputHeap, sortedHeap) {
+function showHeapOnTree(heap) {
 	BTreePrinter.printNode(test1(heap.heapContents()), inputHeap, sortedHeap);
 }
 

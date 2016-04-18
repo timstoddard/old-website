@@ -10,7 +10,7 @@ h4 > a:link, h4 > a:visited, h4 > a:hover, h4 > a:active {
 }
 
 h4 > a:hover {
-	text-shadow: 0 0 2px #1fc8db;
+	text-decoration: underline;
 }
 
 hr {
@@ -18,18 +18,12 @@ hr {
 }
 
 .tree {
-    background: #1fc8db;
-    background: -webkit-linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
-    background: -o-linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
-    background: -moz-linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
-    background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    background: #c2d6d6;
 	font-family: Courier New, Courier, monospace;
 	font-size: 14px;
 	line-height: 14px;
 	padding-left: 10px;
-	white-space: pre;
+	padding-top: 10px;
 }
 
 .normal {
@@ -38,7 +32,7 @@ hr {
 	line-height: initial;
 }
 
-.tree > span:not(:nth-child(2)) {
-	background-color: springgreen;
+.tree > span:not(:first-child) {
+	background-color: #00ff66;
 	font-weight: 800;
 }
