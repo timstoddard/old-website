@@ -1,13 +1,14 @@
-var Heap = {
-	max_capacity: 0,
-	arr: [],
-	size: 0,
-	newHeap: function(len) {
+Heap = function(sort = true) {
+	this.max_capacity = 0;
+	this.arr = [];
+	this.size = 0;
+	this.sort = sort;
+	this.newHeap = function(len) {
 		this.max_capacity = len;
 		this.arr = [];
 		this.size = 0;
-	},
-	buildHeap: function(arr) { // takes an int array
+	};
+	this.buildHeap = function(arr) { // takes an int array
 		if (arr.length > this.max_capacity) {
 			return;
 		}
@@ -15,30 +16,37 @@ var Heap = {
 			this.arr[i + 1] = arr[i];
 			this.size++;
 		}
-		for (var i = Math.floor(this.size / 2); i >= 1; i--) {
-			//this.driftDown(i);
+		if (this.sort) {
+			for (var i = Math.floor(this.size / 2); i >= 1; i--) {
+				this.driftDown(i);
+			}
 		}
 		return;
-	},
-	heapContents: function() {
+	};
+	this.heapContents = function() {
 		var temp = [];
 		for (var i = 0; i < this.arr.length - 1; i++) {
 			temp[i] = this.arr[i + 1];
 		}
 		return temp;
-	},
-	insert: function(i) {
+	};
+	this.insert = function(i) {
 		if (this.isFull()) {
 			return;
 		}
 		this.arr[++this.size] = i;
-		//this.driftUp(this.size);
+		if (this.sort) {
+			this.driftUp(this.size);
+		}
 		return;
-	},
-	/*findMax: function() {
+	};
+	this.findMax = function() {
+		if (this.isEmpty()) {
+			return null;
+		}
 		return this.arr[1];
-	},
-	deleteMax: function() {
+	};
+	this.deleteMax = function() {
 		if (this.isEmpty()) {
 			return;
 		}
@@ -47,17 +55,17 @@ var Heap = {
 		this.size--;
 		this.driftDown(1);
 		return;
-	},
-	isEmpty: function() {
+	};
+	this.isEmpty = function() {
 		return this.size === 0;
-	},*/
-	isFull: function() {
+	};
+	this.isFull = function() {
 		return this.size === this.max_capacity;
-	},
-	heapSize: function() {
+	};
+	this.heapSize = function() {
 		return this.size;
-	},
-	driftDown: function(hole) {
+	};
+	this.driftDown = function(hole) {
 		var child;
 		var temp = this.arr[hole];
 		while (Math.floor(hole * 2) <= this.size) {
@@ -73,8 +81,8 @@ var Heap = {
 			}
 		}
 		this.arr[hole] = temp;
-	},
-	driftUp: function(hole) {
+	};
+	this.driftUp = function(hole) {
 		var parent;
 		var temp = this.arr[hole];
 		while (Math.floor(hole / 2) >= 1) {
@@ -87,14 +95,14 @@ var Heap = {
 			}
 		}
 		this.arr[hole] = temp;
-	},
-	toString: function() {
+	};
+	this.toString = function() {
 		var str = '';
 		for (var i = 1; i < this.arr.length; i++) {
 			str += `${this.arr[i]}${(i < this.arr.length - 1 ? ', ' : '')}`;
 		}
 		return str;
-	}
+	};
 };
 
 Node = function(i) {
@@ -106,10 +114,10 @@ Node = function(i) {
 // BTreePrinter is based on code found here: http://stackoverflow.com/a/4973083/5781945
 
 var BTreePrinter = {
-	printNode: function(root) {
-		this.printNodeInternal([root], 1, this.maxLevel(root));
+	printNode: function(root, inputHeap, sortedHeap) {
+		this.printNodeInternal([root], 1, this.maxLevel(root), inputHeap, sortedHeap);
 	},
-	printNodeInternal: function(nodes, level, maxLevel) {
+	printNodeInternal: function(nodes, level, maxLevel, inputHeap, sortedHeap) {
 		if (nodes.length === 0 || BTreePrinter.isAllElementsNull(nodes)) {
 			return '';
 		}
@@ -174,7 +182,7 @@ var BTreePrinter = {
 		if (level === 1) {
 			oneLongString = oneLongString.replace(/ /g, '&nbsp;').replace(/,/g, '<br>');
 			oneLongString = oneLongString.substr(0, oneLongString.length - 4).replace(/(?:&nbsp;)+$/,'');
-			$('.tree').html(`<br><span class="normal">Array: ${Heap.toString()}<br>Number of elements: ${Heap.heapSize()}<br>Number of levels: ${maxLevel}</span><br><br>${oneLongString}<br>`);
+			$('.tree').html(`<br><span class="normal">Your input array:          ${inputHeap}  <button onclick="showHeapOnTree(inputHeap, inputHeap, sortedHeap)">Show on tree</button><br>Heap-formatted array: ${sortedHeap}  <button onclick="showHeapOnTree(sortedHeap, inputHeap, sortedHeap)">Show on tree</button><br>Number of elements: ${inputHeap.heapSize()}<br>Number of levels: ${maxLevel}</span><br><br>${oneLongString}<br>`);
 		}
 		return oneLongString;
 	},
@@ -199,6 +207,9 @@ var BTreePrinter = {
 	}
 };
 
+var inputHeap;
+var sortedHeap;
+
 function checkForUrlArray() {
     let url = window.location.href;
     let index = url.indexOf('?');
@@ -217,7 +228,17 @@ function checkForUrlArray() {
 		let temp = parseInt(rawList[i]);
 		ints[i] = temp;
 	}
-	BTreePrinter.printNode(test1(ints));
+	
+	inputHeap = new Heap(false);
+	sortedHeap = new Heap();
+	inputHeap.newHeap(ints.length);
+	sortedHeap.newHeap(ints.length);
+	for (var i = 0; i < ints.length; i++) {
+		inputHeap.insert(ints[i]);
+		sortedHeap.insert(ints[i]);
+	}
+	
+	BTreePrinter.printNode(test1(inputHeap.heapContents()), inputHeap, sortedHeap);
 }
 
 function inputArray() {
@@ -232,6 +253,16 @@ function inputArray() {
 		}
 		ints[i] = temp;
 	}
+	
+	inputHeap = new Heap(false);
+	sortedHeap = new Heap();
+	inputHeap.newHeap(ints.length);
+	sortedHeap.newHeap(ints.length);
+	for (var i = 0; i < ints.length; i++) {
+		inputHeap.insert(ints[i]);
+		sortedHeap.insert(ints[i]);
+	}
+	
 	let url = window.location.href;
     let index = url.indexOf('?');
 	if (index === -1) {
@@ -239,21 +270,15 @@ function inputArray() {
 	} else {
 		window.location.href = `${url.substr(0, index)}?${encodeURIComponent(ints)}`;
 	}
-	BTreePrinter.printNode(test1(ints));
+	BTreePrinter.printNode(test1(inputHeap), inputHeap, sortedHeap);
 }
 
 function test1(arr) {
-	Heap.newHeap(arr.length);
-	Heap.buildHeap([]);
-	for (var i = 0; i < arr.length; i++) {
-		Heap.insert(arr[i]);
-	}
 	
-	var temp = Heap.heapContents();
 	var data = [];
 	
-	for (var i = 1; i <= temp.length; i++) {
-		data[i] = new Node(temp[i - 1]);
+	for (var i = 1; i <= arr.length; i++) {
+		data[i] = new Node(arr[i - 1]);
 	}
 	
 	for (var i = 1; i < data.length; i++) {
@@ -268,6 +293,10 @@ function test1(arr) {
 	}
 
 	return data[1];
+}
+
+function showHeapOnTree(heap, inputHeap, sortedHeap) {
+	BTreePrinter.printNode(test1(heap.heapContents()), inputHeap, sortedHeap);
 }
 
 checkForUrlArray();
