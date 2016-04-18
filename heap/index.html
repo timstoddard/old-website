@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <title>Heap.js</title>
-        <link rel="stylesheet" href="../css/bootstrap.css">
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/heap.css">
     </head>
 
@@ -14,14 +14,9 @@
 			<span>Paste your heap contents here: </span>
 			<input id="user-input" type="text">
 			<button onclick="inputArray()">Generate tree</button>
-			<span><br>Accepted format: <a href="./?1%2C2%2C3">1,2,3</a> (no enclosing brackets, spaces optional)</span>
-			<span><br>Notes:
-				<ul>
-					<li>This tool will not order your heap if it is our of order. It is only meant to help you better visualize the data structure.</li>
-					<li>Numbers greater than longer than 3 characters will mess up the spacing.</li>
-				</ul>
-			</span>
-			<span>Java version, for those interested: <a href="./PrettyPrinter.java">link</a></span>
+			<span><br>Accepted format example: <a href="./?1%2C2%2C3">1,2,3</a> (no enclosing brackets, spaces optional)</span>
+			<span><br>Note: numbers greater than longer than 3 characters will mess up the spacing.</span>
+			<span>Java version, for those interested: <a href="./PrettyPrinter.java" target="_blank">link</a></span>
 		</div>
 		<hr>
         <div class="tree"></div>

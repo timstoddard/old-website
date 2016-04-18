@@ -220,10 +220,18 @@ var sortedHeap;
 function checkForUrlArray() {
     let url = window.location.href;
     let index = url.indexOf('?');
-    if (index === -1) { return; }
+    if (index === -1) {
+		$('hr').hide();
+		$('.tree').hide();
+		return;
+	}
     
     let urlArr = url.substring(index + 1).trim();
-    if (urlArr.length == 0) { return; }
+    if (urlArr.length == 0) {
+		$('hr').hide();
+		$('.tree').hide();
+		return;
+	}
     
     try { urlArr = decodeURIComponent(urlArr); }
     catch(err) { window.location.href = url.substr(0, index); }
@@ -234,6 +242,14 @@ function checkForUrlArray() {
 	for (let i = 0; i < rawList.length; i++) {
 		let temp = parseInt(rawList[i]);
 		ints[i] = temp;
+	}
+	
+	if (ints.length === 0) {
+		$('hr').hide();
+		$('.tree').hide();
+	} else {
+		$('hr').show();
+		$('.tree').show();
 	}
 	
 	inputHeap = new Heap(false);
@@ -250,15 +266,26 @@ function checkForUrlArray() {
 
 function inputArray() {
 	var rawInput = $('#user-input').val();
+	if (rawInput.length === 0) {
+		window.open('./');
+		return;
+	}
 	var rawList = rawInput.replace(/ /g, '').split(',');
 	var ints = [];
 	for (let i = 0; i < rawList.length; i++) {
 		let temp = parseInt(rawList[i]);
 		if (isNaN(temp)) {
-			alert('Detected a non-numerical value in the array.\nPlease check your values (and your commas).');
+			alert('Detected a non-numerical value in the array.\nPlease check your values and comma placement.');
 			return;
 		}
 		ints[i] = temp;
+	}
+	
+	if (ints.length === 0) {
+		$('.tree').hide();
+	} else {
+		$('hr').show();
+		$('.tree').show();
 	}
 	
 	inputHeap = new Heap(false);
