@@ -1,3 +1,28 @@
 table {
+	/*border: 1px solid black;*/
+	border-collapse: collapse;
+}
+
+td {
 	border: 1px solid black;
+	height: 50px;
+	padding: 20px 30px;
+	text-align: center;
+	width: 110px;
+}
+
+.td-clean {
+	background: transparent;
+}
+
+.td-select {
+	background: yellow;
+}
+
+.td-chosen {
+	background: lightgreen;
+}
+
+.td-hover {
+	background: red;
 }
