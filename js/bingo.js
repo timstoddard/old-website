@@ -58,6 +58,7 @@ function init() {
 	}
 	$('.bingo-table').html(`<table>${tableStr}</table>`);
 	$(`table > tbody > tr:nth-child(3) > td:nth-child(3)`).addClass('td-chosen');
+	$('button').html('Submit');
 	$('.stats').html('Moves: 0<br>Squares filled in: 1');
 }
 
@@ -138,16 +139,6 @@ function onSubmit() {
 	moves++;
 	$('.stats').html(`Moves: ${moves}<br>Squares filled in: ${chosenCount}`);
 	
-	var newIndex = lastIndex;
-	while (newIndex === lastIndex) {
-		newIndex = Math.floor(arr.length * Math.random());
-	}
-	var obj = arr[newIndex].data;
-	setTimeout(function() {
-		$('.curr-video').html(`<span>${obj.title}<span><br>${obj.media_embed.content.replace(/&lt;/g, '<').replace(/&lt;/g, '>')}<br>`);
-	}, 500);
-	lastIndex = newIndex;
-	
 	// check for bingo on rows and cols
 	for (var i = 1; i <= 5; i++) {
 		var fullCol = true, fullRow = true;
@@ -187,5 +178,16 @@ function onSubmit() {
 		} else {
 			$('button').html('Reset');
 		}
+		return;
 	}
+	
+	var newIndex = lastIndex;
+	while (newIndex === lastIndex) {
+		newIndex = Math.floor(arr.length * Math.random());
+	}
+	var obj = arr[newIndex].data;
+	setTimeout(function() {
+		$('.curr-video').html(`<span>${obj.title}<span><br>${obj.media_embed.content.replace(/&lt;/g, '<').replace(/&lt;/g, '>')}<br>`);
+	}, 500);
+	lastIndex = newIndex;
 }
