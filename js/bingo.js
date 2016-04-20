@@ -31,10 +31,35 @@ var itemsList = [
 	'U-turner'
 ];
 var arr = null;
-var currTd = null;
-var lastIndex = -1;
-var moves = 0;
-var userBingo = false;
+var currTd;
+var lastIndex;
+var moves;
+var userBingo;
+
+function init() {
+	currTd = null;
+	lastIndex = -1;
+	moves = 0;
+	userBingo = false;
+	
+	shuffle(itemsList);
+	while(itemsList.length > 25) {
+		itemsList.pop();
+	}
+	var tableStr = '';
+	for (var i = 0; i <= 24; i++) {
+		if (i % 5 == 0 && i > 0) {
+			tableStr += `</tr>`;
+		}
+		if (i % 5 == 0 && i < 24) {
+			tableStr += `<tr>`;
+		}
+		tableStr += `<td onmouseover="mouseOver(${i})" onmouseout="mouseOut(${i})" onclick="onClick()">${i != 12 ? itemsList[i] : 'FREE (Blame the cammer)'}</td>`;
+	}
+	$('.bingo-table').html(`<table>${tableStr}</table>`);
+	$(`table > tbody > tr:nth-child(3) > td:nth-child(3)`).addClass('td-chosen');
+	$('.stats').html('Moves: 0<br>Squares filled in: 1');
+}
 
 $(function() {
     $.ajax({
@@ -53,22 +78,7 @@ $(function() {
 		console.dir(xhr);
 	});
 	
-	shuffle(itemsList);
-	while(itemsList.length > 25) {
-		itemsList.pop();
-	}
-	var tableStr = '';
-	for (var i = 0; i <= 24; i++) {
-		if (i % 5 == 0 && i > 0) {
-			tableStr += `</tr>`;
-		}
-		if (i % 5 == 0 && i < 24) {
-			tableStr += `<tr>`;
-		}
-		tableStr += `<td onmouseover="mouseOver(${i})" onmouseout="mouseOut(${i})" onclick="onClick()">${i != 12 ? itemsList[i] : 'FREE (Blame the cammer)'}</td>`;
-	}
-	$('.bingo-table').html(`<table>${tableStr}</table>`);
-	$(`table > tbody > tr:nth-child(3) > td:nth-child(3)`).addClass('td-chosen');
+	init();
 });
 
 function shuffle(array) {
@@ -107,6 +117,12 @@ function onClick() {
 }
 
 function onSubmit() {
+	
+	if (userBingo) {
+		init();
+		return;
+	}
+	
 	var chosenCount = 0;
 	for (var i = 0; i <= 24; i++) {
 		var tempTd = $(`table > tbody > tr:nth-child(${Math.floor(i / 5) + 1}) > td:nth-child(${i % 5 + 1})`);
@@ -132,13 +148,7 @@ function onSubmit() {
 	}, 500);
 	lastIndex = newIndex;
 	
-	if (userBingo) {
-		alert('You already won!');
-		return;
-	}
-	
-	// check for bingo
-	var fullDiagDown = true, fullDiagUp = true;
+	// check for bingo on rows and cols
 	for (var i = 1; i <= 5; i++) {
 		var fullCol = true, fullRow = true;
 		for (var j = 1; j <= 5; j++) {
@@ -149,24 +159,33 @@ function onSubmit() {
 				fullCol = false;
 			}
 		}
-		if (i === 1) {
-			for (var j = 1; j <= 5; j++) {
-				if (!$(`table > tbody > tr:nth-child(${j}) > td:nth-child(${j}`).hasClass('td-chosen')) {
-					fullDiagDown = false;
-				}
-				if (!$(`table > tbody > tr:nth-child(${j}) > td:nth-child(${5 - (j - 1)}`).hasClass('td-chosen')) {
-					fullDiagUp = false;
-				}
-			}
-		}
 		if (fullCol || fullRow) {
-			alert('Bingo!');
 			userBingo = true;
+			if (confirm('Bingo! Would you like to play again?')) {
+				init();
+			} else {
+				$('button').html('Reset');
+			}
 			return;
 		}
 	}
+	
+	// check for bingo on diagonals
+	var fullDiagDown = true, fullDiagUp = true;
+	for (var j = 1; j <= 5; j++) {
+		if (!$(`table > tbody > tr:nth-child(${j}) > td:nth-child(${j}`).hasClass('td-chosen')) {
+			fullDiagDown = false;
+		}
+		if (!$(`table > tbody > tr:nth-child(${j}) > td:nth-child(${5 - (j - 1)}`).hasClass('td-chosen')) {
+			fullDiagUp = false;
+		}
+	}
 	if (fullDiagDown || fullDiagUp) {
-		alert('Bingo!');
 		userBingo = true;
+		if (confirm('Bingo! Would you like to play again?')) {
+			init();
+		} else {
+			$('button').html('Reset');
+		}
 	}
 }
