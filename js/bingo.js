@@ -75,9 +75,9 @@ $(function() {
 		init();
 	})
 	.fail(function(xhr, status, errorThrown) {
-		alert("Sorry, there was a problem!");
-		console.log("Error: " + errorThrown);
-		console.log("Status: " + status);
+		alert("Sorry, there was a problem loading the data!\nTry refreshing the page.");
+		console.log(`Error: ${errorThrown}`);
+		console.log(`Status: ${status}`);
 		console.dir(xhr);
 	});
 });
