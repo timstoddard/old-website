@@ -72,7 +72,7 @@ $(function() {
 	})
 	.done(function(response) {
 		arr = response.data.children;
-		firstRandomLink();
+		init();
 	})
 	.fail(function(xhr, status, errorThrown) {
 		alert("Sorry, there was a problem!");
@@ -80,8 +80,6 @@ $(function() {
 		console.log("Status: " + status);
 		console.dir(xhr);
 	});
-	
-	init();
 });
 
 function shuffle(array) {
@@ -94,17 +92,9 @@ function shuffle(array) {
 	}
 }
 
-function firstRandomLink() {
-	if (arr === null) {
-		return;
-	}
-	var obj = arr[lastIndex = Math.floor(arr.length * Math.random())].data;
-	$('.curr-video').html(`<span>${obj.title}<span><br>${obj.media_embed.content.replace(/&lt;/g, '<').replace(/&lt;/g, '>')}<br>`);
-}
-
 function randomLink() {
 	var newIndex = lastIndex;
-	while (newIndex === lastIndex) {
+	while (newIndex === lastIndex || !arr[newIndex].data.media_embed.content) {
 		newIndex = Math.floor(arr.length * Math.random());
 	}
 	var obj = arr[newIndex].data;
@@ -128,7 +118,12 @@ function onClick() {
 	if (currTd === null) {
 		return;
 	}
-	$(`table > tbody > tr:nth-child(${Math.floor(currTd / 5) + 1}) > td:nth-child(${(currTd) % 5 + 1})`).addClass('td-select');
+	var tempTd = $(`table > tbody > tr:nth-child(${Math.floor(currTd / 5) + 1}) > td:nth-child(${currTd % 5 + 1})`);
+	if (!tempTd.hasClass('td-select')) {
+		tempTd.addClass('td-select');
+	} else {
+		tempTd.removeClass('td-select');
+	}
 }
 
 function onSubmit() {
@@ -194,4 +189,6 @@ function onSubmit() {
 		}
 		return;
 	}
+	
+	randomLink();
 }
