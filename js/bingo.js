@@ -60,6 +60,8 @@ function init() {
 	$(`table > tbody > tr:nth-child(3) > td:nth-child(3)`).addClass('td-chosen');
 	$('button').html('Submit');
 	$('.stats').html('Moves: 0<br>Squares filled in: 1');
+	
+	randomLink();
 }
 
 $(function() {
@@ -70,7 +72,7 @@ $(function() {
 	})
 	.done(function(response) {
 		arr = response.data.children;
-		randomLink();
+		firstRandomLink();
 	})
 	.fail(function(xhr, status, errorThrown) {
 		alert("Sorry, there was a problem!");
@@ -92,12 +94,24 @@ function shuffle(array) {
 	}
 }
 
-function randomLink() {
+function firstRandomLink() {
 	if (arr === null) {
 		return;
 	}
 	var obj = arr[lastIndex = Math.floor(arr.length * Math.random())].data;
 	$('.curr-video').html(`<span>${obj.title}<span><br>${obj.media_embed.content.replace(/&lt;/g, '<').replace(/&lt;/g, '>')}<br>`);
+}
+
+function randomLink() {
+	var newIndex = lastIndex;
+	while (newIndex === lastIndex) {
+		newIndex = Math.floor(arr.length * Math.random());
+	}
+	var obj = arr[newIndex].data;
+	setTimeout(function() {
+		$('.curr-video').html(`<span>${obj.title}<span><br>${obj.media_embed.content.replace(/&lt;/g, '<').replace(/&lt;/g, '>')}<br>`);
+	}, 500);
+	lastIndex = newIndex;
 }
 
 function mouseOver(id) {
@@ -180,14 +194,4 @@ function onSubmit() {
 		}
 		return;
 	}
-	
-	var newIndex = lastIndex;
-	while (newIndex === lastIndex) {
-		newIndex = Math.floor(arr.length * Math.random());
-	}
-	var obj = arr[newIndex].data;
-	setTimeout(function() {
-		$('.curr-video').html(`<span>${obj.title}<span><br>${obj.media_embed.content.replace(/&lt;/g, '<').replace(/&lt;/g, '>')}<br>`);
-	}, 500);
-	lastIndex = newIndex;
 }
