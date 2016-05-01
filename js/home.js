@@ -91,7 +91,7 @@ $('#contact').click(function() {
         $('#personal').html(`<a href="mailto:${personal.reverse().join('')}">${personal.join('')}</a>`);
         $('#myModal').modal();
     } else {
-        window.open('contact.html');
+        window.open('contact');
     }
 });
 
