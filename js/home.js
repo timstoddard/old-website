@@ -112,7 +112,6 @@ $('#send').click(function() {
         alert('Please enter a message.');
         return;
     }
-    //console.log(`"${$('#name').val()}" (${$('#sender-email').val()})`);
     $.ajax({
         type: 'POST',
         url: 'https://mandrillapp.com/api/1.0/messages/send.json',
@@ -129,7 +128,7 @@ $('#send').click(function() {
                     }
                 ],
                 'subject': `${$('#subject').val()}`,
-                'html': `"${$('#name').val()}" (${$('#sender-email').val()}) says: ${sanitizeText($('#message').val())}`
+                'html': `"${$('#name').val()}" (${$('#sender-email').val()}) says: ${DOMPurify.sanitize($('#message').val().replace(/\n/g, '<br>'))}`
             }
         }
     }).done(function() {
@@ -140,7 +139,3 @@ $('#send').click(function() {
         $('#message').val('');
     });
 });
-
-function sanitizeText(str) {
-    return document.createElement('div').appendChild(document.createTextNode(str)).innerHTML;
-}

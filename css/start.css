@@ -95,8 +95,6 @@ input {
     vertical-align: middle;
 }
 
-.inner {}
-
 #c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items {
     position: fixed;
     width: 70px;
