@@ -93,7 +93,7 @@ var urls = [
     {'key': 'git', 'url': 'https://github.com/search?q=', 'name': 'GitHub'},
     {'key': 'i', 'url': 'http://www.imdb.com/find?s=all&q=', 'name': 'IMDb'},
     {'key': 'sc', 'url': 'https://soundcloud.com/search?q=', 'name': 'Soundcloud'},
-    {'key': 'st', 'url': 'https://stackoverflow.com/search?q=', 'name': 'Stack Overflow'},
+    {'key': 'so', 'url': 'https://stackoverflow.com/search?q=', 'name': 'Stack Overflow'},
     {'key': 't', 'url': 'https://twitter.com/search?q=', 'name': 'Twitter'},
     {'key': 'w', 'url': 'https://en.wikipedia.org/wiki/', 'name': 'Wikipedia'},
     {'key': 'y', 'url': 'https://www.youtube.com/results?search_query=', 'name': 'Youtube'}

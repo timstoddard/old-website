@@ -268,7 +268,6 @@ function inputArray() {
 	var rawInput = $('#user-input').val();
 	if (rawInput.length === 0) { return; }
 	var rawList = rawInput.replace(/ /g, '').split(',');
-	console.log(rawList.length);
 	if (rawList.length === 0 || (rawList.length === 1 && rawList[0] === '')) {
 		$('#user-input').val('');
 		return;

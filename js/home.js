@@ -8,6 +8,8 @@ $(function() {
         $('td > span').addClass('glyphicon-chevron-down');
     }
     initPositionShadow();
+    
+    //$('#contact').attr("href", "#");
 
 });
 
@@ -90,8 +92,6 @@ $('#contact').click(function() {
         $('#work').html(`<a href="mailto:${work.reverse().join('')}">${work.join('')}</a>`);
         $('#personal').html(`<a href="mailto:${personal.reverse().join('')}">${personal.join('')}</a>`);
         $('#myModal').modal();
-    } else {
-        window.open('contact');
     }
 });
 
