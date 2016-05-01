@@ -9,8 +9,12 @@ $(function() {
     }
     initPositionShadow();
     
-    //$('#contact').attr("href", "#");
-
+    let url = window.location.href;
+    if (url.charAt(url.length - 1) === '#') {
+        window.location.href = url.substr(0, url.length - 1);
+    }
+    
+    $('#contact').attr("href", "#");
 });
 
 $(window).resize(function() {
