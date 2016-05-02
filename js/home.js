@@ -26,22 +26,15 @@ $(function() {
         -webkit-text-fill-color: transparent;
         font-family: "Lucida Console", Monaco, monospace;
         font-size: 30px;`;
-    var css2 = `
-        font-size: 30px;
-        background: -webkit-linear-gradient(left, red, yellow, green);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;`;
-    var css3 = `
-        `;
 
 console.log(
     `%cHi, I\'m Tim.
 %cWelcome to my website!
-%c----------------------
-%cSome things I've made:
+%c
+Some cool things I've made:
   • https://timstoddard.githb.io/bingo
   • https://timstoddard.github.io/heap
-  • https://timstoddard.github.io/forecast.html`, css1, css1, css2, css3);
+  • https://timstoddard.github.io/forecast.html`, css1, css1, '');
 });
 
 $(window).resize(function() {
