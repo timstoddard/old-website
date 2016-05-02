@@ -94,7 +94,7 @@ function showWeatherByLocation() {
 
 function getWeatherData(locationData) {
     getWeatherResultData('../data.json');
-    //getWeatherResultData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/q/${locationData}.json`, true);
+    //getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/q/${locationData}.json`, true);
 }
 
 function getWeatherResultData(url) {
@@ -136,7 +136,7 @@ function showWeatherData(resultData) {
     // current weather
     let curr = resultData.current_observation; // object
     $('#weather-city').html(`${curr.display_location.city}: `);
-    $('#weather-img').attr('src', curr.icon_url);
+    $('#weather-img').attr('src', secureImg(curr.icon_url));
     $('#current-temp').html(`${curr.temp_f}&deg;F
         ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}`);
     $('#current-humidity').html(`${curr.relative_humidity}`);
@@ -151,7 +151,7 @@ function showWeatherData(resultData) {
         header += `<td class="pred-header">${formatForecastDay(forecast[i].date)}</td>`;
         upperBody += `
             <td>
-                <img class="forecast-icon" src="${forecast[i].icon_url}">
+                <img class="forecast-icon" src="${secureImg(forecast[i].icon_url)}">
                 <div class="temperature-low">${forecast[i].low.fahrenheit}&deg;F</div>
                 <div class="temperature-high">${forecast[i].high.fahrenheit}&deg;F</div>
                 <div class="humidity"><span>${forecast[i].avehumidity}%</span></div>
@@ -183,7 +183,7 @@ $('#weather-details').html('<span>${tempDate}</span><span>${formatHours(hForecas
                     onmouseout="
                         $('#weather-details').hide();
                         $('#weather-details').html('');">
-                <img class="forecast-img" src="${hForecast[i].icon_url}">
+                <img class="forecast-img" src="${secureImg(hForecast[i].icon_url)}">
             </div>`;
         lastDate = tempDate;
     }
@@ -201,6 +201,12 @@ $('#weather-details').html('<span>${tempDate}</span><span>${formatHours(hForecas
         let str = text.substring(0, text.length - 1);
         $(this).css({background: `rgba(128, 128, 255, ${parseInt(str) / 100})`});
     });
+}
+
+function secureImg(str) {
+    if (str.indexOf('http:') > -1 && str.indexOf('https:') === -1) {
+        return `https${str.substring(4, str.length)}`;
+    }
 }
 
 function formatForecastDay(date) {

@@ -240,7 +240,7 @@ function showWeatherByLocation() {
 
 function getWeatherData(locationData) {
     getWeatherResultData('../data.json', true);
-    //getWeatherResultData(`http://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
+    //getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
 }
 
 function getWeatherResultData(url) {
@@ -279,7 +279,7 @@ function showWeatherData(resultData) {
 
     $('#weather-header').html(`<div class="weather-title">Weather in ${resultData.current_observation.display_location.city}</div>`);
     $('#weather-content').html(`
-        <img src="${resultData.current_observation.icon_url}">
+        <img src="${secureImg(resultData.current_observation.icon_url)}">
         <div class="current-temp">Temp: ${resultData.current_observation.temp_f}&deg;F
         ${Math.abs(resultData.current_observation.temp_f - resultData.current_observation.feelslike_f) > 2 ?
             `(Feels like ${resultData.current_observation.feelslike_f}&deg;F)` : ''}</div>
@@ -295,7 +295,7 @@ function showWeatherData(resultData) {
         header += `<td class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</td>`;
         body += `
             <td>
-                <img class="forecast-icon" src="${resultData.forecast.simpleforecast.forecastday[i].icon_url}">
+                <img class="forecast-icon" src="${secureImg(resultData.forecast.simpleforecast.forecastday[i].icon_url)}">
                 <div class="temperature">${resultData.forecast.simpleforecast.forecastday[i].low.fahrenheit}-${resultData.forecast.simpleforecast.forecastday[i].high.fahrenheit}&deg;F</div>
                 <div class="humidity">Hum: ${resultData.forecast.simpleforecast.forecastday[i].avehumidity}%</div>
             </td>`;
@@ -312,6 +312,12 @@ function showWeatherData(resultData) {
             </table>
         </div>`);
     $('[data-toggle="tooltip"]').tooltip();
+}
+
+function secureImg(str) {
+    if (str.indexOf('http:') > -1 && str.indexOf('https:') === -1) {
+        return `https${str.substring(4, str.length)}`;
+    }
 }
 
 function formatHours(date) {

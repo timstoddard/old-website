@@ -27,8 +27,8 @@ $(function() {
         font-family: "Lucida Console", Monaco, monospace;
         font-size: 30px;`;
 
-console.log(
-    `%cHi, I\'m Tim.
+    console.log(
+`%cHi, I\'m Tim.
 %cWelcome to my website!
 %c
 Some cool things I've made:
