@@ -14,7 +14,34 @@ $(function() {
         window.location.href = url.substr(0, url.length - 1);
     }
     
-    $('#contact').attr("href", "#");
+    $('#contact').attr('href', '#');
+    
+    var css1 = `
+        background:
+            linear-gradient(45deg, #445 12%, transparent 0, transparent 88%, #445 0),
+            linear-gradient(135deg, transparent 37%, #99a 0, #99a 63%, transparent 0),
+            linear-gradient(45deg, transparent 37%, #445 0, #445 63%, transparent 0) blue;
+        background-size: 25px 25px;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-family: "Lucida Console", Monaco, monospace;
+        font-size: 30px;`;
+    var css2 = `
+        font-size: 30px;
+        background: -webkit-linear-gradient(left, red, yellow, green);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;`;
+    var css3 = `
+        `;
+
+console.log(
+    `%cHi, I\'m Tim.
+%cWelcome to my website!
+%c----------------------
+%cSome things I've made:
+  • https://timstoddard.githb.io/bingo
+  • https://timstoddard.github.io/heap
+  • https://timstoddard.github.io/forecast.html`, css1, css1, css2, css3);
 });
 
 $(window).resize(function() {
