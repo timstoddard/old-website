@@ -34,7 +34,7 @@ $(function() {
 Some cool things I've made:
   • https://timstoddard.githb.io/bingo
   • https://timstoddard.github.io/heap
-  • https://timstoddard.github.io/forecast.html`, css1, css1, '');
+  • https://timstoddard.github.io/forecast`, css1, css1, '');
 });
 
 $(window).resize(function() {

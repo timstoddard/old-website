@@ -304,7 +304,7 @@ function showWeatherData(resultData) {
     body += '</tr>';
 
     $('#weather-forecast').html(`
-        <div class="weather-title"><a href="../forecast.html" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
+        <div class="weather-title"><a href="../forecast" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
         <div id="weather-forecast-data">
             <table>
                 <thead>${header}</thead>
