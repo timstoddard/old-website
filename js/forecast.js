@@ -93,8 +93,8 @@ function showWeatherByLocation() {
 }
 
 function getWeatherData(locationData) {
-    getWeatherResultData('../data.json');
-    //getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/q/${locationData}.json`, true);
+    //getWeatherResultData('../data.json');
+    getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/q/${locationData}.json`, true);
 }
 
 function getWeatherResultData(url) {
