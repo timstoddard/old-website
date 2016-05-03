@@ -77,7 +77,7 @@ function showWeatherByLocation() {
                     return;
                 }
                 getWeatherData(zip.replace(/[^0-9]/g, ''));
-            }, {enableHighAccuracy: false, timeout: 8000, maximumAge: 0});
+            }, {enableHighAccuracy: false, timeout: 15000, maximumAge: 0});
     } else {
         if (posErrCount > 0) return;
         posErrCount++;
