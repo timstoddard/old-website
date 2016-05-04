@@ -32,7 +32,7 @@ $(function() {
 %cWelcome %cto %cmy %cwebsite!
 %c
 Some cool things I've made:
-  • https://timstoddard.githb.io/bingo
+  • https://timstoddard.github.io/bingo
   • https://timstoddard.github.io/heap
   • https://timstoddard.github.io/forecast`, css1, css1, css1, css1, css1, css1, css1, '');
 });

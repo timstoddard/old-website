@@ -140,6 +140,7 @@ function checkForCustomName() {
 /**********   CALL METHODS HERE   **********/
 checkForCustomName();
 showTime();
+daysTillBday();
 showWeather();
 // NOTE: Lat/long data lasts for an hour before it is refreshed. Weather data lasts for 30 mins.
 /*******************************************/
@@ -334,6 +335,36 @@ function formatTime(date, short = false) { // pass in a JavaScript date object
         var seconds = date.getSeconds();
         return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${seconds < 10 ? ':0' : ':'}${seconds}${hours >= 12 ? ' PM' : ' AM'}`;
     }
+}
+
+function daysTillBday() {
+    var bdayDate = Date.parse("May 13 2016") + 7 * 60 * 1000;
+    var now = Date.now();
+    
+    var days = (bdayDate - now) / (24 * 60 * 60 * 1000);
+    var dayStr = `${Math.floor(days)}`;
+    
+    var hours = (days % 1) * 24;
+    var hourStr = `${Math.floor(hours)}`;
+    
+    var mins = (hours % 1) * 60;
+    var minStr = `${Math.floor(mins)}`;
+    
+    var secs = (mins % 1) * 60;
+    var secStr = `${Math.floor(secs)}`;
+    
+    var millis = (secs % 1) * 1000;
+    var milliStr = `${Math.floor(millis)}`;
+    
+    var dateStr = `${dayStr} days `;
+    dateStr += `${hourStr.length < 2 ? `0${hourStr}` : `${hourStr}`}h `;
+    dateStr += `${minStr.length < 2 ? `0${minStr}` : `${minStr}`}m `;
+    dateStr += `${secStr.length < 2 ? `0${secStr}` : `${secStr}`}s `;
+    dateStr += `${milliStr.length < 3 ? (milliStr.length < 2 ? `00${milliStr}` : `0${milliStr}`) : `${milliStr}`}ms`;
+    
+    $('#days-till-bday').html(dateStr);
+    
+    setTimeout('daysTillBday()', 0);
 }
 
 function formatDay(date, short = false) { // pass in a JavaScript date object
