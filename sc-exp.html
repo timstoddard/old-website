@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <script type="text/javascript">
+            if (location.protocol !== 'file:' && location.protocol !== 'https:') location.protocol = 'https:';
+        </script>
+        <meta charset="utf-8">
+        <title>SC Lab</title>
+        <link rel="stylesheet" href="css/bootstrap.css">
+
+    </head>
+
+    <body>
+        <div class="outer">
+            <div class="inner">
+				<div class="content"></div>
+            </div>
+        </div>
+        <script src="js/jquery-2.2.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+		<script>
+			jQuery.ajax({
+				url: 'https://wis.sndcdn.com/ZnMrdw8DY25u_m.json',
+				type: 'GET',
+				success: function(result) {
+					console.log(result);
+					var temp = '';
+					var wid = $(window).width();
+					for (var i = 0; i < result.width; i++) {
+						console.log('h')
+						temp += `<div style="display:inline-block;background-color:black;width:${wid/1800}px;/*margin-left:1px;*/height:${result.samples[i]*2}px;"></div>`;
+					}
+					$('.content').html(temp);
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					console.error('There was an error loading the data.')
+				},
+				timeout: 10000
+			});
+		</script>
+    </body>
+</html>

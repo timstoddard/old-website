@@ -338,7 +338,7 @@ function formatTime(date, short = false) { // pass in a JavaScript date object
 }
 
 function daysTillBday() {
-    var bdayDate = Date.parse("May 13 2016") + 7 * 60 * 1000;
+    var bdayDate = Date.parse("May 13 2016") + 7 * 60 * 60 * 1000;
     var now = Date.now();
     
     var days = (bdayDate - now) / (24 * 60 * 60 * 1000);
