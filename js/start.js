@@ -340,6 +340,9 @@ function formatTime(date, short = false) { // pass in a JavaScript date object
 function daysTillBday() {
     var bdayDate = Date.parse("May 13 2016") + 7 * 60 * 60 * 1000;
     var now = Date.now();
+    if (bdayDate - now < 0) {
+        $('#days-till-bday').html('Happy Birthday!');
+    }
     
     var days = (bdayDate - now) / (24 * 60 * 60 * 1000);
     var dayStr = `${Math.floor(days)}`;
@@ -356,11 +359,16 @@ function daysTillBday() {
     var millis = (secs % 1) * 1000;
     var milliStr = `${Math.floor(millis)}`;
     
-    var dateStr = `${dayStr} days `;
-    dateStr += `${hourStr.length < 2 ? `0${hourStr}` : `${hourStr}`}h `;
-    dateStr += `${minStr.length < 2 ? `0${minStr}` : `${minStr}`}m `;
-    dateStr += `${secStr.length < 2 ? `0${secStr}` : `${secStr}`}s `;
-    dateStr += `${milliStr.length < 3 ? (milliStr.length < 2 ? `00${milliStr}` : `0${milliStr}`) : `${milliStr}`}ms`;
+    var dateStr = '';
+    if (days >= 1) dateStr += `${dayStr} days `;
+    if (hours >= 1 || days > 0 && hours < 1)
+        dateStr += `${hourStr.length < 2 ? `0${hourStr}` : `${hourStr}`}h `;
+    if (mins >= 1 || days > 0 && hours > 0 && mins < 1)
+        dateStr += `${minStr.length < 2 ? `0${minStr}` : `${minStr}`}m `;
+    if (secs >= 1 || days > 0 && hours > 0 && mins > 0 && secs < 1)
+        dateStr += `${secStr.length < 2 ? `0${secStr}` : `${secStr}`}s `;
+    if (millis >= 1)
+        dateStr += `${milliStr.length < 3 ? (milliStr.length < 2 ? `00${milliStr}` : `0${milliStr}`) : `${milliStr}`}ms`;
     
     $('#days-till-bday').html(dateStr);
     
