@@ -1,10 +1,10 @@
-$(function(){ $('#weather-details').hide(); });
-
 if (location.protocol === 'http:' || location.protocol === 'https:') {
     showWeather();   
 } else if (location.protocol === 'file:') {
     console.log(getData())
-    showWeatherData(getData());
+    setTimeout(() => {
+        showWeatherData(getData())
+    }, 1000);
 }
 
 function hasLatAndLongInLocalStorage() {
@@ -193,15 +193,18 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
 
     $('#forecast-body').html(tbod);
 
-    // set extra styles on forecast title
+    // add title/table-border styles after loading data so the loading screen doesnt look weird
     $('#forecast-title').css({
+        'background-color': '#f2f2f2',
         'border-left': '10px solid #c0c0c0',
         'border-right': '10px solid #c0c0c0',
         'border-top': '10px solid #c0c0c0',
         'border-top-left-radius': '10px',
         'border-top-right-radius': '10px',
+        'box-shadow': '2.5px 2.5px 3px #595959',
         'padding': '0px 12px'
-    })
+    });
+    $('.table-border').css({ 'display': 'inline-block' });
     
     // set opacity of the daily humidity forecast background
     $('.humidity').each(function() {
