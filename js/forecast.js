@@ -179,7 +179,7 @@ function showWeatherData(resultData) {
                 `<td
                     onmouseover="
                         $('#weather-details').show();
-$('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTTIME)} | ${formatHours(hForecast[index].FCTTIME)}</div><div><span>${hForecast[index].temp.english}&deg;F</span> <span>${hForecast[index].humidity}%</span></div><div>${hForecast[index].wspd.english} mph ${hForecast[index].wdir.dir}</div>');"
+$('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTTIME)} - ${formatHours(hForecast[index].FCTTIME)}</div><div><span>${hForecast[index].temp.english}&deg;F</span> <span>${hForecast[index].humidity}%</span></div><div>${hForecast[index].wspd.english} mph ${hForecast[index].wdir.dir}</div>');"
                     onmouseout="
                         $('#weather-details').hide();
                         $('#weather-details').html('');">
