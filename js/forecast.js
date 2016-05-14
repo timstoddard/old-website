@@ -1,5 +1,11 @@
 $(function(){ $('#weather-details').hide(); });
-showWeather();
+
+if (location.protocol === 'http:' || location.protocol === 'https:') {
+    showWeather();   
+} else if (location.protocol === 'file:') {
+    console.log(getData())
+    showWeatherData(getData());
+}
 
 function hasLatAndLongInLocalStorage() {
     return localStorage.getItem('lat') !== null
@@ -43,12 +49,12 @@ function showWeatherByLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function (pos) {
-                var currLat = pos.coords.latitude;
-                var currLong = pos.coords.longitude;
+                let currLat = pos.coords.latitude;
+                let currLong = pos.coords.longitude;
                 if (hasLatAndLongInLocalStorage()) {
-                    var lat = localStorage.getItem('lat');
-                    var long = localStorage.getItem('long');
-                    var epsilon = 0.001;
+                    let lat = localStorage.getItem('lat');
+                    let long = localStorage.getItem('long');
+                    let epsilon = 0.001;
                     if (Math.abs(lat - currLat) > epsilon
                             || Math.abs(long - currLong) > epsilon) {
                         getWeatherData(`${currLat},${currLong}`);
@@ -69,7 +75,7 @@ function showWeatherByLocation() {
                 console.log(err);
                 if (posErrCount > 0) return;
                 posErrCount++;
-                var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
+                let zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
                 if (!zip) {
                     $('#forecast-title').html('Loading failed.');
                     $('#weather-content').html('Weather data failed to load');
@@ -81,7 +87,7 @@ function showWeatherByLocation() {
     } else {
         if (posErrCount > 0) return;
         posErrCount++;
-        var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
+        let zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
         if (zip === null) {
             $('#forecast-title').html('Loading failed.');
             $('#weather-content').html('Weather data failed to load');
@@ -93,7 +99,6 @@ function showWeatherByLocation() {
 }
 
 function getWeatherData(locationData) {
-    //getWeatherResultData('../data.json');
     getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/q/${locationData}.json`, true);
 }
 
@@ -135,82 +140,85 @@ function showWeatherData(resultData) {
 
     // current weather
     let curr = resultData.current_observation; // object
-    $('#weather-city').html(`${curr.display_location.city}: `);
+    $('#weather-city').html(`${curr.display_location.city}`);
     $('#weather-img').attr('src', secureImg(curr.icon_url));
     $('#current-temp').html(`${curr.temp_f}&deg;F
         ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}`);
     $('#current-humidity').html(`${curr.relative_humidity}`);
     $('#current-wind').html(`${curr.wind_mph > 0 ? `${curr.wind_mph} mph ${curr.wind_dir}` : ''}`);
     $('#forecast-title').html('Forecast');
+    
+    // forecast table header
+    let thead = '<td>Day</td>';
+    for (let i = 0; i < 24; i++) {
+        thead += `<td class="col-${i + 1} row-1">${i % 12 === 0 ? 12 : i % 12}<span class="small-text">${i < 12 ? 'AM' : 'PM'}</span></td>`;
+    }
+    $('#forecast-head').html(`<tr>${thead}</tr>`);
 
-    // daily forecast
+    // 10 day hourly forecast
     let forecast = resultData.forecast.simpleforecast.forecastday; // array[0 - 9]
-    var header = '';
-    var upperBody = '';
+    let hForecast = resultData.hourly_forecast; // array[0 - 239]
+    let tbod = '';
+    let index = 0;
     for (let i = 0; i < forecast.length; i++) {
-        header += `<td class="pred-header">${formatForecastDay(forecast[i].date)}</td>`;
-        upperBody += `
-            <td>
-                <img class="forecast-icon" src="${secureImg(forecast[i].icon_url)}">
-                <div class="temperature-low">${forecast[i].low.fahrenheit}&deg;F</div>
-                <div class="temperature-high">${forecast[i].high.fahrenheit}&deg;F</div>
+        tbod +=
+            `<tr><td>
+                <div class="pred-header">${formatForecastDay(forecast[i].date)}</div>
+                <div class="temperature">${forecast[i].low.fahrenheit}-${forecast[i].high.fahrenheit}&deg;F</div>
                 <div class="humidity"><span>${forecast[i].avehumidity}%</span></div>
             </td>`;
-    }
-
-    $('#forecast-header').html(`<tr>${header}</tr>`);
-
-    // hourly forecast
-    let hForecast = resultData.hourly_forecast; // array[0 - 239]
-    let lastDate = formatHourlyForecastDay(hForecast[0].FCTTIME);
-    let daysCount = 1;
-    var lowerBody = '<td class="pred-first-day pred-detail-top">';
-    for (let i = 0; i < hForecast.length; i++) {
-        if (daysCount > 10) {
-            lowerBody += '</td>';
-            break;
+        let currDate = new Date(forecast[i].date.epoch * 1000).getDate();
+        if (i === 0) {
+            for (let j = 0; j < new Date(hForecast[index].FCTTIME.epoch * 1000).getHours(); j++) {
+                tbod += '<td>-</td>';
+            }
         }
-        let tempDate = formatHourlyForecastDay(hForecast[i].FCTTIME);
-        if (tempDate !== lastDate) {
-            lowerBody += '</td><td class="pred-other-days pred-detail-top">';
-            daysCount++;
-        }
-        lowerBody += `
-            <div class="forecast-img-wrapper"
-                onmouseover="
+        while (new Date(hForecast[index].FCTTIME.epoch * 1000).getDate() === currDate) {
+            // html stuff
+            tbod +=
+                `<td
+                    onmouseover="
                         $('#weather-details').show();
-$('#weather-details').html('<span>${tempDate}</span><span>${formatHours(hForecast[i].FCTTIME)}</span><span><div>${hForecast[i].temp.english}&deg;F</div></span><span><div>${hForecast[i].humidity}%</div></span><span><div>${hForecast[i].wspd.english} mph ${hForecast[i].wdir.dir}</div></span>');"
+$('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTTIME)} | ${formatHours(hForecast[index].FCTTIME)}</div><div><span>${hForecast[index].temp.english}&deg;F</span> <span>${hForecast[index].humidity}%</span></div><div>${hForecast[index].wspd.english} mph ${hForecast[index].wdir.dir}</div>');"
                     onmouseout="
                         $('#weather-details').hide();
                         $('#weather-details').html('');">
-                <img class="forecast-img" src="${secureImg(hForecast[i].icon_url)}">
-            </div>`;
-        lastDate = tempDate;
+                    <img class="forecast-img" src="${secureImg(hForecast[index].icon_url)}">
+                </td>`;
+            index++;
+        }
+        tbod += '</tr>';
+        // console.log(new Date(forecast[i].date.epoch * 1000).getDate())
     }
 
-    $('#forecast-body').html(`<tr>${upperBody}</tr><tr>${lowerBody}</tr>`);
+    $('#forecast-body').html(tbod);
 
-    // get rid of any extraneous extra rows
-    while ($('table').children('tbody').children('tr').children('td').length > 20) {
-        $('table').find("tr:last").find("td:last").remove();
-    }
-
+    // set extra styles on forecast title
+    $('#forecast-title').css({
+        'border-left': '10px solid #c0c0c0',
+        'border-right': '10px solid #c0c0c0',
+        'border-top': '10px solid #c0c0c0',
+        'border-top-left-radius': '10px',
+        'border-top-right-radius': '10px',
+        'padding': '0px 12px'
+    })
+    
     // set opacity of the daily humidity forecast background
     $('.humidity').each(function() {
         let text = $(this).text();
         let str = text.substring(0, text.length - 1);
-        $(this).css({background: `rgba(128, 128, 255, ${parseInt(str) / 100})`});
+        $(this).css({ 'background': `rgba(128, 128, 255, ${parseInt(str) / 100})` });
     });
 }
 
 function secureImg(str) {
-    if (str.indexOf('http:') > -1 && str.indexOf('https:') === -1) {
+    if (str.indexOf('http') > -1 && str.indexOf('https') === -1) {
         return `https${str.substring(4, str.length)}`;
     }
 }
 
 function formatForecastDay(date) {
-    return `${date.weekday_short}<br>${date.month}/${date.day}`;
+    return `${date.weekday_short} ${date.month}/${date.day}`;
 }
 
 function formatHourlyForecastDay(date) {
@@ -218,6 +226,6 @@ function formatHourlyForecastDay(date) {
 }
 
 function formatHours(date) {
-    var hr = date.hour;
+    let hr = date.hour;
     return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)} ${date.ampm}`;
 }

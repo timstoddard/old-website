@@ -1,4 +1,5 @@
-
+function getData() {
+	return (
 {
   "response": {
   "version":"0.1",
@@ -7047,4 +7048,5 @@
 		"mslp": {"english": "29.9", "metric": "1013"}
 		}
 	]
+})
 }

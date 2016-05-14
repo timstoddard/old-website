@@ -6,28 +6,30 @@
         </script>
         <meta charset="utf-8">
         <title>Forecast</title>
-        <link rel="stylesheet" href="../css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/forecast.css">
     </head>
     <body>
         <div class="text-center">
-            <div id="weather-content">
-                <div id="weather-city" class="weather-title"></div>
-                <img id="weather-img">
-                <div id="current-temp"></div>
-                <div id="current-humidity"></div>
-                <div id="current-wind"></div>
-            </div>
             <div id="weather-forecast">
-                <div id="forecast-title" class="weather-title">Loading...</div>
-                <table>
-                    <thead id="forecast-header"></thead>
-                    <tbody id="forecast-body"></tbody>
-                </table>
+                <div id="weather-content">
+                    <div id="forecast-title" class="weather-title">Loading...</div>
+                    <div id="weather-city" class="weather-title"></div>
+                    <img id="weather-img">
+                    <div id="current-temp"></div>
+                    <div id="current-humidity"></div>
+                    <div id="current-wind"></div>
+                </div>
+                <div class="table-border">
+                    <table>
+                        <thead id="forecast-head"></thead>
+                        <tbody id="forecast-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div id="weather-details"></div>
         <script src="../js/jquery-2.2.1.min.js"></script>
+        <script src="../js/data.json.js"></script>
         <script src="../js/forecast.js"></script>
     </body>
 </html>
