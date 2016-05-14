@@ -2,7 +2,7 @@
 
 $(function() {
     
-    $('.outer-right').hide();
+    $('[data-toggle="tooltip"]').tooltip();
     $('#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items').hide();
     
     $(window).keydown(function(event) {
@@ -15,13 +15,13 @@ $(function() {
             $('#myModal').modal();
             $('#name-input').focus();
             setTimeout(function() { $('#name-input').val(''); }, 0);
-            $('.outer-right').hide();
+            $('.work-link').hide();
         } else if (key === 87) { // 'w' key
             if (!$('#myModal').is(':visible')) {
-                $('.outer-right').toggle();
+                $('.work-link').toggle();
             }
         } else if (key === 27) { // esc key
-            $('.outer-right').hide();
+            $('.work-link').hide();
         }
     });
     
@@ -140,8 +140,16 @@ function checkForCustomName() {
 /**********   CALL METHODS HERE   **********/
 checkForCustomName();
 showTime();
-daysTillBday();
-showWeather();
+// daysTillBday();
+if (location.protocol === 'http:' || location.protocol === 'https:') {
+    showWeather();   
+} else if (location.protocol === 'file:') {
+    console.log(getData())
+    setTimeout(() => {
+        showWeatherData(getData())
+    }, 1000);
+}
+
 // NOTE: Lat/long data lasts for an hour before it is refreshed. Weather data lasts for 30 mins.
 /*******************************************/
 
@@ -280,7 +288,7 @@ function showWeatherData(resultData) {
 
     $('#weather-header').html(`<div class="weather-title">Weather in ${resultData.current_observation.display_location.city}</div>`);
     $('#weather-content').html(`
-        <img src="${secureImg(resultData.current_observation.icon_url)}">
+        <div class="current-icon"><img src="${secureImg(resultData.current_observation.icon_url)}"></div>
         <div class="current-temp">Temp: ${resultData.current_observation.temp_f}&deg;F
         ${Math.abs(resultData.current_observation.temp_f - resultData.current_observation.feelslike_f) > 2 ?
             `(Feels like ${resultData.current_observation.feelslike_f}&deg;F)` : ''}</div>
@@ -290,26 +298,21 @@ function showWeatherData(resultData) {
 
     // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
 
-    var header = '<tr>';
-    var body = '<tr>';
+    var body = '';
     for (let i = 0; i < resultData.forecast.simpleforecast.forecastday.length; i++) {
-        header += `<td class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</td>`;
         body += `
             <td>
+                <div class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</div>
                 <img class="forecast-icon" src="${secureImg(resultData.forecast.simpleforecast.forecastday[i].icon_url)}">
                 <div class="temperature">${resultData.forecast.simpleforecast.forecastday[i].low.fahrenheit}-${resultData.forecast.simpleforecast.forecastday[i].high.fahrenheit}&deg;F</div>
-                <div class="humidity">Hum: ${resultData.forecast.simpleforecast.forecastday[i].avehumidity}%</div>
-            </td>`;
+                </td>`;
     }
-    header += '</tr>';
-    body += '</tr>';
 
     $('#weather-forecast').html(`
         <div class="weather-title"><a href="../forecast" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
         <div id="weather-forecast-data">
             <table>
-                <thead>${header}</thead>
-                <tbody>${body}</tbody>
+                <tbody><tr>${body}</tr></tbody>
             </table>
         </div>`);
     $('[data-toggle="tooltip"]').tooltip();
@@ -387,7 +390,7 @@ function formatDay(date, short = false) { // pass in a JavaScript date object
 }
 
 function formatForecastDay(date) {
-    return `${date.weekday_short} ${date.month}/${date.day}`;
+    return `${date.weekday_short}<br>${date.month}/${date.day}`;
 }
 
 function dayString(day, short = false) {
