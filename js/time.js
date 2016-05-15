@@ -3,8 +3,10 @@ function setBackground() {
     if (location.protocol === 'http:' || location.protocol === 'https:') {
         var data = JSON.parse(localStorage.getItem('weatherData'));
     } else if (location.protocol === 'file:') {
-        console.log(getData())
-        data = getData();
+        let n = true ? getDayData() : getNightData();
+        console.log(n)
+        console.log(n)
+        data = n;
     }
     if (!data) {
         return;

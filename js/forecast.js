@@ -1,9 +1,10 @@
 if (location.protocol === 'http:' || location.protocol === 'https:') {
     showWeather();
 } else if (location.protocol === 'file:') {
-    console.log(getData())
+    let n = true ? getDayData() : getNightData();
+    console.log(n)
     setTimeout(() => {
-        showWeatherData(getData())
+        showWeatherData(n)
     }, 1000);
 }
 
