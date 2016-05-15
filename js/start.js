@@ -322,7 +322,11 @@ function showWeatherData(resultData) {
     let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
     let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
     if (currTime < sunrise || sunset < currTime) {
-        $('#page-content').css({ 'background': '#000099' });
+        $('body').css({ 'background': '#000000' })
+        $('#page-content').css({
+            'background': '#000099',
+            'box-shadow': 'inset 0px 0px 15px 3px #f2f2f2'
+        });
         $('#time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#f2f2f2' });
     }
 }
