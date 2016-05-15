@@ -1,10 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700);
 
-body {
-    background: #29b8e5;
-    font-family: 'PT Sans Narrow', sans-serif !important;
-}
-
+body { background: #77d2ee; font-family: 'PT Sans Narrow', sans-serif !important; }
 h1 { font-size: 16vw; }
 #outer { display: table; position: absolute; top: 0px; left: 0px; width: 100vw; height: 100vh; }
 #middle { display: table-cell; text-align: center; vertical-align: middle; }

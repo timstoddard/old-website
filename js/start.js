@@ -286,10 +286,9 @@ function showWeatherData(resultData) {
     
     // current weather --> resultData.current_observation
 
-    $('#weather-header').html(`<div class="weather-title">Weather in ${resultData.current_observation.display_location.city}</div>`);
+    $('#weather-header').html(`<div class="weather-title">${resultData.current_observation.display_location.city}<img src="${secureImg(resultData.current_observation.icon_url)}"></div>`);
     $('#weather-content').html(`
-        <div class="current-icon"><img src="${secureImg(resultData.current_observation.icon_url)}"></div>
-        <div class="current-temp">Temp: ${resultData.current_observation.temp_f}&deg;F
+        <div class="current-temp">Temperature: ${resultData.current_observation.temp_f}&deg;F
         ${Math.abs(resultData.current_observation.temp_f - resultData.current_observation.feelslike_f) > 2 ?
             `(Feels like ${resultData.current_observation.feelslike_f}&deg;F)` : ''}</div>
         <div class="current-humidity">Humidity: ${resultData.current_observation.relative_humidity}</div>

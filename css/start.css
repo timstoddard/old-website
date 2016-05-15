@@ -1,11 +1,19 @@
 @import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700);
 
 body {
-    background: #29b8e5;
-    box-shadow: inset 0px 0px 10px 2px #808080;
     font-family: 'PT Sans Narrow', sans-serif !important;
     font-size: 18px;
+}
+
+#page-content {
+    background: #77d2ee;
+    box-shadow: inset 0px 0px 10px 2px #808080;
     height: 100vh;
+    width: 850px;
+}
+
+.modal-title, h1, h3 {
+    font-family: 'PT Sans Narrow', sans-serif !important;
 }
 
 h3 {
@@ -13,20 +21,26 @@ h3 {
 }
 
 #time {
-    margin-right: 0.5em;
+    display: inline-block;
+    font-weight: bold;
+    margin: 0;
 }
 
-#time {
-    font-weight: bold;
+#date {
+    margin: 0;
 }
 
 hr {
     border-color: #878787;
-    margin: 25px calc(100vw / 2 - 225px);
+    margin: 25px 225px;
 }
 
 .weather-title {
     font-size: 200%;
+}
+
+.weather-title img {
+    margin-left: 0.2em;
 }
 
 #weather-content {
@@ -34,28 +48,12 @@ hr {
     display: inline-flex;
 }
 
-.current-temp:not(:empty), .current-icon, .current-humidity:not(:empty), .current-wind:not(:empty) {
+.current-temp:not(:empty), .current-humidity:not(:empty), .current-wind:not(:empty) {
     border-radius: 0.2em;
     font-size: 120%;
     margin: 0 0.2em;
     padding: 2px 5px;
     text-align: center;
-}
-
-.current-icon {
-    background-color: #f2f2f2;
-}
-
-.current-temp:not(:empty) {
-    background-color: #ff4d4d;
-}
-
-.current-humidity:not(:empty) {
-    background-color: #8080ff;
-}
-
-.current-wind:not(:empty) {
-    background-color: #878787;
 }
 
 #weather-forecast, table {
@@ -85,11 +83,12 @@ input {
 }
 
 #c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items {
+    bottom: 70px;
+    display: none;
+    height: 70px;
+    left: 50%;
     position: fixed;
     width: 70px;
-    bottom: 70px;
-    left: 50%;
-    height: 70px;
 }
 
 #c1-menu-items {
@@ -120,6 +119,7 @@ input {
 .btn, .btn-lg, .btn-default {
     background-color: #f2f2f2;
     border-color: #878787;
+    border-radius: 0.15em !important;
     font-size: 25px;
     margin: 0 !important;
     padding: 17.5px 0px 17.5px 0px !important;
@@ -128,6 +128,7 @@ input {
 
 .btn:hover, .btn-lg:hover, .btn-default:hover, td:hover {
     background-color: #d9d9d9;
+    border-color: #878787;
 }
 
 a:link, a:visited, a:hover, a:active {
@@ -161,8 +162,10 @@ td {
 
 .forecast-icon {
     display: block;
+    height: 4.5em;
     margin: 0 auto;
-    padding-bottom: 5px;
+    padding: 4px 0;
+    width: auto;
 }
 
 .pred-icon, .temperature, .humidity {
