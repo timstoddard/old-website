@@ -1,7 +1,7 @@
 function setBackground() {
     // set background based on whether it is currently day/night
     if (location.protocol === 'http:' || location.protocol === 'https:') {
-        var data = localStorage.getItem('weatherData');
+        var data = JSON.parse(localStorage.getItem('weatherData'));
     } else if (location.protocol === 'file:') {
         console.log(getData())
         data = getData();

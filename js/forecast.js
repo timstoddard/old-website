@@ -193,17 +193,6 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
 
     $('#forecast-body').html(tbod);
     
-    // set background based on whether it is currently day/night
-    let sunData = resultData.sun_phase; // object[sunrise, sunset]
-    let now = new Date();
-    let currTime = now.getHours() * 60 + now.getMinutes();
-    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
-    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
-    if (currTime < sunrise || sunset < currTime) {
-        $('body').css({ 'background': '#000099' });
-        $('#weather-city').css({ 'color': '#f2f2f2' });
-    }
-
     // add title/table-border styles after loading data so the loading screen doesnt look weird
     $('#forecast-title').css({
         'background-color': '#f2f2f2',
@@ -216,6 +205,19 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
         'padding': '0px 12px'
     });
     $('.table-border').css({ 'display': 'inline-block' });
+    
+    // set background based on whether it is currently day/night
+    let sunData = resultData.sun_phase; // object[sunrise, sunset]
+    let now = new Date();
+    let currTime = now.getHours() * 60 + now.getMinutes();
+    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
+    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
+    if (currTime < sunrise || sunset < currTime) {
+        $('body').css({ 'background': '#000099' });
+        $('#weather-city').css({ 'color': '#f2f2f2' });
+        $('#forecast-title, .table-border, #weather-details').css({ 'box-shadow': 'none' });
+    }
+
     
     // set opacity of the daily humidity forecast background
     $('.humidity').each(function() {
