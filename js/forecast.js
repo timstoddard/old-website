@@ -1,5 +1,5 @@
 if (location.protocol === 'http:' || location.protocol === 'https:') {
-    showWeather();   
+    showWeather();
 } else if (location.protocol === 'file:') {
     console.log(getData())
     setTimeout(() => {
@@ -99,7 +99,7 @@ function showWeatherByLocation() {
 }
 
 function getWeatherData(locationData) {
-    getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/q/${locationData}.json`, true);
+    getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/hourly10day/astronomy/q/${locationData}.json`);
 }
 
 function getWeatherResultData(url) {
@@ -192,6 +192,17 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
     }
 
     $('#forecast-body').html(tbod);
+    
+    // set background based on whether it is currently day/night
+    let sunData = resultData.sun_phase; // object[sunrise, sunset]
+    let now = new Date();
+    let currTime = now.getHours() * 60 + now.getMinutes();
+    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
+    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
+    if (currTime < sunrise || sunset < currTime) {
+        $('body').css({ 'background': '#000099' });
+        $('#weather-city').css({ 'color': '#f2f2f2' });
+    }
 
     // add title/table-border styles after loading data so the loading screen doesnt look weird
     $('#forecast-title').css({

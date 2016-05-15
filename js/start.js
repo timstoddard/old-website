@@ -248,8 +248,7 @@ function showWeatherByLocation() {
 }
 
 function getWeatherData(locationData) {
-    //getWeatherResultData('../data.json', true);
-    getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/q/${locationData}.json`);
+    getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/astronomy/q/${locationData}.json`);
 }
 
 function getWeatherResultData(url) {
@@ -315,6 +314,17 @@ function showWeatherData(resultData) {
             </table>
         </div>`);
     $('[data-toggle="tooltip"]').tooltip();
+    
+    // set background based on whether it is currently day/night
+    let sunData = resultData.sun_phase; // object[sunrise, sunset]
+    let now = new Date();
+    let currTime = now.getHours() * 60 + now.getMinutes();
+    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
+    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
+    if (currTime < sunrise || sunset < currTime) {
+        $('#page-content').css({ 'background': '#000099' });
+        $('#time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#f2f2f2' });
+    }
 }
 
 function secureImg(str) {
