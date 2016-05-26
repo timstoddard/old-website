@@ -3,7 +3,6 @@
 $(function() {
     
     $('[data-toggle="tooltip"]').tooltip();
-    $('#c1-menu-items, #c2-menu-items, #c3-menu-items, #c4-menu-items').hide();
     
     $(window).keydown(function(event) {
         var key = event.which;
@@ -286,24 +285,26 @@ function showWeatherData(resultData) {
     
     // current weather --> resultData.current_observation
 
-    $('#weather-header').html(`<div class="weather-title">${resultData.current_observation.display_location.city}<img src="${secureImg(resultData.current_observation.icon_url)}"></div>`);
+    let curr = resultData.current_observation;
+    $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<img src="${secureImg(curr.icon_url)}"></div>`);
     $('#weather-content').html(`
-        <div class="current-temp">Temperature: ${resultData.current_observation.temp_f}&deg;F
-        ${Math.abs(resultData.current_observation.temp_f - resultData.current_observation.feelslike_f) > 2 ?
-            `(Feels like ${resultData.current_observation.feelslike_f}&deg;F)` : ''}</div>
-        <div class="current-humidity">Humidity: ${resultData.current_observation.relative_humidity}</div>
-        <div class="current-wind">${resultData.current_observation.wind_mph > 0 ?
-            `Wind: ${resultData.current_observation.wind_mph} mph ${resultData.current_observation.wind_dir}` : ''}</div>`);
+        <div class="current-temp">Temperature: ${curr.temp_f}&deg;F
+        ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ?
+            `(Feels like ${curr.feelslike_f}&deg;F)` : ''}</div>
+        <div class="current-humidity">Humidity: ${curr.relative_humidity}</div>
+        <div class="current-wind">${curr.wind_mph > 0 ?
+            `Wind: ${curr.wind_mph} mph ${curr.wind_dir}` : ''}</div>`);
 
     // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
-
+    
+    let forecastDays = resultData.forecast.simpleforecast.forecastday
     var body = '';
-    for (let i = 0; i < resultData.forecast.simpleforecast.forecastday.length; i++) {
+    for (let i = 0; i < forecastDays.length; i++) {
         body += `
             <td>
-                <div class="pred-header">${formatForecastDay(resultData.forecast.simpleforecast.forecastday[i].date, true)}</div>
-                <img class="forecast-icon" src="${secureImg(resultData.forecast.simpleforecast.forecastday[i].icon_url)}">
-                <div class="temperature">${resultData.forecast.simpleforecast.forecastday[i].low.fahrenheit}-${resultData.forecast.simpleforecast.forecastday[i].high.fahrenheit}&deg;F</div>
+                <div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>
+                <img class="forecast-icon" src="${secureImg(forecastDays[i].icon_url)}">
+                <div class="temperature">${forecastDays[i].low.fahrenheit}-${forecastDays[i].high.fahrenheit}&deg;F</div>
                 </td>`;
     }
 
@@ -323,10 +324,10 @@ function showWeatherData(resultData) {
     let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
     let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
     if (currTime < sunrise || sunset < currTime) {
-        $('body').css({ 'background': '#000000' })
+        $('body').css({ 'background': '#000099' })
         $('#page-content').css({
             'background': '#000099',
-            'box-shadow': 'inset 0px 0px 15px 3px #f2f2f2'
+            'box-shadow': 'inset 0px 0px 12px 3px #000000'
         });
         $('#time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#f2f2f2' });
     }

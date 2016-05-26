@@ -1,7 +1,8 @@
 if (location.protocol === 'http:' || location.protocol === 'https:') {
     showWeather();
 } else if (location.protocol === 'file:') {
-    let n = true ? getDayData() : getNightData();
+    // let n = true ? getDayData() : getNightData();
+    let n = get11pmData();
     console.log(n)
     setTimeout(() => {
         showWeatherData(n)
@@ -161,19 +162,18 @@ function showWeatherData(resultData) {
     let hForecast = resultData.hourly_forecast; // array[0 - 239]
     let tbod = '';
     let index = 0;
-    for (let i = 0; i < forecast.length; i++) {
+    let lastHour = new Date(forecast[0].date.epoch * 1000).getDate() !== new Date(hForecast[0].FCTTIME.epoch * 1000).getDate(); // checks to see if data is from 11pm - 11:59pm
+    for (let i = lastHour ? 1 : 0; i < forecast.length; i++) {
         tbod +=
             `<tr><td>
                 <div class="pred-header">${formatForecastDay(forecast[i].date)}</div>
                 <div class="temperature">${forecast[i].low.fahrenheit}-${forecast[i].high.fahrenheit}&deg;F</div>
                 <div class="humidity"><span>${forecast[i].avehumidity}%</span></div>
             </td>`;
-        let currDate = new Date(forecast[i].date.epoch * 1000).getDate();
-        if (i === 0) {
-            for (let j = 0; j < new Date(hForecast[index].FCTTIME.epoch * 1000).getHours(); j++) {
-                tbod += '<td>-</td>';
-            }
+        for (let j = 0; j < new Date(hForecast[index].FCTTIME.epoch * 1000).getHours(); j++) {
+            tbod += '<td>-</td>';
         }
+        let currDate = new Date(forecast[i].date.epoch * 1000).getDate();
         while (new Date(hForecast[index].FCTTIME.epoch * 1000).getDate() === currDate) {
             // html stuff
             tbod +=
@@ -189,7 +189,6 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
             index++;
         }
         tbod += '</tr>';
-        // console.log(new Date(forecast[i].date.epoch * 1000).getDate())
     }
 
     $('#forecast-body').html(tbod);
