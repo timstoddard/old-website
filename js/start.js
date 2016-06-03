@@ -329,7 +329,7 @@ function showWeatherData(resultData) {
             'background': '#000099',
             'box-shadow': 'inset 0px 0px 12px 3px #000000'
         });
-        $('#time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#f2f2f2' });
+        $('#welcome, #time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#f2f2f2' });
     }
 }
 
