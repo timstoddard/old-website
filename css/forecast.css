@@ -6,13 +6,15 @@ body { background: #77d2ee; font-family: 'PT Sans Narrow', sans-serif; min-width
 #weather-content { align-items: center; display: inline-flex; margin: 40px 0 0 0; white-space: nowrap; }
 #current-temp:not(:empty), #current-humidity:not(:empty), #current-wind:not(:empty) { border-radius: 0.2em;
     display: inline-block; font-size: 135%; margin: 0 0.2em; padding: 2px 5px; text-align: center; }
-#weather-city, #current-temp:not(:empty), #current-humidity:not(:empty), #current-wind:not(:empty) { margin-top: 10px; }
+#weather-city, #current-temp:not(:empty), #current-humidity:not(:empty), #current-wind:not(:empty)
+    { margin-top: 10px; }
 #weather-city { display: inline-block; margin-left: 0.8em; }
 #weather-img { margin: 5px 0.5em 0 0.2em; }
 #current-temp:not(:empty) { background-color: #ff4d4d; }
 #current-humidity:not(:empty) { background-color: #8080ff; }
 #current-wind:not(:empty) { background-color: #a6a6a6; }
-.table-border, #weather-details { box-shadow: 2.5px 2.5px 3px #595959; margin-right: 3px; }
+.table-border, #current-temp, #current-humidity, #current-wind, #weather-details
+    { box-shadow: 2.5px 2.5px 3px #595959; margin-right: 3px; }
 .table-border { border: 10px solid #c0c0c0; border-radius: 10px; display: none; }
 table { border-collapse: collapse; margin: 0 auto; max-width: 900px; }
 tbody tr td { border-top: solid 1px #c0c0c0; }
