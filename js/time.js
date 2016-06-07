@@ -17,8 +17,8 @@ function setBackground() {
     let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
     let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
     if (currTime < sunrise || sunset < currTime) {
-        $('body').css({ 'background': '#000099' });
-        $('#time').css({ 'color': '#f2f2f2' });
+        $('body').css({ 'background': '#161669' });
+        $('#time').css({ 'color': '#ACB0BD' });
     }
 }
 

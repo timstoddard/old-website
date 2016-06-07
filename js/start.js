@@ -305,7 +305,7 @@ function showWeatherData(resultData) {
                 <div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>
                 <img class="forecast-icon" src="${secureImg(forecastDays[i].icon_url)}">
                 <div class="temperature">${forecastDays[i].low.fahrenheit}-${forecastDays[i].high.fahrenheit}&deg;F</div>
-                </td>`;
+            </td>`;
     }
 
     $('#weather-forecast').html(`
@@ -324,12 +324,17 @@ function showWeatherData(resultData) {
     let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
     let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
     if (currTime < sunrise || sunset < currTime) {
-        $('body').css({ 'background': '#000099' })
+        $('body').css({ 'background': '#161669' });
         $('#page-content').css({
-            'background': '#000099',
+            'background': '#161669',
             'box-shadow': 'inset 0px 0px 12px 3px #000000'
         });
-        $('#welcome, #time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#f2f2f2' });
+        $('#welcome, #time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#ACB0BD' });
+        $('.btn, .btn-lg, .btn-default, td').css({
+            'background': '#111155',
+            'border-color': '#ACB0BD',
+            'color': '#ACB0BD'
+        });
     }
 }
 
