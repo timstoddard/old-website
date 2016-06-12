@@ -143,6 +143,7 @@ showTime();
 if (location.protocol === 'http:' || location.protocol === 'https:') {
     showWeather();   
 } else if (location.protocol === 'file:') {
+    document.title = `${document.title} (dev)`;
     let n = true ? getDayData() : getNightData();
     console.log(n)
     setTimeout(() => {
@@ -334,7 +335,11 @@ function showWeatherData(resultData) {
             'background': '#111155',
             'border-color': '#ACB0BD',
             'color': '#ACB0BD'
-        });
+        })
+        $('.btn, .btn-lg, .btn-default, td').hover(
+            function() {$(this).css({ 'background': '#0d0d40' })},
+            function() {$(this).css({ 'background': '#111155' })}
+        );
     }
 }
 
