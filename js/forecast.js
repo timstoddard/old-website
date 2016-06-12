@@ -256,13 +256,16 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
                 $(this).children().css({ 'color': '#ACB0BD' });
             }
         );
-        $('td').css({ 'border-color': '#2424a8' });
+        $('td').css({
+            'border-color': '#2424a8',
+            'min-width': '45px',
+            'width': '45px'
+        });
         $('i').css({ 'font-size': '1.8em', 'margin': '0 3px' });
         $('#weather-image i').css({ 'font-size': '250%', 'margin': '0 5px' });
         $('.temperature, .humidity').css({ 'background': 'none', 'border': 'none' });
         $('#weather-details').css({ 'background': 'none', 'border': '1px solid #ACB0BD' });
         $('#weather-details div :nth-child(1)').css({ 'color': '#ACB0BD' });
-        console.log($('#weather-details').html());
     }
 
 }
@@ -275,6 +278,25 @@ function secureImg(str) {
 
 function iconMap(str) {
     switch(str) {
+        // clear
+        case 'clear':
+        case 'sunny':
+            return 'day-sunny';
+        case 'mostlysunny':
+        case 'partlysunny':
+            return 'day-sunny-overcast';
+        case 'nt_clear':
+        case 'nt_sunny':
+            return 'night-clear';
+        // cloudy
+        case 'cloudy':
+        case 'mostlycloudy':
+        case 'partlycloudy':
+            return 'day-cloudy';
+        case 'nt_cloudy':
+        case 'nt_mostlycloudy':
+        case 'nt_partlycloudy':
+            return 'night-alt-cloudy';
         // flurries
         case 'flurries':
         case 'chanceflurries':
@@ -282,6 +304,11 @@ function iconMap(str) {
         case 'nt_flurries':
         case 'nt_chanceflurries':
             return 'night-alt-snow-wind';
+        // hazy
+        case 'hazy':
+            return 'day-haze';
+        case 'nt_hazy':
+            return 'night-alt-cloudy';
         // rain
         case 'rain':
             return 'day-rain';
@@ -312,30 +339,6 @@ function iconMap(str) {
         case 'nt_tstorms':
         case 'nt_chancetstorms':
             return 'night-alt-thunderstorm';
-        // cloudy
-        case 'cloudy':
-        case 'mostlycloudy':
-        case 'partlycloudy':
-            return 'day-cloudy';
-        case 'nt_cloudy':
-        case 'nt_mostlycloudy':
-        case 'nt_partlycloudy':
-            return 'night-alt-cloudy';
-        // hazy
-        case 'hazy':
-            return 'day-haze';
-        case 'nt_hazy':
-            return 'night-alt-cloudy';
-        // clear
-        case 'clear':
-        case 'sunny':
-            return 'day-sunny';
-        case 'mostlysunny':
-        case 'partlysunny':
-            return 'day-sunny-overcast';
-        case 'nt_clear':
-        case 'nt_sunny':
-            return 'night-clear';
         // default
         default:
             if (str.substr(0, 2) === 'nt') {
@@ -364,48 +367,3 @@ function formatHours(date) {
     let hr = date.hour;
     return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)} ${date.ampm}`;
 }
-
-
-/**
- * -- DAY --
- * chanceflurries
- * chancerain
- * chancesleat
- * chancesnow
- * chancetstorms
- * clear
- * cloudy
- * flurries
- * hazy
- * mostlycloudy
- * mostlysunny
- * partlycloudy
- * partlysunny
- * rain
- * sleat
- * snow
- * sunny
- * tstorms
- * unknown
- * 
- * -- NIGHT --
- * nt_chanceflurries
- * nt_chancerain
- * nt_chancesleat
- * nt_chancesnow
- * nt_chancetstorms
- * nt_clear
- * nt_cloudy
- * nt_flurries
- * nt_hazy
- * nt_mostlycloudy
- * nt_mostlysunny
- * nt_partlycloudy
- * nt_partlysunny
- * nt_rain
- * nt_sleat
- * nt_snow
- * nt_sunny
- * nt_tstorms
- * nt_unknown
- */
