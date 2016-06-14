@@ -1,0 +1,22 @@
+<div>What&#39;s your name?</div>
+
+<input type="text" (blur)="onNameInputBlur($event)">
+
+<template [ngIf]="name && showWelcome">
+	<div>Welcome, {{ name }}! Let&#39;s make you a nickname!</div>
+	<div>Click the <span>+</span> below to get started.</div>
+	<template [ngIf]="nicknameChunks.length">
+		<div *ngFor="let chunk of nicknameChunks; let i = index">
+			{{ chunk.type }}
+			<div (click)="remove(i)">x</div>
+		</div>
+	</template>
+	<add-nickname-chunk (addChunk)="addChunk($event)"></add-nickname-chunk>
+	<template [ngIf]="nicknameChunks.length">
+		<button (click)="generateNickname()">Make me a nickname!</button>
+		<input  type="checkbox" [(ngModel)]="alliteration">Use alliteration
+	</template>
+	<template [ngIf]="nickname">
+		<div>{{ nickname }}</div>
+	</template>
+</template>
