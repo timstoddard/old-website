@@ -197,7 +197,7 @@ function showWeatherData(resultData) {
             }
             // html stuff
             tbod +=
-                `<td
+                `<td class="night-hover"
                     onmouseover="
                         $('#weather-details').show();
 $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTTIME)} - ${formatHours(hForecast[index].FCTTIME)}</div><div><span>${hForecast[index].temp.english}&deg;F</span> <span>${hForecast[index].humidity}%</span></div><div>${hForecast[index].wspd.english} mph ${hForecast[index].wdir.dir}</div>');if(afterSunset){$('#weather-details div:nth-child(1)').css({ 'color': '#ACB0BD' });}"
@@ -240,7 +240,7 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
         $('#forecast-title, #current-temp, #current-humidity, #current-wind, .table-border, #weather-details').css({ 'box-shadow': 'none' });
         $('#forecast-title, td, i').css({ 'color': '#ACB0BD' });
         $('#forecast-title, td').css({ 'background': '#111155' });
-        $('td').hover(
+        $('td.night-hover').hover(
             function() {
                 $(this).css({
                     'background': '#0d0d40',
