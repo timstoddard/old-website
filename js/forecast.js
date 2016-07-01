@@ -139,7 +139,6 @@ function getWeatherResultData(url) {
     });
 }
 
-var afterSunset;
 function showWeatherData(resultData) {
 
     // figure out if it is daytime or nighttime
@@ -148,7 +147,7 @@ function showWeatherData(resultData) {
     let currTime = now.getHours() * 60 + now.getMinutes();
     let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
     let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
-    afterSunset = currTime < sunrise || sunset < currTime;
+    let afterSunset = currTime < sunrise || sunset < currTime;
 
     // current weather
     let curr = resultData.current_observation; // object
@@ -176,7 +175,8 @@ function showWeatherData(resultData) {
     let hForecast = resultData.hourly_forecast; // array[0 - 239]
     let tbod = '';
     let index = 0;
-    let lastHour = new Date(forecast[0].date.epoch * 1000).getDate() !== new Date(hForecast[0].FCTTIME.epoch * 1000).getDate(); // checks to see if data is from 11pm - 11:59pm
+    // checks to see if data is from 11pm - 11:59pm
+    let lastHour = new Date(forecast[0].date.epoch * 1000).getDate() !== new Date(hForecast[0].FCTTIME.epoch * 1000).getDate();     
     for (let i = lastHour ? 1 : 0; i < forecast.length; i++) {
         tbod +=
             `<tr><td>
@@ -185,7 +185,7 @@ function showWeatherData(resultData) {
                 <div class="humidity"><span>${forecast[i].avehumidity}%</span></div>
             </td>`;
         for (let j = 0; j < new Date(hForecast[index].FCTTIME.epoch * 1000).getHours(); j++) {
-            tbod += '<td>-</td>';
+            tbod += '<td class="unselectable" unselectable="on">-</td>';
         }
         let currDate = new Date(forecast[i].date.epoch * 1000).getDate();
         while (new Date(hForecast[index].FCTTIME.epoch * 1000).getDate() === currDate) {

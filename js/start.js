@@ -283,11 +283,24 @@ function getWeatherResultData(url) {
 }
 
 function showWeatherData(resultData) {
+
+    // figure out if it is daytime or nighttime
+    let sunData = resultData.sun_phase; // object[sunrise, sunset]
+    let now = new Date();
+    let currTime = now.getHours() * 60 + now.getMinutes();
+    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
+    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
+    let afterSunset = currTime < sunrise || sunset < currTime;
     
     // current weather --> resultData.current_observation
 
     let curr = resultData.current_observation;
-    $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<img src="${secureImg(curr.icon_url)}"></div>`);
+    if (afterSunset) {
+        $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<i style="margin-left: 10px" class="wi wi-${iconMap(parseIconUrl(curr.icon_url))}"></i></div>`);
+    } else {
+        $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<img src="${secureImg(curr.icon_url)}"></div>`);
+    }
+    // `<i style="margin-left:8px;margin-right:8px;" class="wi wi-${iconMap(parseIconUrl(curr.icon_url))}"></i>`
     $('#weather-content').html(`
         <div class="current-temp">Temperature: ${curr.temp_f}&deg;F
         ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ?
@@ -301,12 +314,13 @@ function showWeatherData(resultData) {
     let forecastDays = resultData.forecast.simpleforecast.forecastday
     var body = '';
     for (let i = 0; i < forecastDays.length; i++) {
-        body += `
-            <td>
-                <div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>
-                <img class="forecast-icon" src="${secureImg(forecastDays[i].icon_url)}">
-                <div class="temperature">${forecastDays[i].low.fahrenheit}-${forecastDays[i].high.fahrenheit}&deg;F</div>
-            </td>`;
+        body += `<td><div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>`
+        if (afterSunset) {
+            body += `<i class="wi wi-${iconMap(parseIconUrl(curr.icon_url))} w-icon"></i>`;
+        } else {
+            body += `<img class="forecast-icon" src="${secureImg(forecastDays[i].icon_url)}">`;
+        }
+        body += `<div class="temperature">${forecastDays[i].low.fahrenheit}-${forecastDays[i].high.fahrenheit}&deg;F</div></td>`;
     }
 
     $('#weather-forecast').html(`
@@ -319,12 +333,8 @@ function showWeatherData(resultData) {
     $('[data-toggle="tooltip"]').tooltip();
     
     // set background based on whether it is currently day/night
-    let sunData = resultData.sun_phase; // object[sunrise, sunset]
-    let now = new Date();
-    let currTime = now.getHours() * 60 + now.getMinutes();
-    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
-    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
-    if (currTime < sunrise || sunset < currTime) {
+    
+    if (afterSunset) {
         $('body').css({ 'background': '#161669' });
         $('#page-content').css({
             'background': '#161669',
@@ -347,6 +357,85 @@ function secureImg(str) {
     if (str.indexOf('http:') > -1 && str.indexOf('https:') === -1) {
         return `https${str.substring(4, str.length)}`;
     }
+}
+
+function iconMap(str) {
+    switch(str) {
+        // clear
+        case 'clear':
+        case 'sunny':
+            return 'day-sunny';
+        case 'mostlysunny':
+        case 'partlysunny':
+            return 'day-sunny-overcast';
+        case 'nt_clear':
+        case 'nt_sunny':
+            return 'night-clear';
+        // cloudy
+        case 'cloudy':
+        case 'mostlycloudy':
+        case 'partlycloudy':
+            return 'day-cloudy';
+        case 'nt_cloudy':
+        case 'nt_mostlycloudy':
+        case 'nt_partlycloudy':
+            return 'night-alt-cloudy';
+        // flurries
+        case 'flurries':
+        case 'chanceflurries':
+            return 'day-snow-wind';
+        case 'nt_flurries':
+        case 'nt_chanceflurries':
+            return 'night-alt-snow-wind';
+        // hazy
+        case 'hazy':
+            return 'day-haze';
+        case 'nt_hazy':
+            return 'night-alt-cloudy';
+        // rain
+        case 'rain':
+            return 'day-rain';
+        case 'chancerain':
+            return 'day-showers';
+        case 'nt_rain':
+            return 'night-rain';
+        case 'nt_chancerain':
+            return 'night-alt-showers';
+        // sleet
+        case 'sleat':
+        case 'chancesleat':
+            return 'day-sleet';
+        case 'nt_sleat':
+        case 'nt_chancesleat':
+            return 'night-alt-sleet';
+        // snow
+        case 'snow':
+        case 'chancesnow':
+            return 'snow';
+        case 'nt_snow':
+        case 'nt_chancesnow':
+            return 'night-alt-snow';
+        // thunderstorms
+        case 'tstorms':
+        case 'chancetstorms':
+            return 'thunderstorm';
+        case 'nt_tstorms':
+        case 'nt_chancetstorms':
+            return 'night-alt-thunderstorm';
+        // default
+        default:
+            if (str.substr(0, 2) === 'nt') {
+                return 'night-clear';
+            } else {
+                return 'day-sunny';
+            }
+    }
+}
+
+function parseIconUrl(str) {
+    let start = str.lastIndexOf('/');
+    let end = str.lastIndexOf('.');
+    return str.substring(start + 1, end);
 }
 
 function formatHours(date) {
