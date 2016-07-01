@@ -183,6 +183,7 @@ a {
 }
 
 .w-icon {
+    display: block;
     font-size: 36px;
     height: 44px;
     margin-top: 10px;
