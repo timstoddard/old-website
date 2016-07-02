@@ -1,15 +1,10 @@
 # timstoddard.github.io
-My Homepage (for now)
 
 Contents:
 
- * Personal website (main page)
- * Start page w/ links (/start)
- * JavaScript time displace (/time.html)
- * 10 day weather forecast (/forecast.html)
- * Resume - linked to by main page (/resume.html)
-
-Frameworks/Libraries utilized:
-
- * Bootstrap (css/js)
- * JQuery (js)
+ * Start page
+ * [Current time](https://timstoddard.github.io/time)
+ * [10 day weather forecast](https://timstoddard.github.io/forecast)
+ * [Resume](https://timstoddard.github.io/resume)
+ * [Bad driving bingo](https://timstoddard.github.io/bingo)
+ * [Heap demo](https://timstoddard.github.io/heap)
