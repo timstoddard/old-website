@@ -138,7 +138,7 @@ function getWeatherResultData(url) {
         timeout: 10000
     });
 }
-
+let afterSunset;
 function showWeatherData(resultData) {
 
     // figure out if it is daytime or nighttime
@@ -147,7 +147,7 @@ function showWeatherData(resultData) {
     let currTime = now.getHours() * 60 + now.getMinutes();
     let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
     let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
-    let afterSunset = currTime < sunrise || sunset < currTime;
+    afterSunset = currTime < sunrise || sunset < currTime;
 
     // current weather
     let curr = resultData.current_observation; // object
@@ -264,7 +264,7 @@ $('#weather-details').html('<div>${formatHourlyForecastDay(hForecast[index].FCTT
         $('i').css({ 'font-size': '1.8em', 'margin': '0 3px' });
         $('#weather-image i').css({ 'font-size': '250%', 'margin': '0 5px' });
         $('.temperature, .humidity').css({ 'background': 'none', 'border': 'none' });
-        $('#weather-details').css({ 'background': 'none', 'border': '1px solid #ACB0BD' });
+        $('#weather-details').css({ 'background': '#161669', 'border': '1px solid #ACB0BD' });
         $('#weather-details div :nth-child(1)').css({ 'color': '#ACB0BD' });
     }
 
