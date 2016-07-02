@@ -5,7 +5,7 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
     
     $(window).keydown(function(event) {
-        var key = event.which;
+        let key = event.which;
         if (key === 83) { // 's' key
             if (($('#myModal').data('bs.modal') || {}).isShown) {
                 return;
@@ -25,8 +25,8 @@ $(function() {
     });
     
     $('#name-input').keypress(function (event) {
-        var keynum = event.which;
-        var query = $('#name-input').val();
+        let keynum = event.which;
+        let query = $('#name-input').val();
         if (keynum === 13 && query && query.trim().length > 0) {
             let index = query.indexOf('/');
             if (index === -1) return;
@@ -37,7 +37,7 @@ $(function() {
         }
     );
     
-    var c1Timer;
+    let c1Timer;
     $('#c1, #c1-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c1Timer);
@@ -48,7 +48,7 @@ $(function() {
         }
     });
     
-    var c2Timer;
+    let c2Timer;
     $('#c2, #c2-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c2Timer);
@@ -59,7 +59,7 @@ $(function() {
         }
     });
     
-    var c3Timer;
+    let c3Timer;
     $('#c3, #c3-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c3Timer);
@@ -70,7 +70,7 @@ $(function() {
         }
     });
     
-    var c4Timer;
+    let c4Timer;
     $('#c4, #c4-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c4Timer);
@@ -82,24 +82,22 @@ $(function() {
     });
 });
 
-// yes its a global #dealwithit
-var urls = [
-    {'key': 'a', 'url': 'https://www.amazon.com/s?field-keywords=', 'name': 'Amazon'},
-    {'key': 'c', 'url': 'http://catalog.calpoly.edu/search/?P=', 'name': 'the Course Catalog'},
-    {'key': 'f', 'url': 'https://www.facebook.com/search/people/?q=', 'name': 'Facebook'},
-    //{'key': 'fox', 'url': 'http://www.foxnews.com/search-results/search?q=', 'name': 'Fox News'},
-    {'key': 'g', 'url': 'https://www.google.com/?gws_rd=ssl#q=', 'name': 'Google'},
-    {'key': 'git', 'url': 'https://github.com/search?q=', 'name': 'GitHub'},
-    {'key': 'i', 'url': 'http://www.imdb.com/find?s=all&q=', 'name': 'IMDb'},
-    {'key': 'sc', 'url': 'https://soundcloud.com/search?q=', 'name': 'Soundcloud'},
-    {'key': 'so', 'url': 'https://stackoverflow.com/search?q=', 'name': 'Stack Overflow'},
-    {'key': 't', 'url': 'https://twitter.com/search?q=', 'name': 'Twitter'},
-    {'key': 'w', 'url': 'https://en.wikipedia.org/wiki/', 'name': 'Wikipedia'},
-    {'key': 'y', 'url': 'https://www.youtube.com/results?search_query=', 'name': 'Youtube'}
+const urls = [
+    {'key': 'a',    'url': 'https://www.amazon.com/s?field-keywords=',      'name': 'Amazon'},
+    {'key': 'c',    'url': 'http://catalog.calpoly.edu/search/?P=',         'name': 'Cal Poly Course Catalog'},
+    {'key': 'f',    'url': 'https://www.facebook.com/search/people/?q=',    'name': 'Facebook'},
+    {'key': 'g',    'url': 'https://www.google.com/?gws_rd=ssl#q=',         'name': 'Google'},
+    {'key': 'git',  'url': 'https://github.com/search?q=',                  'name': 'GitHub'},
+    {'key': 'i',    'url': 'http://www.imdb.com/find?s=all&q=',             'name': 'IMDb'},
+    {'key': 'sc',   'url': 'https://soundcloud.com/search?q=',              'name': 'Soundcloud'},
+    {'key': 'so',   'url': 'https://stackoverflow.com/search?q=',           'name': 'Stack Overflow'},
+    {'key': 't',    'url': 'https://twitter.com/search?q=',                 'name': 'Twitter'},
+    {'key': 'w',    'url': 'https://en.wikipedia.org/wiki/',                'name': 'Wikipedia'},
+    {'key': 'y',    'url': 'https://www.youtube.com/results?search_query=', 'name': 'Youtube'}
 ];
 
 function canDoCommand(key) {
-    var can = false;
+    let can = false;
     urls.forEach(function(element) {
         if (element.key === key) can = true;
     });
@@ -107,15 +105,15 @@ function canDoCommand(key) {
 }
 
 function getKeyIndex(key) {
-    var index = -1;
+    let index;
     urls.forEach(function(element, i) {
         if (element.key === key) index = i;
     });
-    return index; // should always return a value >= 0
+    return index; // should always return a value
 }
 
 function showModalText() {
-    var data = '';
+    let data = '';
     urls.forEach(function(element) {
         data += `<div>'${element.key}/' to search ${element.name}</div>`
     });
@@ -141,145 +139,21 @@ checkForCustomName();
 showTime();
 // daysTillBday();
 if (location.protocol === 'http:' || location.protocol === 'https:') {
-    showWeather();   
+    showWeather(false);   
 } else if (location.protocol === 'file:') {
     document.title = `${document.title} (dev)`;
     let n = true ? getDayData() : getNightData();
     console.log(n)
-    setTimeout(() => {
-        showWeatherData(n)
-    }, 1000);
-}
-
-// NOTE: Lat/long data lasts for an hour before it is refreshed. Weather data lasts for 30 mins.
-/*******************************************/
-
-function hasLatAndLongInLocalStorage() {
-    return localStorage.getItem('lat') !== null
-        && localStorage.getItem('long') !== null
-        && localStorage.getItem('latLongTimestamp') !== null;
-}
-
-function hasWeatherDataInLocalStorage() {
-    return localStorage.getItem('weatherData') !== null
-        && localStorage.getItem('weatherDataTimestamp') !== null
-        && localStorage.getItem('weatherDataType') !== null;
-}
-
-function dateDiffMins(date1, date2) {
-    return Math.floor(Math.abs(date2 - date1) / (60 * 1000));
-}
-
-function showWeather() { // time before update: 30m
-    if (hasWeatherDataInLocalStorage()) {
-        if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) <= 30) {
-            showWeatherData(JSON.parse(localStorage.getItem('weatherData')));
-        } else {
-            showWeatherByLocation();
-        }
-    } else {
-        showWeatherByLocation();
-    }
+    setTimeout(() => {showWeatherData(n)}, 1000);
 }
 
 function showTime() {
-    var now = new Date();
+    let now = new Date();
     $('#time').html(formatTime(now));
     $('#date').html(formatDay(now));
     
-    var millis = now.getMilliseconds();
+    let millis = now.getMilliseconds();
     setTimeout('showTime()', 1000 - millis < 10 ? 1000 : 1000 - millis);
-}
-
-function showWeatherByLocation() {
-    let posErrCount = 0;
-    if (hasLatAndLongInLocalStorage()
-            && dateDiffMins(localStorage.getItem('latLongTimestamp'), Date.now()) <= 60) {
-        getWeatherData(`${localStorage.getItem('lat')},${localStorage.getItem('long')}`);
-        return;
-    }
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (pos) {
-                var currLat = pos.coords.latitude;
-                var currLong = pos.coords.longitude;
-                if (hasLatAndLongInLocalStorage()) {
-                    var lat = localStorage.getItem('lat');
-                    var long = localStorage.getItem('long');
-                    var epsilon = 0.001;
-                    if (Math.abs(lat - currLat) > epsilon
-                            || Math.abs(long - currLong) > epsilon) {
-                        getWeatherData(`${currLat},${currLong}`);
-                        localStorage.setItem('lat', currLat);
-                        localStorage.setItem('long', currLong);
-                        localStorage.setItem('latLongTimestamp', Date.now());
-                    } else {
-                        getWeatherData(`${lat},${long}`);
-                    }
-                } else {
-                    getWeatherData(`${currLat},${currLong}`);
-                    localStorage.setItem('lat', currLat);
-                    localStorage.setItem('long', currLong);
-                    localStorage.setItem('latLongTimestamp', Date.now());
-                }
-            },
-            function (err) {
-                console.log(err);
-                if (posErrCount > 0) return;
-                posErrCount++;
-                var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
-                if (!zip) {
-                    $('#weather-content').html('Weather data failed to load');
-                    $('#weather-forecast').html('Weather forecast failed to load');
-                    return;
-                }
-                getWeatherData(zip.replace(/[^0-9]/g, ''));
-            }, {enableHighAccuracy: false, timeout: 15000, maximumAge: 0});
-    } else {
-        if (posErrCount > 0) return;
-        posErrCount++;
-        var zip = prompt('There was an error determining your location.\nPlease enter your zip code.');
-        if (zip === null) {
-            $('#weather-content').html('Weather data failed to load');
-            $('#weather-forecast').html('Weather forecast failed to load');
-            return;
-        }
-        getWeatherData(zip.replace(/[^0-9]/g, ''));
-    }
-}
-
-function getWeatherData(locationData) {
-    getWeatherResultData(`https://api.wunderground.com/api/8d7d14e295f9150a/conditions/forecast10day/astronomy/q/${locationData}.json`);
-}
-
-function getWeatherResultData(url) {
-    if (hasWeatherDataInLocalStorage() && dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) <= 30) {
-        showWeatherData(JSON.parse(localStorage.getItem('weatherData')));
-        return;
-    }
-    jQuery.ajax({
-        url: url,
-        type: 'GET',
-        success: function(resultData) {
-            if (hasWeatherDataInLocalStorage()) {
-                if (dateDiffMins(localStorage.getItem('weatherDataTimestamp'), Date.now()) > 30) {
-                    localStorage.setItem('weatherData', JSON.stringify(resultData));
-                    localStorage.setItem('weatherDataTimestamp', Date.now());
-                    localStorage.setItem('weatherDataType', 'Regular');
-                }
-            } else {
-                localStorage.setItem('weatherData', JSON.stringify(resultData));
-                localStorage.setItem('weatherDataTimestamp', Date.now());
-                localStorage.setItem('weatherDataType', 'Regular');
-            }
-            showWeatherData(resultData);
-        },
-        error : function(jqXHR, textStatus, errorThrown) {
-            $('#weather-content').html('Weather data failed to load');
-            $('#weather-forecast').html('Weather forecast failed to load');
-        },
-        timeout: 10000
-    });
 }
 
 function showWeatherData(resultData) {
@@ -312,7 +186,7 @@ function showWeatherData(resultData) {
     // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
     
     let forecastDays = resultData.forecast.simpleforecast.forecastday
-    var body = '';
+    let body = '';
     for (let i = 0; i < forecastDays.length; i++) {
         body += `<td><div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>`
         if (afterSunset) {
@@ -353,130 +227,45 @@ function showWeatherData(resultData) {
     }
 }
 
-function secureImg(str) {
-    if (str.indexOf('http:') > -1 && str.indexOf('https:') === -1) {
-        return `https${str.substring(4, str.length)}`;
-    }
-}
-
-function iconMap(str) {
-    switch(str) {
-        // clear
-        case 'clear':
-        case 'sunny':
-            return 'day-sunny';
-        case 'mostlysunny':
-        case 'partlysunny':
-            return 'day-sunny-overcast';
-        case 'nt_clear':
-        case 'nt_sunny':
-            return 'night-clear';
-        // cloudy
-        case 'cloudy':
-        case 'mostlycloudy':
-        case 'partlycloudy':
-            return 'day-cloudy';
-        case 'nt_cloudy':
-        case 'nt_mostlycloudy':
-        case 'nt_partlycloudy':
-            return 'night-alt-cloudy';
-        // flurries
-        case 'flurries':
-        case 'chanceflurries':
-            return 'day-snow-wind';
-        case 'nt_flurries':
-        case 'nt_chanceflurries':
-            return 'night-alt-snow-wind';
-        // hazy
-        case 'hazy':
-            return 'day-haze';
-        case 'nt_hazy':
-            return 'night-alt-cloudy';
-        // rain
-        case 'rain':
-            return 'day-rain';
-        case 'chancerain':
-            return 'day-showers';
-        case 'nt_rain':
-            return 'night-rain';
-        case 'nt_chancerain':
-            return 'night-alt-showers';
-        // sleet
-        case 'sleat':
-        case 'chancesleat':
-            return 'day-sleet';
-        case 'nt_sleat':
-        case 'nt_chancesleat':
-            return 'night-alt-sleet';
-        // snow
-        case 'snow':
-        case 'chancesnow':
-            return 'snow';
-        case 'nt_snow':
-        case 'nt_chancesnow':
-            return 'night-alt-snow';
-        // thunderstorms
-        case 'tstorms':
-        case 'chancetstorms':
-            return 'thunderstorm';
-        case 'nt_tstorms':
-        case 'nt_chancetstorms':
-            return 'night-alt-thunderstorm';
-        // default
-        default:
-            if (str.substr(0, 2) === 'nt') {
-                return 'night-clear';
-            } else {
-                return 'day-sunny';
-            }
-    }
-}
-
-function parseIconUrl(str) {
-    let start = str.lastIndexOf('/');
-    let end = str.lastIndexOf('.');
-    return str.substring(start + 1, end);
-}
-
 function formatHours(date) {
-    var hr = date.hour;
+    let hr = date.hour;
     return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)}${date.ampm}`;
 }
 
 function formatTime(date, short = false) { // pass in a JavaScript date object
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
     if (short) {
         return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${hours >= 12 ? ' PM' : ' AM'}`;
     } else {
-        var seconds = date.getSeconds();
+        let seconds = date.getSeconds();
         return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${seconds < 10 ? ':0' : ':'}${seconds}${hours >= 12 ? ' PM' : ' AM'}`;
     }
 }
 
 function daysTillBday() {
-    var bdayDate = Date.parse("May 13 2016") + 7 * 60 * 60 * 1000;
-    var now = Date.now();
+    let bdayDate = Date.parse("May 13 2016") + 7 * 60 * 60 * 1000;
+    let now = Date.now();
     if (bdayDate - now < 0) {
         $('#days-till-bday').html('Happy Birthday!');
     }
     
-    var days = (bdayDate - now) / (24 * 60 * 60 * 1000);
-    var dayStr = `${Math.floor(days)}`;
+    let days = (bdayDate - now) / (24 * 60 * 60 * 1000);
+    let dayStr = `${Math.floor(days)}`;
     
-    var hours = (days % 1) * 24;
-    var hourStr = `${Math.floor(hours)}`;
+    let hours = (days % 1) * 24;
+    let hourStr = `${Math.floor(hours)}`;
     
-    var mins = (hours % 1) * 60;
-    var minStr = `${Math.floor(mins)}`;
+    let mins = (hours % 1) * 60;
+    let minStr = `${Math.floor(mins)}`;
     
-    var secs = (mins % 1) * 60;
-    var secStr = `${Math.floor(secs)}`;
+    let secs = (mins % 1) * 60;
+    let secStr = `${Math.floor(secs)}`;
     
-    var millis = (secs % 1) * 1000;
-    var milliStr = `${Math.floor(millis)}`;
+    let millis = (secs % 1) * 1000;
+    let milliStr = `${Math.floor(millis)}`;
     
-    var dateStr = '';
+    let dateStr = '';
     if (days >= 1) dateStr += `${dayStr} days `;
     if (hours >= 1 || days > 0 && hours < 1)
         dateStr += `${hourStr.length < 2 ? `0${hourStr}` : `${hourStr}`}h `;
@@ -493,9 +282,9 @@ function daysTillBday() {
 }
 
 function formatDay(date, short = false) { // pass in a JavaScript date object
-    var dayOfWeek = date.getDay();
-    var month = date.getMonth();
-    var day = date.getDate();
+    let dayOfWeek = date.getDay();
+    let month = date.getMonth();
+    let day = date.getDate();
     if (short) {
         return `${dayString(dayOfWeek, true)} ${month}/${day}`;
     } else {
