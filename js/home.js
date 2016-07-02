@@ -14,8 +14,6 @@ $(function() {
         window.location.href = url.substr(0, url.length - 1);
     }
     
-    $('#contact').attr('href', '#');
-    
     var css1 = `
         background:
             linear-gradient(45deg, #445 12%, transparent 0, transparent 88%, #445 0),
