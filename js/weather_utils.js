@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /** Lat/long data stays until manually reset */
 function hasLocationDataInLocalStorage() {

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 if (location.protocol === 'http:' || location.protocol === 'https:') {
     showWeather(true);

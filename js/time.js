@@ -1,3 +1,5 @@
+'use strict';
+
 function setBackground() {
     if (location.protocol === 'http:' || location.protocol === 'https:') {
         var data = JSON.parse(localStorage.getItem('weatherData'));

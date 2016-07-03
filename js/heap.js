@@ -1,3 +1,5 @@
+'use strict';
+
 function DNE(value) {
 	return value === null || value === undefined;
 }
