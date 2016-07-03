@@ -232,15 +232,12 @@ function formatHours(date) {
     return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)}${date.ampm}`;
 }
 
-function formatTime(date, short = false) { // pass in a JavaScript date object
+function formatTime(date) { // pass in a JavaScript date object
     var hours = date.getHours();
     var minutes = date.getMinutes();
-    if (short) {
-        return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${hours >= 12 ? ' PM' : ' AM'}`;
-    } else {
-        var seconds = date.getSeconds();
-        return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${seconds < 10 ? ':0' : ':'}${seconds}${hours >= 12 ? ' PM' : ' AM'}`;
-    }
+    var seconds = date.getSeconds();
+    return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${seconds < 10 ? ':0' : ':'}${seconds}${hours >= 12 ? ' PM' : ' AM'}`;
+    // return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${hours >= 12 ? ' PM' : ' AM'}`;
 }
 
 function daysTillBday() {
@@ -281,30 +278,27 @@ function daysTillBday() {
     setTimeout('daysTillBday()', 0);
 }
 
-function formatDay(date, short = false) { // pass in a JavaScript date object
+function formatDay(date) { // pass in a JavaScript date object
     var dayOfWeek = date.getDay();
     var month = date.getMonth();
     var day = date.getDate();
-    if (short) {
-        return `${dayString(dayOfWeek, true)} ${month}/${day}`;
-    } else {
-        return `${dayString(dayOfWeek)} ${monthString(month)} ${day}, ${date.getFullYear()}`;
-    }
+    return `${dayString(dayOfWeek)} ${monthString(month)} ${day}, ${date.getFullYear()}`;
+    // return `${dayString(dayOfWeek, true)} ${month}/${day}`;
 }
 
-function formatForecastDay(date) {
+function formatForecastDay(date) { // use date from results
     return `${date.weekday_short}<br>${date.month}/${date.day}`;
 }
 
-function dayString(day, short = false) {
+function dayString(day) {
     switch (day) {
-        case 0: return short ? 'Sun' : 'Sunday';
-        case 1: return short ? 'Mon' : 'Monday';
-        case 2: return short ? 'Tue' : 'Tuesday';
-        case 3: return short ? 'Wed' : 'Wednesday';
-        case 4: return short ? 'Thu' : 'Thursday';
-        case 5: return short ? 'Fri' : 'Friday';
-        case 6: return short ? 'Sat' : 'Saturday';
+        case 0: return 'Sunday';
+        case 1: return 'Monday';
+        case 2: return 'Tuesday';
+        case 3: return 'Wednesday';
+        case 4: return 'Thursday';
+        case 5: return 'Friday';
+        case 6: return 'Saturday';
         default: return 'null';
     }
 }

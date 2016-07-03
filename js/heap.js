@@ -4,7 +4,7 @@ function DNE(value) {
 	return value === null || value === undefined;
 }
 
-var Heap = function(sort = true) {
+var Heap = function(sort) {
 	this.max_capacity = 0;
 	this.arr = [];
 	this.size = 0;
@@ -259,7 +259,7 @@ function checkForUrlArray() {
 	}
 	
 	inputHeap = new Heap(false);
-	sortedHeap = new Heap();
+	sortedHeap = new Heap(true);
 	inputHeap.newHeap(ints.length);
 	sortedHeap.newHeap(ints.length);
 	for (var i = 0; i < ints.length; i++) {
@@ -296,7 +296,7 @@ function inputArray() {
 	}
 	
 	inputHeap = new Heap(false);
-	sortedHeap = new Heap();
+	sortedHeap = new Heap(true);
 	inputHeap.newHeap(ints.length);
 	sortedHeap.newHeap(ints.length);
 	for (var i = 0; i < ints.length; i++) {
