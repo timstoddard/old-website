@@ -1,4 +1,8 @@
-Heap = function(sort = true) {
+function DNE(value) {
+	return value === null || value === undefined;
+}
+
+var Heap = function(sort = true) {
 	this.max_capacity = 0;
 	this.arr = [];
 	this.size = 0;
@@ -118,7 +122,7 @@ var BTreePrinter = {
 		this.printNodeInternal([root], 1, this.maxLevel(root));
 	},
 	printNodeInternal: function(nodes, level, maxLevel) {
-		if (nodes.length === 0 || BTreePrinter.isAllElementsNull(nodes)) {
+		if (nodes.length === 0 || BTreePrinter.allElementsDNE(nodes)) {
 			return '';
 		}
 		
@@ -131,19 +135,19 @@ var BTreePrinter = {
 		oneLongString += this.printWhitespaces(firstSpaces);
 		var newNodes = [];
 		for (var i = 0; i < nodes.length; i++) {
-			var val = nodes[i];
-			if (val !== null) {
-				oneLongString += `<span>${val.i}</span>`;
-                newNodes.push(val.left);
-                newNodes.push(val.right);
+			var value = nodes[i];
+			if (!DNE(value)) {
+				oneLongString += `<span>${value.i}</span>`;
+                newNodes.push(value.left);
+                newNodes.push(value.right);
             } else {
 				oneLongString += ' ';
                 newNodes.push(null);
                 newNodes.push(null);
             }
             
-            if (val != null && i < nodes.length - 1 && floor < maxLevel) {
-               oneLongString += this.printWhitespaces(betweenSpaces - ((val.i + '').length - 1));
+            if (value != null && i < nodes.length - 1 && floor < maxLevel) {
+               oneLongString += this.printWhitespaces(betweenSpaces - ((value.i + '').length - 1));
             }
 		}
 		oneLongString += ','; // splitter character
@@ -154,12 +158,12 @@ var BTreePrinter = {
 				if (j > 0) {
 					oneLongString += this.printWhitespaces(firstSpaces - i + 1);
 				}
-				if (nodes[j] === null) {
+				if (DNE(nodes[j])) {
 					oneLongString += this.printWhitespaces(endgeLines + endgeLines + i + 1);
 					continue;
 				}
 				
-				if (nodes[j].left !== null) {
+				if (!DNE(nodes[j].left)) {
 					oneLongString += '/';
 				} else {
 					oneLongString += ' ';
@@ -167,7 +171,7 @@ var BTreePrinter = {
 				
 				oneLongString += this.printWhitespaces(i + i - 1);
 				
-				if (nodes[j].right != null) {
+				if (!DNE(nodes[j].right)) {
 					oneLongString += '\\';
 				} else {
 					oneLongString += ' ';
@@ -199,18 +203,18 @@ var BTreePrinter = {
 		return temp;
 	},
 	maxLevel: function(node) {
-		return node === null
+		return DNE(node)
 			? 0
-			: Math.max(this.maxLevel(node === null ? node : node.left), this.maxLevel(node === null ? node : node.right)) + 1;
+			: Math.max(this.maxLevel(DNE(node) ? node : node.left), this.maxLevel(DNE(node) ? node : node.right)) + 1;
 	},
-	isAllElementsNull: function(list) {
-		var allNull = true;
-		list.forEach(function(val) {
-			if (val !== null) {
-				allNull = false;
+	allElementsDNE: function(list) {
+		var allDNE = true;
+		list.forEach(function(value) {
+			if (!DNE(value)) {
+				allDNE = false;
 			}
 		});
-		return allNull;
+		return allDNE;
 	}
 };
 
