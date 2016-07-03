@@ -82,7 +82,7 @@ $(function() {
     });
 });
 
-const urls = [
+var urls = [
     {'key': 'a',    'url': 'https://www.amazon.com/s?field-keywords=',      'name': 'Amazon'},
     {'key': 'c',    'url': 'http://catalog.calpoly.edu/search/?P=',         'name': 'Cal Poly Course Catalog'},
     {'key': 'f',    'url': 'https://www.facebook.com/search/people/?q=',    'name': 'Facebook'},
