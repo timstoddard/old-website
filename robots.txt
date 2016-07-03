@@ -1,0 +1,5 @@
+# robots.txt for timstoddard.github.io
+
+User-Agent: *
+Disallow: 
+Allow: /
