@@ -218,15 +218,15 @@ var inputHeap;
 var sortedHeap;
 
 function checkForUrlArray() {
-    let url = window.location.href;
-    let index = url.indexOf('?');
+    var url = window.location.href;
+    var index = url.indexOf('?');
     if (index === -1) {
 		$('hr').hide();
 		$('.tree').hide();
 		return;
 	}
     
-    let urlArr = url.substring(index + 1).trim();
+    var urlArr = url.substring(index + 1).trim();
     if (urlArr.length == 0) {
 		$('hr').hide();
 		$('.tree').hide();
@@ -239,8 +239,8 @@ function checkForUrlArray() {
 	$('#user-input').val(urlArr);
 	var rawList = urlArr.split(',');
 	var ints = [];
-	for (let i = 0; i < rawList.length; i++) {
-		let temp = parseInt(rawList[i]);
+	for (var i = 0; i < rawList.length; i++) {
+		var temp = parseInt(rawList[i]);
 		ints[i] = temp;
 	}
 	
@@ -273,8 +273,8 @@ function inputArray() {
 		return;
 	}
 	var ints = [];
-	for (let i = 0; i < rawList.length; i++) {
-		let temp = parseInt(rawList[i]);
+	for (var i = 0; i < rawList.length; i++) {
+		var temp = parseInt(rawList[i]);
 		if (isNaN(temp)) {
 			alert('Detected a non-numerical value in the array.\nPlease check your values and comma placement.');
 			return;
@@ -298,8 +298,8 @@ function inputArray() {
 		sortedHeap.insert(ints[i]);
 	}
 	
-	let url = window.location.href;
-    let index = url.indexOf('?');
+	var url = window.location.href;
+    var index = url.indexOf('?');
 	if (index === -1) {
 		window.location.href += `?${encodeURIComponent(ints)}`;
 	} else {

@@ -5,7 +5,7 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
     
     $(window).keydown(function(event) {
-        let key = event.which;
+        var key = event.which;
         if (key === 83) { // 's' key
             if (($('#myModal').data('bs.modal') || {}).isShown) {
                 return;
@@ -25,19 +25,19 @@ $(function() {
     });
     
     $('#name-input').keypress(function (event) {
-        let keynum = event.which;
-        let query = $('#name-input').val();
+        var keynum = event.which;
+        var query = $('#name-input').val();
         if (keynum === 13 && query && query.trim().length > 0) {
-            let index = query.indexOf('/');
+            var index = query.indexOf('/');
             if (index === -1) return;
-            let type = query.substring(0, index);
+            var type = query.substring(0, index);
             if (!canDoCommand(type)) return;
             window.open(`${urls[getKeyIndex(type)].url}${query.substring(index + 1).trim()}`);
             }
         }
     );
     
-    let c1Timer;
+    var c1Timer;
     $('#c1, #c1-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c1Timer);
@@ -48,7 +48,7 @@ $(function() {
         }
     });
     
-    let c2Timer;
+    var c2Timer;
     $('#c2, #c2-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c2Timer);
@@ -59,7 +59,7 @@ $(function() {
         }
     });
     
-    let c3Timer;
+    var c3Timer;
     $('#c3, #c3-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c3Timer);
@@ -70,7 +70,7 @@ $(function() {
         }
     });
     
-    let c4Timer;
+    var c4Timer;
     $('#c4, #c4-menu-items').on({
         mouseenter: function(e) {
             clearTimeout(c4Timer);
@@ -97,7 +97,7 @@ const urls = [
 ];
 
 function canDoCommand(key) {
-    let can = false;
+    var can = false;
     urls.forEach(function(element) {
         if (element.key === key) can = true;
     });
@@ -105,7 +105,7 @@ function canDoCommand(key) {
 }
 
 function getKeyIndex(key) {
-    let index;
+    var index;
     urls.forEach(function(element, i) {
         if (element.key === key) index = i;
     });
@@ -113,7 +113,7 @@ function getKeyIndex(key) {
 }
 
 function showModalText() {
-    let data = '';
+    var data = '';
     urls.forEach(function(element) {
         data += `<div>'${element.key}/' to search ${element.name}</div>`
     });
@@ -121,11 +121,11 @@ function showModalText() {
 }
 
 function checkForCustomName() {
-    let url = window.location.href;
-    let index = url.indexOf('?');
+    var url = window.location.href;
+    var index = url.indexOf('?');
     if (index === -1) return;
     
-    let name = url.substring(index + 1).trim();
+    var name = url.substring(index + 1).trim();
     if (name.length == 0) return;
     
     try { name = decodeURIComponent(name); }
@@ -142,33 +142,33 @@ if (location.protocol === 'http:' || location.protocol === 'https:') {
     showWeather(false);   
 } else if (location.protocol === 'file:') {
     document.title = `${document.title} (dev)`;
-    let n = true ? getDayData() : getNightData();
+    var n = true ? getDayData() : getNightData();
     console.log(n)
     setTimeout(() => {showWeatherData(n)}, 1000);
 }
 
 function showTime() {
-    let now = new Date();
+    var now = new Date();
     $('#time').html(formatTime(now));
     $('#date').html(formatDay(now));
     
-    let millis = now.getMilliseconds();
+    var millis = now.getMilliseconds();
     setTimeout('showTime()', 1000 - millis < 10 ? 1000 : 1000 - millis);
 }
 
 function showWeatherData(resultData) {
 
     // figure out if it is daytime or nighttime
-    let sunData = resultData.sun_phase; // object[sunrise, sunset]
-    let now = new Date();
-    let currTime = now.getHours() * 60 + now.getMinutes();
-    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
-    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
-    let afterSunset = currTime < sunrise || sunset < currTime;
+    var sunData = resultData.sun_phase; // object[sunrise, sunset]
+    var now = new Date();
+    var currTime = now.getHours() * 60 + now.getMinutes();
+    var sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
+    var sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
+    var afterSunset = currTime < sunrise || sunset < currTime;
     
     // current weather --> resultData.current_observation
 
-    let curr = resultData.current_observation;
+    var curr = resultData.current_observation;
     if (afterSunset) {
         $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<i style="margin-left: 10px" class="wi wi-${iconMap(parseIconUrl(curr.icon_url))}"></i></div>`);
     } else {
@@ -185,9 +185,9 @@ function showWeatherData(resultData) {
 
     // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
     
-    let forecastDays = resultData.forecast.simpleforecast.forecastday
-    let body = '';
-    for (let i = 0; i < forecastDays.length; i++) {
+    var forecastDays = resultData.forecast.simpleforecast.forecastday
+    var body = '';
+    for (var i = 0; i < forecastDays.length; i++) {
         body += `<td><div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>`
         if (afterSunset) {
             body += `<i class="wi wi-${iconMap(parseIconUrl(curr.icon_url))} w-icon"></i>`;
@@ -228,44 +228,44 @@ function showWeatherData(resultData) {
 }
 
 function formatHours(date) {
-    let hr = date.hour;
+    var hr = date.hour;
     return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)}${date.ampm}`;
 }
 
 function formatTime(date, short = false) { // pass in a JavaScript date object
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
     if (short) {
         return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${hours >= 12 ? ' PM' : ' AM'}`;
     } else {
-        let seconds = date.getSeconds();
+        var seconds = date.getSeconds();
         return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${seconds < 10 ? ':0' : ':'}${seconds}${hours >= 12 ? ' PM' : ' AM'}`;
     }
 }
 
 function daysTillBday() {
-    let bdayDate = Date.parse("May 13 2016") + 7 * 60 * 60 * 1000;
-    let now = Date.now();
+    var bdayDate = Date.parse("May 13 2016") + 7 * 60 * 60 * 1000;
+    var now = Date.now();
     if (bdayDate - now < 0) {
         $('#days-till-bday').html('Happy Birthday!');
     }
     
-    let days = (bdayDate - now) / (24 * 60 * 60 * 1000);
-    let dayStr = `${Math.floor(days)}`;
+    var days = (bdayDate - now) / (24 * 60 * 60 * 1000);
+    var dayStr = `${Math.floor(days)}`;
     
-    let hours = (days % 1) * 24;
-    let hourStr = `${Math.floor(hours)}`;
+    var hours = (days % 1) * 24;
+    var hourStr = `${Math.floor(hours)}`;
     
-    let mins = (hours % 1) * 60;
-    let minStr = `${Math.floor(mins)}`;
+    var mins = (hours % 1) * 60;
+    var minStr = `${Math.floor(mins)}`;
     
-    let secs = (mins % 1) * 60;
-    let secStr = `${Math.floor(secs)}`;
+    var secs = (mins % 1) * 60;
+    var secStr = `${Math.floor(secs)}`;
     
-    let millis = (secs % 1) * 1000;
-    let milliStr = `${Math.floor(millis)}`;
+    var millis = (secs % 1) * 1000;
+    var milliStr = `${Math.floor(millis)}`;
     
-    let dateStr = '';
+    var dateStr = '';
     if (days >= 1) dateStr += `${dayStr} days `;
     if (hours >= 1 || days > 0 && hours < 1)
         dateStr += `${hourStr.length < 2 ? `0${hourStr}` : `${hourStr}`}h `;
@@ -282,9 +282,9 @@ function daysTillBday() {
 }
 
 function formatDay(date, short = false) { // pass in a JavaScript date object
-    let dayOfWeek = date.getDay();
-    let month = date.getMonth();
-    let day = date.getDate();
+    var dayOfWeek = date.getDay();
+    var month = date.getMonth();
+    var day = date.getDate();
     if (short) {
         return `${dayString(dayOfWeek, true)} ${month}/${day}`;
     } else {

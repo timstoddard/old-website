@@ -4,7 +4,7 @@ function setBackground() {
         var data = JSON.parse(localStorage.getItem('weatherData'));
     } else if (location.protocol === 'file:') {
         document.title = `${document.title} (dev)`;
-        let n = true ? getDayData() : getNightData();
+        var n = true ? getDayData() : getNightData();
         console.log(n)
         console.log(n)
         data = n;
@@ -12,11 +12,11 @@ function setBackground() {
     if (!data) {
         return;
     }
-    let now = new Date();
-    let sunData = data.sun_phase; // object[sunrise, sunset]
-    let currTime = now.getHours() * 60 + now.getMinutes();
-    let sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
-    let sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
+    var now = new Date();
+    var sunData = data.sun_phase; // object[sunrise, sunset]
+    var currTime = now.getHours() * 60 + now.getMinutes();
+    var sunrise = parseInt(sunData.sunrise.hour) * 60 + parseInt(sunData.sunrise.minute);
+    var sunset = parseInt(sunData.sunset.hour) * 60 + parseInt(sunData.sunset.minute);
     if (currTime < sunrise || sunset < currTime) {
         $('body').css({ 'background': '#161669' });
         $('#time').css({ 'color': '#ACB0BD' });

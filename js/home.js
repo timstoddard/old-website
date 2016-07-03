@@ -9,7 +9,7 @@ $(function() {
     }
     initPositionShadow();
     
-    let url = window.location.href;
+    var url = window.location.href;
     if (url.charAt(url.length - 1) === '#') {
         window.location.href = url.substr(0, url.length - 1);
     }

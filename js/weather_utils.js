@@ -105,8 +105,8 @@ function getWeatherDataAjax(url, extended) {
 /* WEATHER IMAGE/ICON FUNCTIONS */
 
 function parseIconUrl(str) {
-    let start = str.lastIndexOf('/');
-    let end = str.lastIndexOf('.');
+    var start = str.lastIndexOf('/');
+    var end = str.lastIndexOf('.');
     return str.substring(start + 1, end);
 }
 
