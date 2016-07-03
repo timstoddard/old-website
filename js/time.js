@@ -1,17 +1,17 @@
 function setBackground() {
-    // set background based on whether it is currently day/night
     if (location.protocol === 'http:' || location.protocol === 'https:') {
         var data = JSON.parse(localStorage.getItem('weatherData'));
     } else if (location.protocol === 'file:') {
         document.title = `${document.title} (dev)`;
         var n = true ? getDayData() : getNightData();
         console.log(n)
-        console.log(n)
         data = n;
     }
     if (!data) {
         return;
     }
+    
+    // set background based on whether it is currently day/night
     var now = new Date();
     var sunData = data.sun_phase; // object[sunrise, sunset]
     var currTime = now.getHours() * 60 + now.getMinutes();
