@@ -16,7 +16,7 @@ function hasWeatherDataInLocalStorage() {
  * the timestamp was set; false otherwise.
  */
 function needNewWeatherData() {
-    var time1 = new Date().getTime();
+    var time1 = Date.now();
     var time2 = get('weatherDataTimestamp');
     if (Math.floor(Math.abs(time2 - time1) / (60 * 1000)) >= 60) {
         return true;
