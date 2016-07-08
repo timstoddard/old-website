@@ -7,12 +7,6 @@ import {TestComponent, OtherComponent, ACoolService, SomeDirective, CoolOtherCom
 
 function fixData() {
 	var lines = document.getElementById('imports').value.split('\n');
-	// var lines = [
-	// 	"import {Subject} from 'rxjs/Subject';",
-	// 	"import {ADirective, AComponent, AService, APipe} from './test-module';",
-	// 	"import {EventEmitter, Component} from '@angular/core';",
-	// 	"import {TestComponent, OtherComponent, ACoolService, SomeDirective, CoolOtherComponent, OtherOtherComponent, asyncValidator, state, acoolservice, LOWERCASE, uppercase} from '../my/app/is/cool';"
-	// ];
 	console.log(lines)
 	var fixedLines = [];
 	lines.forEach(function(value, index) {
@@ -61,6 +55,7 @@ function fix(str) {
 		return;
 	}
 	
+	// find and sort the imports
 	var bracketStart = str.indexOf('{');
 	var bracketEnd = str.indexOf('}');
 	var imports = str.substring(bracketStart + 1, bracketEnd).split(',');
@@ -75,7 +70,7 @@ function fix(str) {
 		return result;
 	});
 
-	// find the module name
+	// find and analyze the module name
 	var moduleStart = str.indexOf('\'');
 	var moduleEnd = str.lastIndexOf('\'');
 	var moduleNameFull = str.substring(moduleStart + 1, moduleEnd);
