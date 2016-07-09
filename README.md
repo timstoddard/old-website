@@ -8,3 +8,4 @@ Contents:
  * [Resume](https://timstoddard.github.io/resume)
  * [Bad driving bingo](https://timstoddard.github.io/bingo)
  * [Heap demo](https://timstoddard.github.io/heap)
+ * [Angular 2 import formatter](https://timstoddard.github.io/import)
