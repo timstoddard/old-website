@@ -3,24 +3,25 @@
 	// if it does, discard other imports
 	// also, what to do if imports is empty due to importing the whole module
 
-/* TEST DATA
-import {Subject as subj, Observable as obs} from 'rxjs/Subject';
-import {ADirective, AComponent, AService, APipe} from './test-module';;
-import {SomeClass} from '../test-module';
-import * from './idk';
-import DefaultClass from './file.name';
-import {
-	expect,
-	it,
-	describe
-} from '@angular/core/testing';
-import {EventEmitter, Component} from '@angular/core';
-import {  Location,  EventEmitter  } from '@angular/core'
-import {TestComponent, OtherComponent, ACoolService, SomeDirective, CoolOtherComponent, OtherOtherComponent, asyncValidator, state, acoolservice, LOWERCASE, uppercase} from '../my/app/is/cool';
-import * as something from './test-me';
-*/
+// info on imports: https://www.typescriptlang.org/docs/handbook/module-resolution.html
 
-// more info: https://www.typescriptlang.org/docs/handbook/module-resolution.html
+function loadMockData() {
+	document.getElementById('imports').value =
+		"import {Subject as subj, Observable as obs} from 'rxjs/Subject';\n" + 
+		"import {ADirective, AComponent, AService, APipe} from './test-module';;\n" + 
+		"import {SomeClass} from '../test-module';\n" +
+		"import * from './idk';\n" +
+		"import DefaultClass from './file.name';\n" +
+		"import {\n" +
+		"	expect,\n" +
+		"	it,\n" +
+		"	describe\n" +
+		"} from '@angular/core/testing';\n" +
+		"import {EventEmitter, Component} from '@angular/core';\n" +
+		"import {  Location,  EventEmitter  } from '@angular/core'\n" + 
+		"import {TestComponent, OtherComponent, ACoolService, SomeDirective, CoolOtherComponent, OtherOtherComponent, asyncValidator, state, acoolservice, LOWERCASE, uppercase} from \"../my/app/is/cool\";\n" +
+		"import * as something from './test-me';\n";
+}
 
 /**
  * expects a valid import statement followed by a semicolon
