@@ -1,12 +1,11 @@
 /* TODOs */
-// add detection for lines without a semicolon at the end
 // check if module contains '*' when adding new imports
 	// if it does, discard other imports
 	// also, what to do if imports is empty due to importing the whole module
 
 /* TEST DATA
 import {Subject as subj, Observable as obs} from 'rxjs/Subject';
-import {ADirective, AComponent, AService, APipe} from './test-module';
+import {ADirective, AComponent, AService, APipe} from './test-module';;
 import {SomeClass} from '../test-module';
 import * from './idk';
 import DefaultClass from './file.name';
@@ -16,7 +15,7 @@ import {
 	describe
 } from '@angular/core/testing';
 import {EventEmitter, Component} from '@angular/core';
-import {  Location,  EventEmitter  } from '@angular/core';
+import {  Location,  EventEmitter  } from '@angular/core'
 import {TestComponent, OtherComponent, ACoolService, SomeDirective, CoolOtherComponent, OtherOtherComponent, asyncValidator, state, acoolservice, LOWERCASE, uppercase} from '../my/app/is/cool';
 import * as something from './test-me';
 */
@@ -28,11 +27,48 @@ import * as something from './test-me';
 */
 function fixData() {
 
-	var lines = document
+	// read in the data and format it
+	var rawLines = document
 		.getElementById('imports').value // read in the data
-		.replace(/;+/, ';') // remove duplicate semicolons
-		.replace(/\s+/g, ' ') // condense all whitespace
-		.split(';'); // split over the semicolons
+		.replace(/;;+/, ';') // remove duplicate semicolons
+		.split('\n'); // split over the newlines
+	var lines = [];
+	var lastLineWasComplete = true;
+	rawLines.forEach(function(value) {
+		// get rid of annoying whitespace
+		value = value.trim();
+		var lastChar = value.charAt(value.length - 1);
+		// line ends with a semicolon -- awesome!
+		if (lastChar === ';') {
+			if (!lastLineWasComplete) {
+				var lastLine = lines[lines.length - 1];
+				lines[lines.length - 1] = lastLine + ' ' + value;
+			} else {
+				lines.push(value);
+			}
+			lastLineWasComplete = true;
+		} else {
+			// line is complete but missing a semicolon; add it and move on
+			if (lastChar === '\'' || lastChar === '"') {
+				if (!lastLineWasComplete) {
+					var lastLine = lines[lines.length - 1];
+					lines[lines.length - 1] = lastLine + ' ' + value + ';';
+				} else {
+					lines.push(value + ';');
+				}
+				lastLineWasComplete = true;
+			// line is incomplete, add what is there and flag it for the next loop
+			} else {
+				if (!lastLineWasComplete) {
+					var lastLine = lines[lines.length - 1];
+					lines[lines.length - 1] = lastLine + ' ' + value;
+				} else {
+					lines.push(value);
+				}
+				lastLineWasComplete = false;
+			}
+		}
+	});
 	
 	// create an object to hold of the module objects
 	var modules = {};
