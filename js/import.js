@@ -5,22 +5,54 @@
 
 // info on imports: https://www.typescriptlang.org/docs/handbook/module-resolution.html
 
+document.getElementById('imports').focus();
+var shiftKeyDown = false;
+
 function loadMockData() {
 	document.getElementById('imports').value =
-		"import {Subject as subj, Observable as obs} from 'rxjs/Subject';\n" + 
-		"import {ADirective, AComponent, AService, APipe} from './test-module';;\n" + 
+		"import {Subject as subj, Observable as obs} from 'rxjs/Subject';\n" +
+		"import {ADirective, AComponent, AService, APipe} from './test-module';;\n" +
+		"import 'rxjs/add/observable/of'\n" + 
 		"import {SomeClass} from '../test-module';\n" +
 		"import * from './idk';\n" +
 		"import DefaultClass from './file.name';\n" +
+		"import {idk as lol} from './'\n" +
+		"import { lol as idk  } from '../'\n" +
 		"import {\n" +
 		"	expect,\n" +
 		"	it,\n" +
 		"	describe\n" +
 		"} from '@angular/core/testing';\n" +
-		"import {EventEmitter, Component} from '@angular/core';\n" +
-		"import {  Location,  EventEmitter  } from '@angular/core'\n" + 
+		"import {EventEmitter, Component} from '@angular/core';;\n" +
+		"import {  Location,  EventEmitter  } from '@angular/core'\n" +
 		"import {TestComponent, OtherComponent, ACoolService, SomeDirective, CoolOtherComponent, OtherOtherComponent, asyncValidator, state, acoolservice, LOWERCASE, uppercase} from \"../my/app/is/cool\";\n" +
-		"import * as something from './test-me';\n";
+		"import * as something from './test-me';\n" +
+		"import 'code'";
+}
+
+function checkKeyDown(event) {
+	if (event.which === 16) {
+		shiftKeyDown = true;
+	}
+	if (event.which === 13 && !shiftKeyDown) {
+		event.stopPropagation();
+    	event.preventDefault();
+		fixData();
+	}
+}
+
+function checkKeyUp(event) {
+	if (event.which === 16) {
+		shiftKeyDown = false;
+	}
+}
+
+function replaceText(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    var clipboardData = event.clipboardData || window.clipboardData;
+    var pastedData = clipboardData.getData('Text');
+	document.getElementById('imports').value = pastedData;
 }
 
 /**
@@ -31,7 +63,7 @@ function fixData() {
 	// read in the data and format it
 	var rawLines = document
 		.getElementById('imports').value // read in the data
-		.replace(/;;+/, ';') // remove duplicate semicolons
+		.replace(/;;+/g, ';') // remove duplicate semicolons
 		.split('\n'); // split over the newlines
 	var lines = [];
 	var lastLineWasComplete = true;
@@ -150,7 +182,7 @@ function fixData() {
 
 	result = result.trim();
 	document.getElementById('output').innerText = result;
-	this.select();
+	document.getElementById('output').focus();
 }
 
 function generateImportString(imports, moduleName, useBrackets) {
@@ -161,7 +193,7 @@ function generateImportString(imports, moduleName, useBrackets) {
 		});
 		importStr += (useBrackets ? ' }' : '') + ' from \'' + moduleName + '\';';
 	} else {
-		importStr += ' \'' + moduleName + '\';';
+		importStr += '\'' + moduleName + '\';';
 	}
 	return importStr;
 }
@@ -176,6 +208,9 @@ function getData(str) {
 		moduleName = str.substring(str.indexOf('"') + 1, str.lastIndexOf('"'));
 	}
 	var firstModuleNameChar = moduleName.search(/[^\.\/]/);
+	if (firstModuleNameChar === -1) { // only a relative path, no folder/file names
+		firstModuleNameChar = moduleName.length;
+	}
 	var prefixLength = moduleName.substr(0, firstModuleNameChar).length;
 	var moduleNameStripped = moduleName.substr(firstModuleNameChar).trim();
 
@@ -213,12 +248,4 @@ function getData(str) {
 		thirdParty: !/[./]/.test(moduleName[0]),
 		brackets: brackets
 	}
-}
-
-function select() {
-    var range = document.createRange();
-    range.selectNodeContents(document.getElementById('output'));
-    var selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
 }
