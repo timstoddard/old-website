@@ -1,9 +1,12 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class VerbService {
 	get(firstLetter?: string) {
 		if (firstLetter) {
+			if (firstLetter.length > 1) {
+				firstLetter = firstLetter.charAt(0);
+			}
 			let allStartingWithLetter = verbs.filter(adjective => adjective.charAt(0) === firstLetter);
 			return allStartingWithLetter[ Math.floor(Math.random() * allStartingWithLetter.length) ];
 		}

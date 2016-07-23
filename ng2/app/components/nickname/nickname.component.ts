@@ -1,14 +1,14 @@
-import {Component} from '@angular/core';
-import {AddNicknameChunk} from './add_nickname_chunk.component';
-import {AdjectiveService} from '../services/adjective.service';
-import {AdverbService} from '../services/adverb.service';
-import {VerbService} from '../services/verb.service';
+import { Component } from '@angular/core';
+import { AddNicknameChunkComponent } from '../add-nickname-chunk/add-nickname-chunk.component';
+import { AdjectiveService } from '../../services/adjective.service';
+import { AdverbService } from '../../services/adverb.service';
+import { VerbService } from '../../services/verb.service';
 
 @Component({
-    selector: 'nickname',
+    selector: 'app-nickname',
     templateUrl: './nickname.component.html',
     styleUrls: ['./nickname.component.css'],
-	directives: [AddNicknameChunk],
+	directives: [AddNicknameChunkComponent],
 	providers: [AdjectiveService, AdverbService, VerbService],
     moduleId: module.id
 })

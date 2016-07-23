@@ -1,12 +1,12 @@
-import {Component, Output, EventEmitter} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-	selector: 'add-nickname-chunk',
-	templateUrl: './add_nickname_chunk.component.html',
-	styleUrls: ['./add_nickname_chunk.component.css'],
+	selector: 'app-add-nickname-chunk',
+	templateUrl: 'add-nickname-chunk.component.html',
+	styleUrls: ['add-nickname-chunk.component.css'],
 	moduleId: module.id
 })
-export class AddNicknameChunk {
+export class AddNicknameChunkComponent {
 	@Output() addChunk = new EventEmitter();
 	currentType: string = '';
 	editing = false;

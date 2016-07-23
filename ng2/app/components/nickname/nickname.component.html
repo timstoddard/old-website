@@ -11,7 +11,7 @@
 			<div (click)="remove(i)">x</div>
 		</div>
 	</template>
-	<add-nickname-chunk (addChunk)="addChunk($event)"></add-nickname-chunk>
+	<app-add-nickname-chunk (addChunk)="addChunk($event)"></app-add-nickname-chunk>
 	<template [ngIf]="nicknameChunks.length">
 		<button (click)="generateNickname()">Make me a nickname!</button>
 		<input  type="checkbox" [(ngModel)]="alliteration">Use alliteration
