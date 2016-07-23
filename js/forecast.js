@@ -30,6 +30,23 @@ function showWeatherData(resultData) {
     } else {
         $('#weather-image').html(`<img id="weather-img" src="${secureImg(curr.icon_url)}">`);
     }
+    var showReloadIconTimer;
+    $('#weather-city, #weather-image').hover(
+        function() {
+            showReloadIconTimer = setTimeout(function() {
+                console.log('hi')
+                $('#reload').show();
+            }, 800);
+        },
+        function() {
+            console.log('bye')
+            clearTimeout(showReloadIconTimer);
+            setTimeout(function() {
+                console.log('peace')
+                $('#reload').hide(); // animate this
+            }, 3000);
+        }
+    );
     $('#current-temp').html(`${curr.temp_f}&deg;F
         ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}`);
     $('#current-humidity').html(`${curr.relative_humidity}`);

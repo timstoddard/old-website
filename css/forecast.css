@@ -3,6 +3,7 @@
 body { background: #77d2ee; font-family: 'PT Sans Narrow', sans-serif; min-width: 650px; }
 #weather-forecast { text-align: center; }
 .weather-title { display: inline-block; font-size: 250%; }
+#reload { display: none; }
 #weather-content { align-items: center; display: inline-flex; margin: 40px 0 0 0; white-space: nowrap; }
 #current-temp:not(:empty), #current-humidity:not(:empty), #current-wind:not(:empty) { border-radius: 0.2em;
     display: inline-block; font-size: 135%; margin: 0 0.2em; padding: 2px 5px; text-align: center; }

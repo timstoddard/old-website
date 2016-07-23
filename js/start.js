@@ -174,7 +174,23 @@ function showWeatherData(resultData) {
     } else {
         $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<img src="${secureImg(curr.icon_url)}"></div>`);
     }
-    // `<i style="margin-left:8px;margin-right:8px;" class="wi wi-${iconMap(parseIconUrl(curr.icon_url))}"></i>`
+    var showReloadIconTimer;
+    $('#weather-header').hover(
+        function() {
+            showReloadIconTimer = setTimeout(function() {
+                console.log('hi')
+                $('#reload').show();
+            }, 800);
+        },
+        function() {
+            console.log('bye')
+            clearTimeout(showReloadIconTimer);
+            setTimeout(function() {
+                console.log('peace')
+                $('#reload').hide(); // animate this
+            }, 3000);
+        }
+    );
     $('#weather-content').html(`
         <div class="current-temp">Temperature: ${curr.temp_f}&deg;F
         ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ?

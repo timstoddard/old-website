@@ -102,6 +102,12 @@ function getWeatherDataAjax(url, extended) {
     });
 }
 
+function reloadData() {
+    localStorage.clear();
+    getLocation(true);
+    $('#reload').hide(); // remove this???
+}
+
 /* WEATHER IMAGE/ICON FUNCTIONS */
 
 function parseIconUrl(str) {
