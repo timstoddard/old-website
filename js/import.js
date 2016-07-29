@@ -150,6 +150,23 @@ function fixData() {
 
 	// sort modules by name
 	var sorter = function(a, b) {
+		if (a.imports.length === 0) {
+			if (b.imports.length === 0) {
+				// a and b both have no imports, so sort by module name
+				var result = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+				if (result === 0) {
+					return a.pathLength < b.pathLength ? -1 : 1;
+				}
+				return result;
+			} else {
+				// a has no imports but b does, so b comes first
+				return 1;
+			}
+		} else if (b.imports.length === 0) {
+			// b has no imports but a does, so a comes first
+			return -1;
+		}
+		// a and b both have imports, so sort by module name
 		var result = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
 		if (result === 0) {
 			return a.pathLength < b.pathLength ? -1 : 1;
@@ -195,7 +212,14 @@ function generateImportString(imports, moduleName, useBrackets) {
 	} else {
 		importStr += '\'' + moduleName + '\';';
 	}
-	return importStr;
+	return reformatIfLineTooLong(importStr, 140);
+}
+
+function reformatIfLineTooLong(str, len) {
+	if (str.length > len) {
+		return str.replace(/{ /, '{\n    ').replace(/, /g, ',\n    ').replace(/ }/, '\n}');
+	}
+	return str;
 }
 
 function getData(str) {
