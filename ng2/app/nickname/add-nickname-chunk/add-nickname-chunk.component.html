@@ -1,0 +1,19 @@
+<div>
+	<span *ngIf="!editing" (click)="onNewClick()">+</span>
+</div>
+<div *ngIf="editing" class="padded-background">
+	<div>I want to add...</div>
+	<div class="list">
+		<input id="adj" type="radio" name="type" (click)="setType(nicknameChunkTypeEnum.ADJECTIVE)">
+		<label for="adj">Adjective</label>
+		<br>
+		<input id="adv" type="radio" name="type" value="adverb" (click)="setType(nicknameChunkTypeEnum.ADVERB)">
+		<label for="adv">Adverb</label>
+		<br>
+		<input type="radio" name="type" value="verb" (click)="setType(nicknameChunkTypeEnum.VERB)">
+		<label for="vb">Verb</label>
+	</div>
+	<input id="vb" type="submit" value="Add" (click)="onAddClick()">
+	<input type="submit" value="Cancel" (click)="editing=false">
+	<br>
+</div>

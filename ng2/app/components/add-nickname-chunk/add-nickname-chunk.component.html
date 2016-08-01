@@ -1,9 +1,0 @@
-<div *ngIf="!editing" (click)="onNewClick()">+</div>
-<template [ngIf]="editing">
-	<div>I want to add...</div>
-	<input type="radio" name="type" value="adjective" (click)="setType('adjective')">Adjective
-	<input type="radio" name="type" value="adverb" (click)="setType('adverb')">Adverb
-	<input type="radio" name="type" value="verb" (click)="setType('verb')">Verb
-	<input type="submit" value="Add" (click)="onAddClick()">
-	<div (click)="editing=false">x</div>
-</template>

@@ -9,17 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var nickname_component_1 = require('./components/nickname/nickname.component');
+var nickname_component_1 = require('./nickname/nickname.component');
 var AppComponent = (function () {
     function AppComponent() {
     }
     AppComponent = __decorate([
         core_1.Component({
+            moduleId: module.id,
             selector: 'nn-app',
             templateUrl: 'app.component.html',
-            styleUrls: ['app.component.css'],
-            directives: [nickname_component_1.NicknameComponent],
-            moduleId: module.id
+            styleUrls: ['app.component.css', './globals.css'],
+            directives: [nickname_component_1.NicknameComponent]
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

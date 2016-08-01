@@ -9,20 +9,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var AddNicknameChunk = (function () {
-    function AddNicknameChunk() {
+var nickname_chunk_type_1 = require('../shared/nickname-chunk-type');
+var AddNicknameChunkComponent = (function () {
+    function AddNicknameChunkComponent() {
         this.addChunk = new core_1.EventEmitter();
         this.currentType = '';
         this.editing = false;
+        this.nicknameChunkTypeEnum = nickname_chunk_type_1.NicknameChunkType;
     }
-    AddNicknameChunk.prototype.onNewClick = function () {
+    AddNicknameChunkComponent.prototype.onNewClick = function () {
         this.editing = true;
         this.currentType = '';
     };
-    AddNicknameChunk.prototype.setType = function (type) {
+    AddNicknameChunkComponent.prototype.setType = function (type) {
         this.currentType = type;
     };
-    AddNicknameChunk.prototype.onAddClick = function () {
+    AddNicknameChunkComponent.prototype.onAddClick = function () {
         if (this.currentType === '') {
             alert('Please select a part of speech to add to your nickname!');
             return;
@@ -33,17 +35,17 @@ var AddNicknameChunk = (function () {
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
-    ], AddNicknameChunk.prototype, "addChunk", void 0);
-    AddNicknameChunk = __decorate([
+    ], AddNicknameChunkComponent.prototype, "addChunk", void 0);
+    AddNicknameChunkComponent = __decorate([
         core_1.Component({
-            selector: 'add-nickname-chunk',
-            templateUrl: './add_nickname_chunk.component.html',
-            styleUrls: ['./add_nickname_chunk.component.css'],
-            moduleId: module.id
+            moduleId: module.id,
+            selector: 'app-add-nickname-chunk',
+            templateUrl: 'add-nickname-chunk.component.html',
+            styleUrls: ['add-nickname-chunk.component.css', '../../globals.css']
         }), 
         __metadata('design:paramtypes', [])
-    ], AddNicknameChunk);
-    return AddNicknameChunk;
+    ], AddNicknameChunkComponent);
+    return AddNicknameChunkComponent;
 }());
-exports.AddNicknameChunk = AddNicknameChunk;
+exports.AddNicknameChunkComponent = AddNicknameChunkComponent;
 //# sourceMappingURL=add-nickname-chunk.component.js.map

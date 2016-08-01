@@ -52,4 +52,3 @@ System.import('systemjs.config.js')
       }));
   })
   .then(__karma__.start, __karma__.error);
-  

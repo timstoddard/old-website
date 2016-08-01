@@ -1,0 +1,35 @@
+<input type="text" required [(ngModel)]="name">
+
+<div [hidden]="!name">
+	<div *ngIf="name && nicknameChunks.length === 0">
+		<div>Welcome, {{ name | appCapitalizedCase }}! Let&#39;s make you a nickname!</div>
+		<div>Click the <span>+</span> below to get started.</div>
+	</div>
+	<div *ngIf="name && nicknameChunks.length === 1">
+		<div>Great! Try adding another!</div>
+	</div>
+	<div *ngIf="name && nicknameChunks.length > 1">
+		<div>Feel free to add as many modifiers as you want.</div>
+	</div>
+	<div *ngFor="let chunk of nicknameChunks; let i = index">
+		<div [ngClass]="[chunk.type, 'inline']">{{ chunk.type }}</div>
+		<div (click)="remove(i)" class="remove">x</div>
+	</div>
+	<app-add-nickname-chunk (addChunk)="addChunk($event)"></app-add-nickname-chunk>
+	<template [ngIf]="nicknameChunks.length" class="block">
+		<button (click)="generateNickname()" class="make-nickname-button">Make me a nickname!</button>
+		<input id="alliteration" type="checkbox" [(ngModel)]="alliteration">
+		<label for="alliteration"> Use alliteration</label>
+	</template>
+	<template [ngIf]="generated" class="block">
+		<hr>
+		<span *ngFor="let chunk of nicknameChunks; let i = index">
+			<span (click)="onChunkClick(i, $event)" [ngClass]="{ locked: chunk.locked }" class="large-text">{{ chunk.value | appCapitalizedCase }}</span>
+		</span>
+		<span class="large-text">{{ name | appCapitalizedCase }}</span>
+	</template>
+</div>
+
+<div [hidden]="!!name">
+	Type your name in the box above!
+</div>
