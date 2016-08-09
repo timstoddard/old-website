@@ -6,7 +6,7 @@ import { NicknameChunkType } from '../shared/nickname-chunk-type';
 	moduleId: module.id,
 	selector: 'app-add-nickname-chunk',
 	templateUrl: 'add-nickname-chunk.component.html',
-	styleUrls: ['add-nickname-chunk.component.css', '../../globals.css']
+	styleUrls: ['add-nickname-chunk.component.css', '../../../globals.css']
 })
 export class AddNicknameChunkComponent {
 	@Output() addChunk = new EventEmitter();

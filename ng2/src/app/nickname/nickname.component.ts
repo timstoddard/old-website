@@ -12,7 +12,7 @@ import { VerbService } from './shared/verb.service';
     moduleId: module.id,
     selector: 'app-nickname',
     templateUrl: 'nickname.component.html',
-    styleUrls: ['nickname.component.css', '../globals.css'],
+    styleUrls: ['nickname.component.css', '../../globals.css'],
 	directives: [AddNicknameChunkComponent],
 	providers: [AdjectiveService, AdverbService, VerbService],
 	pipes: [CapitalizedCasePipe],

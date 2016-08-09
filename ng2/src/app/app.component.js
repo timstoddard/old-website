@@ -18,7 +18,7 @@ var AppComponent = (function () {
             moduleId: module.id,
             selector: 'nn-app',
             templateUrl: 'app.component.html',
-            styleUrls: ['app.component.css', './globals.css'],
+            styleUrls: ['app.component.css', '../globals.css'],
             directives: [nickname_component_1.NicknameComponent]
         }), 
         __metadata('design:paramtypes', [])

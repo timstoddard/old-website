@@ -88,7 +88,7 @@ var NicknameComponent = (function () {
             moduleId: module.id,
             selector: 'app-nickname',
             templateUrl: 'nickname.component.html',
-            styleUrls: ['nickname.component.css', '../globals.css'],
+            styleUrls: ['nickname.component.css', '../../globals.css'],
             directives: [add_nickname_chunk_component_1.AddNicknameChunkComponent],
             providers: [adjective_service_1.AdjectiveService, adverb_service_1.AdverbService, verb_service_1.VerbService],
             pipes: [capitalized_case_pipe_1.CapitalizedCasePipe],

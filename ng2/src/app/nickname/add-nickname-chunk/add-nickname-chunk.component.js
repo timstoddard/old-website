@@ -41,7 +41,7 @@ var AddNicknameChunkComponent = (function () {
             moduleId: module.id,
             selector: 'app-add-nickname-chunk',
             templateUrl: 'add-nickname-chunk.component.html',
-            styleUrls: ['add-nickname-chunk.component.css', '../../globals.css']
+            styleUrls: ['add-nickname-chunk.component.css', '../../../globals.css']
         }), 
         __metadata('design:paramtypes', [])
     ], AddNicknameChunkComponent);
