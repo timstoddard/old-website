@@ -15,7 +15,6 @@
         <!-- favorites: cerulean, paper -->
         <!--<link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">-->
         <link rel="stylesheet" href="../css/start.css">
-        <link rel="stylesheet" href="../css/weather-icons.min.css">
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -27,7 +26,8 @@
     </head>
 
     <body>
-        <div id="page-content" class="center-block text-center">
+        <div id="content-wrapper">
+        <div id="page-content">
             <div id="myModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -41,101 +41,89 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="important-links btn-group">
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://my.calpoly.edu/"
-                data-toggle="tooltip" data-placement="bottom" title="Portal">Pr</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://docs.google.com/spreadsheets/d/1iJBFshNawvpG4JOUBNa9tkxefSHW8a67lVleAWVwH3Y/"
-                data-toggle="tooltip" data-placement="bottom" title="Grades Spreadsheet">Gr</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://my.calpoly.edu/cas/login?service=https://cmsweb.calpoly.edu/psp/HSLOPRD/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?FolderPath=PORTAL_ROOT_OBJECT.CO_EMPLOYEE_SELF_SERVICE.HC_SSS_STUDENT_CENTER%26IsFolder=false%26IgnoreParamTempl=FolderPath%2cIsFolder%26RL=%26target=main0%26navc=2398?clg=login%26languageCd=ENG%26userid=PS%26pwd=z"
-                data-toggle="tooltip" data-placement="bottom" title="Student Center">St</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://my.calpoly.edu/cas/login?service=http://pass.calpoly.edu/j_spring_cas_security_check"
-                data-toggle="tooltip" data-placement="bottom" title="PASS">Pa</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://polyplanner.calpoly.edu/"
-                data-toggle="tooltip" data-placement="bottom" title="Poly Planner">Pp</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="http://catalog.calpoly.edu/collegesandprograms/collegeofengineering/computerscience/bscomputerscience/"
-                data-toggle="tooltip" data-placement="bottom" title="Degree Requirements">Dg</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="http://flowcharts.calpoly.edu/downloads/mymap/15-17.52CSCBSU.pdf"
-                data-toggle="tooltip" data-placement="bottom" title="Flowchart">Fl</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://my.calpoly.edu/cas/limitedLayout"
-                data-toggle="tooltip" data-placement="bottom" title="Hella Links">Li</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="http://registrar.calpoly.edu/2015-16-academic-calendar"
-                data-toggle="tooltip" data-placement="bottom" title="15-16 Calendar">Ca</a>
-                <!--WORK LINKS-->
-                <a class="btn btn-lg btn-default work-link" role="button"
-                href="https://sl-code.couto.local/projects/SL"
-                data-toggle="tooltip" data-placement="right" title="SL-Code (Repos)">Cd</a>
-                <a class="btn btn-lg btn-default work-link" role="button"
-                href="https://sl-ops.couto.local/secure/RapidBoard.jspa?projectKey=SOC"
-                data-toggle="tooltip" data-placement="right" title="Jira SOC Board">Sc</a>
-                <a class="btn btn-lg btn-default work-link" role="button"
-                href="http://docs.spalding-labs.internals/"
-                data-toggle="tooltip" data-placement="right" title="Internal Docs">Dc</a>
+
+            <div id="upper-left" class="upper">
+                <!--<a href="../time">-->
+                    <div id="time">Getting time...</div>
+                <!--</a>-->
+                <div id="welcome"></div>
+            </div>
+            <div id="upper-center" class="upper"></div>
+            <div id="upper-right" class="upper">
+                <div id="date">Getting date...</div>
+                <div id="weather-header"></div>
+                <!--<div id="reload"><img id="reload" src="reload.svg" onclick="reloadData()"></div>-->
             </div>
             
-            <h1><span id="welcome"></span></h1>
-            <div>
-                <a href="../time">
-                    <h3 id="time" class="datetime">Getting time...</h3>
-                </a>
-                <h3 id="date" class="datetime">Getting date...</h3>
-            </div>
             <!--<h3 id="days-till-bday"></h3>-->
             <hr>
-            <div id="weather-header"></div>
-            <div id="reload"><img id="reload" src="reload.svg" onclick="reloadData()"></div>
-            <div id="weather-content">Getting weather data...</div>
             <div id="weather-forecast">Getting weather forecast...</div>
-            <div style="padding-bottom:80px"></div>
+            
+            <div class="important-links btn-group">
+                <a href="https://my.calpoly.edu/"
+                data-toggle="tooltip" data-placement="top" title="Portal">Pr</a>
+                <a href="https://docs.google.com/spreadsheets/d/1iJBFshNawvpG4JOUBNa9tkxefSHW8a67lVleAWVwH3Y/"
+                data-toggle="tooltip" data-placement="top" title="Grades Spreadsheet">Gr</a>
+                <a href="https://my.calpoly.edu/cas/login?service=https://cmsweb.calpoly.edu/psp/HSLOPRD/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?FolderPath=PORTAL_ROOT_OBJECT.CO_EMPLOYEE_SELF_SERVICE.HC_SSS_STUDENT_CENTER%26IsFolder=false%26IgnoreParamTempl=FolderPath%2cIsFolder%26RL=%26target=main0%26navc=2398?clg=login%26languageCd=ENG%26userid=PS%26pwd=z"
+                data-toggle="tooltip" data-placement="top" title="Student Center">St</a>
+                <a href="https://my.calpoly.edu/cas/login?service=http://pass.calpoly.edu/j_spring_cas_security_check"
+                data-toggle="tooltip" data-placement="top" title="PASS">Pa</a>
+                <a href="https://polyplanner.calpoly.edu/"
+                data-toggle="tooltip" data-placement="top" title="Poly Planner">Pp</a>
+                <a href="http://catalog.calpoly.edu/collegesandprograms/collegeofengineering/computerscience/bscomputerscience/"
+                data-toggle="tooltip" data-placement="top" title="Degree Requirements">Dg</a>
+                <a href="http://flowcharts.calpoly.edu/downloads/mymap/15-17.52CSCBSU.pdf"
+                data-toggle="tooltip" data-placement="top" title="Flowchart">Fl</a>
+                <a href="https://my.calpoly.edu/cas/limitedLayout"
+                data-toggle="tooltip" data-placement="top" title="Hella Links">Li</a>
+                <a href="http://registrar.calpoly.edu/2015-16-academic-calendar"
+                data-toggle="tooltip" data-placement="top" title="15-16 Calendar">Ca</a>
+                <!--WORK LINKS-->
+                <a class="work-link"
+                href="https://sl-code.couto.local/projects/SL"
+                data-toggle="tooltip" data-placement="top" title="SL-Code (Repos)">Cd</a>
+                <a class="work-link"
+                href="https://sl-ops.couto.local/secure/RapidBoard.jspa?projectKey=SOC"
+                data-toggle="tooltip" data-placement="top" title="Jira SOC Board">Sc</a>
+                <a class="work-link"
+                href="http://docs.spalding-labs.internals/"
+                data-toggle="tooltip" data-placement="top" title="Internal Docs">Dc</a>
+            </div>
 
             <!--<div class="courses btn-group text-center" role="group">
-                <a id="c1" class="btn btn-lg btn-default" role="button"
-                href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=17382">Li</a>
-                <a id="c2" class="btn btn-lg btn-default" role="button"
-                href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=14313">Ph</a>
-                <a id="c3" class="btn btn-lg btn-default" role="button"
-                href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=15682">Bi</a>
-                <a id="c4" class="btn btn-lg btn-default" role="button"
-                href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=17563">Cs</a>
+            <a id="c1"
+            href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=17382">Li</a>
+            <a id="c2"
+            href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=14313">Ph</a>
+            <a id="c3"
+            href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=15682">Bi</a>
+            <a id="c4"
+            href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=17563">Cs</a>
             </div>
             <div id="c1-menu-items">
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=17382&userid=95263"
+                <a href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=17382&userid=95263"
                 data-toggle="tooltip" data-placement="top" title="Grades">Gr</a>
             </div>
             <div id="c2-menu-items">
-                <a class="btn btn-lg btn-default" role="button"
-                href="http://physvids.calpoly.edu/index.php/welcome"
-                data-toggle="tooltip" data-placement="top" title="Physics Videos">Vi</a>
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=14313&userid=95263"
+                <a href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=14313&userid=95263"
                 data-toggle="tooltip" data-placement="right" title="Grades">Gr</a>
             </div>
             <div id="c3-menu-items">
-                <a class="three btn btn-lg btn-default" role="button"
+                <a class="three"
                 href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=18696&userid=95263"
                 data-toggle="tooltip" data-placement="top" title="Lab Grades">Lg</a>
-                <a class="two btn btn-lg btn-default" role="button"
+                <a class="two"
                 href="https://polylearn.calpoly.edu/AY_2015-2016/course/view.php?id=18696"
                 data-toggle="tooltip" data-placement="right" title="Lab">Lb</a>
-                <a class="one btn btn-lg btn-default" role="button"
+                <a class="one"
                 href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=15682&userid=95263"
                 data-toggle="tooltip" data-placement="right" title="Grades">Gr</a>
             </div>
             <div id="c4-menu-items">
-                <a class="btn btn-lg btn-default" role="button"
-                href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=17563&userid=95263"
+                <a href="https://polylearn.calpoly.edu/AY_2015-2016/grade/report/user/index.php?id=17563&userid=95263"
                 data-toggle="tooltip" data-placement="top" title="Grades">Gr</a>
             </div>-->
+        </div>
         </div>
 
         <script src="../js/jquery-2.2.1.min.js"></script>
@@ -143,5 +131,6 @@
         <script src="../js/data.json.js"></script>
         <script src="../js/weather_utils.js"></script>
         <script src="../js/start.js"></script>
+
     </body>
 </html>

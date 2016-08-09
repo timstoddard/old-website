@@ -128,10 +128,13 @@ function checkForCustomName() {
     var name = url.substring(index + 1).trim();
     if (name.length == 0) return;
     
-    try { name = decodeURIComponent(name); }
-    catch(err) { return; }
+    try {
+        name = decodeURIComponent(name);
+    } catch(e) {
+        return;
+    }
     
-    $('#welcome').html(`Welcome, ${name}!`);
+    localStorage.setItem('name', name);
 }
 
 /**********   CALL METHODS HERE   **********/
@@ -151,6 +154,9 @@ function showTime() {
     var now = new Date();
     $('#time').html(formatTime(now));
     $('#date').html(formatDay(now));
+    var name = localStorage.getItem('name');
+    name = name ? ', ' + name : '';
+    $('#welcome').html('Good ' + formatTimeOfDay(now) + name + '!');
     
     var millis = now.getMilliseconds();
     setTimeout('showTime()', 1000 - millis < 10 ? 1000 : 1000 - millis);
@@ -169,11 +175,11 @@ function showWeatherData(resultData) {
     // current weather --> resultData.current_observation
 
     var curr = resultData.current_observation;
-    if (afterSunset) {
-        $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<i style="margin-left: 10px" class="wi wi-${iconMap(parseIconUrl(curr.icon_url))}"></i></div>`);
-    } else {
-        $('#weather-header').html(`<div class="weather-title">${curr.display_location.city}<img src="${secureImg(curr.icon_url)}"></div>`);
-    }
+    $('#weather-header').html(`
+        <div class="city-title">
+            ${curr.display_location.city}: ${curr.temp_f}&deg;F ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}
+        </div>`);
+    $('#upper-center').html(`<img src="${secureImg(curr.icon)}">`);
     var showReloadIconTimer;
     $('#weather-header').hover(
         function() {
@@ -191,30 +197,20 @@ function showWeatherData(resultData) {
             }, 3000);
         }
     );
-    $('#weather-content').html(`
-        <div class="current-temp">Temperature: ${curr.temp_f}&deg;F
-        ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ?
-            `(Feels like ${curr.feelslike_f}&deg;F)` : ''}</div>
-        <div class="current-humidity">Humidity: ${curr.relative_humidity}</div>
-        <div class="current-wind">${curr.wind_mph > 0 ?
-            `Wind: ${curr.wind_mph} mph ${curr.wind_dir}` : ''}</div>`);
+    // $('#weather-content').html(`<div class="current-wind">${curr.wind_mph > 0 ? `Wind: ${curr.wind_mph} mph ${curr.wind_dir}` : ''}</div>`);
 
     // forecast --> resultData.forecast.simpleforecast.forecastday[0-9]
     
     var forecastDays = resultData.forecast.simpleforecast.forecastday
     var body = '';
     for (var i = 0; i < forecastDays.length; i++) {
-        body += `<td><div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>`
-        if (afterSunset) {
-            body += `<i class="wi wi-${iconMap(parseIconUrl(curr.icon_url))} w-icon"></i>`;
-        } else {
-            body += `<img class="forecast-icon" src="${secureImg(forecastDays[i].icon_url)}">`;
-        }
-        body += `<div class="temperature">${forecastDays[i].low.fahrenheit}-${forecastDays[i].high.fahrenheit}&deg;F</div></td>`;
+        body += `<td><div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>
+        <img src="${secureImg(curr.icon)}" class="forecast-icon">
+        <div class="temperature">${forecastDays[i].low.fahrenheit}-${forecastDays[i].high.fahrenheit}&deg;F</div></td>`;
     }
 
+        // <div id="weather-title"><a href="../forecast" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
     $('#weather-forecast').html(`
-        <div class="weather-title"><a href="../forecast" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
         <div id="weather-forecast-data">
             <table>
                 <tbody><tr>${body}</tr></tbody>
@@ -230,7 +226,7 @@ function showWeatherData(resultData) {
             'background': '#161669',
             'box-shadow': 'inset 0px 0px 12px 3px #000000'
         });
-        $('#welcome, #time, #date, .weather-title, #weather-content, .weather-title a').css({ 'color': '#ACB0BD' });
+        $('#welcome, #time, #date, .city-title, #weather-content, #weather-title a').css({ 'color': '#ACB0BD' });
         $('.btn, .btn-lg, .btn-default, td').css({
             'background': '#111155',
             'border-color': '#ACB0BD',
@@ -243,7 +239,7 @@ function showWeatherData(resultData) {
     }
 }
 
-function formatHours(date) {
+function formatHours(date) { /* TODO: not used anywhere? */
     var hr = date.hour;
     return `${hr > 12 ? hr - 12 : (hr > 0 ? hr : 12)}${date.ampm}`;
 }
@@ -256,8 +252,20 @@ function formatTime(date) { // pass in a JavaScript date object
     // return `${hours > 12 ? hours - 12 : (hours > 0 ? hours : 12)}${minutes < 10 ? ':0' : ':'}${minutes}${hours >= 12 ? ' PM' : ' AM'}`;
 }
 
+function formatTimeOfDay(date) {
+    var hours = date.getHours();
+    if (hours < 12) {
+        return 'Morning';
+    } else if (hours < 18) {
+        return 'Afternoon';
+    } else if (hours < 21) {
+        return 'Evening';
+    }
+    return 'Night';
+}
+
 function daysTillBday() {
-    var bdayDate = Date.parse("May 13 2016") + 7 * 60 * 60 * 1000;
+    var bdayDate = Date.parse('May 13 2016') + 7 * 60 * 60 * 1000; // I was born at 7am
     var now = Date.now();
     if (bdayDate - now < 0) {
         $('#days-till-bday').html('Happy Birthday!');
@@ -307,32 +315,9 @@ function formatForecastDay(date) { // use date from results
 }
 
 function dayString(day) {
-    switch (day) {
-        case 0: return 'Sunday';
-        case 1: return 'Monday';
-        case 2: return 'Tuesday';
-        case 3: return 'Wednesday';
-        case 4: return 'Thursday';
-        case 5: return 'Friday';
-        case 6: return 'Saturday';
-        default: return 'null';
-    }
+    return 'Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday'.split('|')[day];
 }
 
 function monthString(month) {
-    switch (month) {
-        case 0: return 'January';
-        case 1: return 'February';
-        case 2: return 'March';
-        case 3: return 'April';
-        case 4: return 'May';
-        case 5: return 'June';
-        case 6: return 'July';
-        case 7: return 'August';
-        case 8: return 'September';
-        case 9: return 'October';
-        case 10: return 'November';
-        case 11: return 'December';
-        default: return 'null';
-    }
+    return 'January|February|March|April|May|June|July|August|September|October|November|December'.split('|')[month];
 }
