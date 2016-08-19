@@ -61,6 +61,7 @@ function getLocation(extended) {
     }
 }
 
+
 function getPostalCode(extended) {
     var postalCode = prompt('There was an error determining your location.\nPlease enter your postal code.');
     if (postalCode === null) {
