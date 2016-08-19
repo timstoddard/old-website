@@ -8,7 +8,7 @@
         <meta charset="utf-8">
         <title>Start Page</title>
         <!--<link rel="stylesheet" href="../css/bootstrap.css">-->
-        <link rel="stylesheet" href="../css/yeti.min.css">
+        <!--<link rel="stylesheet" href="../css/yeti.min.css">-->
         <!-- CHOOSE FROM:
             cerulean, cosmo, cyborg, darkly, flatly, journal, lumen, paper, readable,
             sandstone, simplex, slate, spacelab, superhero, united, yeti   -->
@@ -23,12 +23,34 @@
             ga('create', 'UA-76379808-1', 'auto');
             ga('send', 'pageview');
         </script>
+
+        <!-- favicons by faviconit.com -->
+        <link rel="shortcut icon" href="../images/favicon.ico">
+        <link rel="icon" sizes="16x16 32x32 64x64" href="../images/favicon.ico">
+        <link rel="icon" type="image/png" sizes="196x196" href="../images/favicon-192.png">
+        <link rel="icon" type="image/png" sizes="160x160" href="../images/favicon-160.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="../images/favicon-96.png">
+        <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon-64.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16.png">
+        <link rel="apple-touch-icon" href="../images/favicon-57.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="../images/favicon-114.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="../images/favicon-72.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="../images/favicon-144.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="../images/favicon-60.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="../images/favicon-120.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="../images/favicon-76.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="../images/favicon-152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon-180.png">
+        <meta name="msapplication-TileColor" content="#FFFFFF">
+        <meta name="msapplication-TileImage" content="../images/favicon-144.png">
+        <meta name="msapplication-config" content="../images/browserconfig.xml">
     </head>
 
     <body>
         <div id="content-wrapper">
         <div id="page-content">
-            <div id="myModal" class="modal" tabindex="-1" role="dialog">
+            <!--<div id="myModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -40,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <div id="upper-left" class="upper">
                 <!--<a href="../time">-->
@@ -52,11 +74,13 @@
             <div id="upper-right" class="upper">
                 <div id="date">Getting date...</div>
                 <div id="weather-header"></div>
-                <!--<div id="reload"><img id="reload" src="reload.svg" onclick="reloadData()"></div>-->
+                <div id="reload">
+                    <!--Image by Minh Hoang (http://www.flaticon.com/authors/minh-hoang)-->
+                    <img id="reload" src="./images/reload.svg" onclick="reloadData()">
+                    </div>
             </div>
             
             <!--<h3 id="days-till-bday"></h3>-->
-            <hr>
             <div id="weather-forecast">Getting weather forecast...</div>
             
             <div class="important-links btn-group">
