@@ -181,7 +181,7 @@ function showWeatherData(resultData) {
         </div>`);
     $('#upper-center').html(`<img src="${secureImg(curr.icon)}">`);
     var showReloadIconTimer;
-    $('#weather-header').hover(
+    $('#upper-center img').hover(
         function() {
             showReloadIconTimer = setTimeout(function() {
                 console.log('hi')
@@ -193,7 +193,7 @@ function showWeatherData(resultData) {
             clearTimeout(showReloadIconTimer);
             setTimeout(function() {
                 console.log('peace')
-                $('#reload').hide(); // animate this
+                $('#reload').hide(); // animate this (fade out)
             }, 3000);
         }
     );
