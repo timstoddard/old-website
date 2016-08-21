@@ -1,6 +1,10 @@
 @import 'https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300';
 
-/* PAGE ELEMENTS */
+/* GENERAL LAYOUT */
+
+html {
+    font-size: 16px;
+}
 
 body {
     background: #1fc8db;
@@ -13,11 +17,12 @@ body {
     color: white;
     position: relative;
     text-align: center;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
+    user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 main {
@@ -32,13 +37,13 @@ main {
     max-width: 950px;
 }
 
-/* HEADER IMAGES */
+/* HEADER */
 
 img {
     height: auto;
-    margin: 1em 0;
-    max-width: 3em;
-    min-width: 2em;
+    margin: 1rem 0;
+    max-width: 3rem;
+    min-width: 2rem;
     opacity: 0.4;
     transition: opacity .35s ease-out;
     -moz-transition: opacity .35s ease-out;
@@ -67,12 +72,12 @@ img:hover {
     width: 80vw;
 }
 
-/* NAME TEXT */
+/* NAME SECTION */
 
 h1 {
     font-family: 'Yanone Kaffeesatz', sans-serif;
     text-transform: capitalize;
-    font-size: 16vw;
+    font-size: 12vw;
     white-space: nowrap;
 }
 
@@ -89,7 +94,7 @@ h1 {
 /* DIVIDER */
 
 hr {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(0, 0, 0, 0));
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
     border: 0;
     height: 1px;
 }
@@ -98,9 +103,8 @@ hr {
 
 h2 {
     font-family: 'Yanone Kaffeesatz', sans-serif;
-    font-size: 5vw !important;
-    letter-spacing: 0.125em;
-    margin: 1.5vw 0;
+    font-size: 5.25vw !important;
+    letter-spacing: 0.25rem;
     text-transform: uppercase;
 }
 
@@ -116,24 +120,18 @@ h2 {
 
 /* MEDIA QUERIES */
 
-@media(max-width: 320px) {
-    h1 { font-size: 4em; }
+@media(max-width: 570px) {
+    h2 { font-size: 1.875rem !important; }
 }
 
-@media(max-width: 570px) {
-    h2 {
-        font-size: 2em !important;
-        margin: 0.3125em 0;
-    }
+@media(max-width: 600px) {
+    h1 { font-size: 4rem; }
 }
 
 @media(min-width: 800px) {
-    h2 {
-        font-size: 3.5em
-        !important; margin: 0.24em 0;
-    }
+    h2 { font-size: 2.625rem !important; }
 }
 
-@media(min-width: 1000px) {
-    h1 { font-size: 11em; }
+@media(min-width: 992px) {
+    h1 { font-size: 7.35rem; }
 }
