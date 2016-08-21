@@ -1,4 +1,3 @@
-@import 'https://fonts.googleapis.com/css?family=Amatic+SC';
 @import 'https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300';
 
 /* PAGE ELEMENTS */
@@ -71,8 +70,9 @@ img:hover {
 /* NAME TEXT */
 
 h1 {
-    font-family: 'Amatic SC', sans-serif;
-    font-size: 20vw;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    text-transform: capitalize;
+    font-size: 16vw;
     white-space: nowrap;
 }
 
@@ -135,5 +135,5 @@ h2 {
 }
 
 @media(min-width: 1000px) {
-    h1 { font-size: 13.75em; }
+    h1 { font-size: 11em; }
 }
