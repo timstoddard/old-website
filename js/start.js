@@ -14,8 +14,7 @@ $(function() {
         success: function(data) {
             var children = data.data.children;
             console.log(children);
-            // var index = Math.floor(Math.random() * 25) + 1;
-            var index = 19;
+            var index = Math.floor(Math.random() * 25) + 1;
             var rawQuote = children[index].data.title;
             rawQuote = rawQuote.trim().replace(/^["”]\s*/, '"').replace(/”/, '"');
             $('#quote').html(rawQuote);
