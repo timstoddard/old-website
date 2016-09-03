@@ -1,124 +1,98 @@
 'use strict';
 
+/*
+CNN API
+key: 7xbttr55w6h9hncp2wytg3f2
+url: https://developer.cnn.com/io-docs
+ */
+
 $(function() {
-    
-    $('[data-toggle="tooltip"]').tooltip();
-    
-    $(window).keydown(function(event) {
-        var key = event.which;
-        if (key === 83) { // 's' key
-            if (($('#myModal').data('bs.modal') || {}).isShown) {
-                return;
-            }
-            showModalText();
-            $('#myModal').modal();
-            $('#name-input').focus();
-            setTimeout(function() { $('#name-input').val(''); }, 0);
-            $('.work-link').hide();
-        } else if (key === 87) { // 'w' key
-            if (!$('#myModal').is(':visible')) {
-                $('.work-link').toggle();
-            }
-        } else if (key === 27) { // esc key
-            $('.work-link').hide();
-        }
-    });
-    
-    $('#name-input').keypress(function (event) {
-        var keynum = event.which;
-        var query = $('#name-input').val();
-        if (keynum === 13 && query && query.trim().length > 0) {
-            var index = query.indexOf('/');
-            if (index === -1) return;
-            var type = query.substring(0, index);
-            if (!canDoCommand(type)) return;
-            window.open(`${urls[getKeyIndex(type)].url}${query.substring(index + 1).trim()}`);
-            }
-        }
-    );
-    
-    var c1Timer;
-    $('#c1, #c1-menu-items').on({
-        mouseenter: function(e) {
-            clearTimeout(c1Timer);
-            $('#c1-menu-items').show();
+
+    $.ajax({
+        url: 'https://www.reddit.com/r/quotes/.json',
+        type: 'GET',
+        success: function(data) {
+            var children = data.data.children;
+            console.log(children);
+            // var index = Math.floor(Math.random() * 25) + 1;
+            var index = 19;
+            var rawQuote = children[index].data.title;
+            rawQuote = rawQuote.trim().replace(/^["”]\s*/, '"').replace(/”/, '"');
+            $('#quote').html(rawQuote);
+            // for (var i = 1; i <= 25; i++) {
+            //     console.log(children[i].data.title);
+            // }
         },
-        mouseleave: function() {
-            c1Timer = setTimeout(function() { $('#c1-menu-items').hide(); }, 10);
-        }
+        error: function(error) {
+            console.error(error);
+        },
+        timeout: 10000
     });
     
-    var c2Timer;
-    $('#c2, #c2-menu-items').on({
-        mouseenter: function(e) {
-            clearTimeout(c2Timer);
-            $('#c2-menu-items').show();
-        },
-        mouseleave: function() {
-            c2Timer = setTimeout(function() { $('#c2-menu-items').hide(); }, 10);
-        }
-    });
+    // $('.btn[data-tooltip]').tooltip();
     
-    var c3Timer;
-    $('#c3, #c3-menu-items').on({
-        mouseenter: function(e) {
-            clearTimeout(c3Timer);
-            $('#c3-menu-items').show();
-        },
-        mouseleave: function() {
-            c3Timer = setTimeout(function() { $('#c3-menu-items').hide(); }, 10);
-        }
-    });
+    // $(window).keydown(function(event) {
+    //     if (event.key === 's') {
+    //         if (($('#myModal').data('bs.modal') || {}).isShown) {
+    //             return;
+    //         }
+    //         showModalText();
+    //         $('#myModal').modal();
+    //         $('#name-input').focus();
+    //         setTimeout(function() { $('#name-input').val(''); }, 0);
+    //     }
+    // });
     
-    var c4Timer;
-    $('#c4, #c4-menu-items').on({
-        mouseenter: function(e) {
-            clearTimeout(c4Timer);
-            $('#c4-menu-items').show();
-        },
-        mouseleave: function() {
-            c4Timer = setTimeout(function() { $('#c4-menu-items').hide(); }, 10);
-        }
-    });
+    // $('#name-input').keypress(function (event) {
+    //     var query = $('#name-input').val();
+    //     if (event.key === 'Enter' && query && query.trim().length > 0) {
+    //         var index = query.indexOf('/');
+    //         if (index === -1) return;
+    //         var type = query.substring(0, index);
+    //         if (!canDoCommand(type)) return;
+    //         window.open(`${urls[getKeyIndex(type)].url}${query.substring(index + 1).trim()}`);
+    //         }
+    //     }
+    // );
 });
 
-var urls = [
-    {'key': 'a',    'url': 'https://www.amazon.com/s?field-keywords=',      'name': 'Amazon'},
-    {'key': 'c',    'url': 'http://catalog.calpoly.edu/search/?P=',         'name': 'Cal Poly Course Catalog'},
-    {'key': 'f',    'url': 'https://www.facebook.com/search/people/?q=',    'name': 'Facebook'},
-    {'key': 'g',    'url': 'https://www.google.com/?gws_rd=ssl#q=',         'name': 'Google'},
-    {'key': 'git',  'url': 'https://github.com/search?q=',                  'name': 'GitHub'},
-    {'key': 'i',    'url': 'http://www.imdb.com/find?s=all&q=',             'name': 'IMDb'},
-    {'key': 'sc',   'url': 'https://soundcloud.com/search?q=',              'name': 'Soundcloud'},
-    {'key': 'so',   'url': 'https://stackoverflow.com/search?q=',           'name': 'Stack Overflow'},
-    {'key': 't',    'url': 'https://twitter.com/search?q=',                 'name': 'Twitter'},
-    {'key': 'w',    'url': 'https://en.wikipedia.org/wiki/',                'name': 'Wikipedia'},
-    {'key': 'y',    'url': 'https://www.youtube.com/results?search_query=', 'name': 'Youtube'}
-];
+// var urls = [
+//     {'key': 'a',    'url': 'https://www.amazon.com/s?field-keywords=',      'name': 'Amazon'},
+//     {'key': 'c',    'url': 'http://catalog.calpoly.edu/search/?P=',         'name': 'Cal Poly Course Catalog'},
+//     {'key': 'f',    'url': 'https://www.facebook.com/search/people/?q=',    'name': 'Facebook'},
+//     {'key': 'g',    'url': 'https://www.google.com/?gws_rd=ssl#q=',         'name': 'Google'},
+//     {'key': 'git',  'url': 'https://github.com/search?q=',                  'name': 'GitHub'},
+//     {'key': 'i',    'url': 'http://www.imdb.com/find?s=all&q=',             'name': 'IMDb'},
+//     {'key': 'sc',   'url': 'https://soundcloud.com/search?q=',              'name': 'Soundcloud'},
+//     {'key': 'so',   'url': 'https://stackoverflow.com/search?q=',           'name': 'Stack Overflow'},
+//     {'key': 't',    'url': 'https://twitter.com/search?q=',                 'name': 'Twitter'},
+//     {'key': 'w',    'url': 'https://en.wikipedia.org/wiki/',                'name': 'Wikipedia'},
+//     {'key': 'y',    'url': 'https://www.youtube.com/results?search_query=', 'name': 'Youtube'}
+// ];
 
-function canDoCommand(key) {
-    var can = false;
-    urls.forEach(function(element) {
-        if (element.key === key) can = true;
-    });
-    return can;
-}
+// function canDoCommand(key) {
+//     var can = false;
+//     urls.forEach(function(element) {
+//         if (element.key === key) can = true;
+//     });
+//     return can;
+// }
 
-function getKeyIndex(key) {
-    var index;
-    urls.forEach(function(element, i) {
-        if (element.key === key) index = i;
-    });
-    return index; // should always return a value
-}
+// function getKeyIndex(key) {
+//     var index;
+//     urls.forEach(function(element, i) {
+//         if (element.key === key) index = i;
+//     });
+//     return index; // should always return a value
+// }
 
-function showModalText() {
-    var data = '';
-    urls.forEach(function(element) {
-        data += `<div>'${element.key}/' to search ${element.name}</div>`
-    });
-    $('#modalText').html(data);
-}
+// function showModalText() {
+//     var data = '';
+//     urls.forEach(function(element) {
+//         data += `<div>'${element.key}/' to search ${element.name}</div>`
+//     });
+//     $('#modalText').html(data);
+// }
 
 function checkForCustomName() {
     var url = window.location.href;
@@ -179,9 +153,9 @@ function showWeatherData(resultData) {
         <div class="city-title">
             ${curr.display_location.city}: ${curr.temp_f}&deg;F ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}
         </div>`);
-    $('#upper-center').html(`<img src="${secureImg(curr.icon)}">`);
+    $('#current-img').html(`<img src="${secureImg(curr.icon)}">`);
     var showReloadIconTimer;
-    $('#upper-center img').hover(
+    $('#current-img img').hover(
         function() {
             showReloadIconTimer = setTimeout(function() {
                 console.log('hi')
@@ -203,40 +177,49 @@ function showWeatherData(resultData) {
     
     var forecastDays = resultData.forecast.simpleforecast.forecastday
     var body = '';
-    for (var i = 0; i < forecastDays.length; i++) {
-        body += `<td><div class="pred-header">${formatForecastDay(forecastDays[i].date, true)}</div>
-        <img src="${secureImg(curr.icon)}" class="forecast-icon">
-        <div class="temperature">${forecastDays[i].low.fahrenheit}-${forecastDays[i].high.fahrenheit}&deg;F</div></td>`;
+    for (var i = 0; i < 6; i++) {
+        var day = forecastDays[i];
+        body += `
+        <div class="col s6 m4 l2">
+            <div class="card-panel hoverable">
+                <img src="${secureImg(curr.icon)}">
+                <div class="divider"></div>
+                <div class="card-content">
+                    <p>${day.date.weekday}</p>
+                    <p>${day.date.month}/${day.date.day}</p>
+                    <p>${day.low.fahrenheit}-${day.high.fahrenheit}&deg;F</p>
+                </div>
+            </div>
+        </div>`;
     }
 
         // <div id="weather-title"><a href="../forecast" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
     $('#weather-forecast').html(`
-        <div id="weather-forecast-data">
-            <table>
-                <tbody><tr>${body}</tr></tbody>
-            </table>
-        </div>`);
-    $('[data-toggle="tooltip"]').tooltip();
+    <div>
+        <div class="light-blue row">
+            ${body}
+        </div>
+    </div>`);
     
     // set background based on whether it is currently day/night
     
-    if (afterSunset) {
-        $('body').css({ 'background': '#161669' });
-        $('#page-content').css({
-            'background': '#161669',
-            'box-shadow': 'inset 0px 0px 12px 3px #000000'
-        });
-        $('#welcome, #time, #date, .city-title, #weather-content, #weather-title a').css({ 'color': '#ACB0BD' });
-        $('.btn, .btn-lg, .btn-default, td').css({
-            'background': '#111155',
-            'border-color': '#ACB0BD',
-            'color': '#ACB0BD'
-        })
-        $('.btn, .btn-lg, .btn-default, td').hover(
-            function() {$(this).css({ 'background': '#0d0d40' })},
-            function() {$(this).css({ 'background': '#111155' })}
-        );
-    }
+    // if (afterSunset) {
+    //     $('body').css({ 'background': '#161669' });
+    //     $('#page-content').css({
+    //         'background': '#161669',
+    //         'box-shadow': 'inset 0px 0px 12px 3px #000000'
+    //     });
+    //     $('#welcome, #time, #date, .city-title, #weather-content, #weather-title a').css({ 'color': '#ACB0BD' });
+    //     $('.btn, .btn-lg, .btn-default, td').css({
+    //         'background': '#111155',
+    //         'border-color': '#ACB0BD',
+    //         'color': '#ACB0BD'
+    //     })
+    //     $('.btn, .btn-lg, .btn-default, td').hover(
+    //         function() {$(this).css({ 'background': '#0d0d40' })},
+    //         function() {$(this).css({ 'background': '#111155' })}
+    //     );
+    // }
 }
 
 function formatHours(date) { /* TODO: not used anywhere? */
@@ -311,7 +294,7 @@ function formatDay(date) { // pass in a JavaScript date object
 }
 
 function formatForecastDay(date) { // use date from results
-    return `${date.weekday_short}<br>${date.month}/${date.day}`;
+    return `${date.weekday}</p><p>${date.month}/${date.day}`;
 }
 
 function dayString(day) {

@@ -1,10 +1,56 @@
 @import url(https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700);
 
-body, .modal-title {
-    font-family: 'PT Sans Narrow', sans-serif !important;
+html {
+    font-size: 18px;
 }
 
-#content-wrapper {
+.collection {
+    margin: 0;
+    padding: 0.5rem !important;
+}
+
+.collection-item {
+    cursor: pointer;
+    padding: 0.5rem !important;
+}
+
+.collection .collection-item.active {
+    background-color: initial;
+    color: initial;
+}
+
+.panorama {
+    font-family: 'PT Sans Narrow', sans-serif !important;
+    text-align: center;
+}
+
+.card-content p {
+    /*font-size: 1.5rem !important;*/
+    margin: 0;
+}
+
+.card-content p:first-child {
+    /*margin-top: 1rem;*/
+}
+
+#time, #date, #weather-title {
+    font-size: 2.75rem;
+}
+
+#welcome, #weather-header {
+    font-size: 2.25rem;
+}
+
+.collection-item, .dropdown-content li a {
+    color: black !important;
+}
+
+/*.backdrop {
+    background-color: white;
+    color: black;
+}*/
+
+/*#content-wrapper {
     align-items: center;
     display: flex;
     justify-content: center;
@@ -18,9 +64,9 @@ body, .modal-title {
     padding: 20px;
     text-align: center;
     width: 940px;
-}
+}*/
 
-.upper {
+/*.upper {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -44,9 +90,9 @@ body, .modal-title {
 
 #upper-right {
     width: 450px;
-}
+}*/
 
-#time, #date, #weather-title {
+/*#time, #date, #weather-title {
     font-size: 275%;
 }
 
@@ -66,10 +112,6 @@ hr {
 #weather-content {
     align-items: center;
     display: inline-flex;
-}
-
-#weather-forecast, table {
-    margin: 0 auto;
 }
 
 .bottom {
@@ -128,21 +170,6 @@ input {
     width: 280px;
 }
 
-/*.btn, .btn-lg, .btn-default {
-    background-color: #f2f2f2;
-    border-color: #878787;
-    border-radius: 0.15em !important;
-    font-size: 150%;
-    margin: 0 !important;
-    padding: 17.5px 0px 17.5px 0px !important;
-    width: 70px !important;
-}*/
-
-/*.btn:hover, .btn-lg:hover, .btn-default:hover, td:hover {
-    background-color: #d9d9d9;
-    border-color: #878787;
-}*/
-
 a:link, a:visited, a:hover, a:active {
     color: black;
     text-decoration: none;
@@ -156,7 +183,6 @@ a:link, a:visited, a:hover, a:active {
     font-size: 175%;
     padding: 0 10px;
 }
-
 
 table {
     border-collapse: separate;
@@ -183,4 +209,4 @@ td {
 
 a {
     cursor: pointer;
-}
+}*/
