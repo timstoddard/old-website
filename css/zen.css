@@ -2,23 +2,13 @@ body {
     margin: 0;
 }
 
+/*temp*/
+#zen {
+    height: 100vh;
+    width: 100vw;
+}
+
 .col {
     height: 100%;
-    /*border: 1px solid black;*/
     float: left;
-    /*transition: background-color 3s ease;*/
-    /*width: 5% !important;*/
-}
-
-.col:nth-child(odd) {
-    /*background-color: green;*/
-}
-
-.col:nth-child(even) {
-    /*background-color: blue;*/
-}
-
-.col:hover {
-    /*background-color: red;*/
-    /*transition: background-color 0.25s ease;*/
 }

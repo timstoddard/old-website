@@ -1,34 +1,34 @@
 'use strict';
 
 $(function() {
-    var sides = 1;
-    var html = '';
-    for (var i = 0; i < sides; i++) {
-        html += '<div class="row">';
-        for (var j = 0; j < sides; j++) {
-            html += '<div id="' + i + '-' + j + '" class="col"></div>';
-        }
-        html += '</div>';
-    }
-    $('#zen').html(html);
-    $('.row').css({ 'height': (100 / sides) + 'vh' });
-    $('.col').css({ 'width': (100 / sides) + 'vw' });
-    createMove(sides).start();
+    // var sides = 1;
+    // var html = '';
+    // for (var i = 0; i < sides; i++) {
+    //     html += '<div class="row">';
+    //     for (var j = 0; j < sides; j++) {
+    //         html += '<div id="' + i + '-' + j + '" class="col"></div>';
+    //     }
+    //     html += '</div>';
+    // }
+    // $('#zen').html(html);
+    // $('.row').css({ 'height': (100 / sides) + 'vh' });
+    // $('.col').css({ 'width': (100 / sides) + 'vw' });
+    createMove(/*sides*/).start();
 });
 
-var createMove = function(sides) {
+var createMove = function(/*sides*/) {
     return {
-        x: Math.floor(Math.random() * sides),
-        y: Math.floor(Math.random() * sides),
+        // x: Math.floor(Math.random() * sides),
+        // y: Math.floor(Math.random() * sides),
         start: function () {
-            setInterval(this.move.bind(this), 100);
+            setInterval(this.move.bind(this), 10);
         },
         move: function() {
             // $('#' + this.x + '-' + this.y).css({
             //     'background-color': 'white',
             //     'transition': 'background-color 5s ease'
             // });
-            if (Math.random() < 1/3) {
+            /*if (Math.random() < 1/3) {
                 this.x++;
                 if (this.x >= sides) {
                     this.x -= 2;
@@ -49,11 +49,12 @@ var createMove = function(sides) {
                 if (this.y < 0) {
                     this.y += 2;
                 }
-            }
-            $('#' + this.x + '-' + this.y).css({
-                'background-color': this.nextColor()//,
-                // 'transition': 'none'
-            });
+            }*/
+            // $('#' + this.x + '-' + this.y).css({
+            //     'background-color': this.nextColor()//,
+            //     // 'transition': 'none'
+            // });
+            $('#zen').css({ 'background-color': this.nextColor() });
         },
         r: 255,
         g: 0,
