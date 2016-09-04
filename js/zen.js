@@ -1,60 +1,104 @@
 'use strict';
 
 $(function() {
-    // var sides = 1;
-    // var html = '';
-    // for (var i = 0; i < sides; i++) {
-    //     html += '<div class="row">';
-    //     for (var j = 0; j < sides; j++) {
-    //         html += '<div id="' + i + '-' + j + '" class="col"></div>';
-    //     }
-    //     html += '</div>';
-    // }
-    // $('#zen').html(html);
-    // $('.row').css({ 'height': (100 / sides) + 'vh' });
-    // $('.col').css({ 'width': (100 / sides) + 'vw' });
-    createMove(/*sides*/).start();
+    var sides = 80;
+    var html = '';
+    for (var i = 0; i < sides; i++) {
+        html += '<div class="row">';
+        for (var j = 0; j < sides; j++) {
+            html += '<div id="' + i + '-' + j + '" class="col"></div>';
+        }
+        html += '</div>';
+    }
+    $('body').html(html);
+    $('.row').css({ 'height': (100 / sides) + 'vh' });
+    $('.col').css({ 'width': (100 / sides) + 'vw' });
+    createMove(sides).start();
 });
 
-var createMove = function(/*sides*/) {
+var createMove = function(sides) {
     return {
-        // x: Math.floor(Math.random() * sides),
-        // y: Math.floor(Math.random() * sides),
+        moveInterval: null,
         start: function () {
-            setInterval(this.move.bind(this), 10);
-        },
-        move: function() {
-            // $('#' + this.x + '-' + this.y).css({
-            //     'background-color': 'white',
-            //     'transition': 'background-color 5s ease'
-            // });
-            /*if (Math.random() < 1/3) {
-                this.x++;
-                if (this.x >= sides) {
-                    this.x -= 2;
+            this.moveInterval = setInterval(this.move.bind(this), 6);
+            $(window).click(function(event) {
+                this.togglePause();
+                var css = {
+                    'background-color': 'white',
+                    'transition': 'background-color 3s ease'
+                };
+                $('#' + this.x1 + '-' + this.y1).css(css);
+                $('#' + this.x2 + '-' + this.y2).css(css);
+            }.bind(this));
+            $(window).keydown(function(event) {
+                if (event.key === ' ') {
+                    this.togglePause();
                 }
-            } else if (Math.random() < 2/3) {
-                this.x--;
-                if (this.x < 0) {
-                    this.x += 2;
+            }.bind(this));
+        },
+        paused: false,
+        togglePause: function() {
+            this.paused = !this.paused;
+            if (this.paused) {
+                clearInterval(this.moveInterval);
+            } else {
+                this.moveInterval = setInterval(this.move.bind(this), 6);
+            }
+        },
+        x1: null,
+        y1: null,
+        x2: null,
+        y2: null,
+        center: sides / 2,
+        radius: 4,
+        radiusChangeSpeed: 0.02,
+        minRadius: 4,
+        maxRadius: (sides - 1) / 2,
+        radiusIncr: true,
+        theta: 0,
+        thetaChangeSpeed: Math.PI / 360,
+        move: function() {
+            // update old tile
+            var css = {
+                'background-color': 'black',
+                'boxShadow': 'none',
+                'transition': 'all 3s ease'
+            }
+            $('#' + this.x1 + '-' + this.y1).css(css);
+            $('#' + this.x2 + '-' + this.y2).css(css);
+            // update radius
+            if (this.radiusIncr) {
+                this.radius += this.radiusChangeSpeed;
+                if (this.radius >= this.maxRadius) {
+                    this.radius = this.maxRadius - this.radiusChangeSpeed;
+                    this.radiusIncr = false;
+                }
+            } else {
+                this.radius -= this.radiusChangeSpeed;
+                if (this.radius <= this.minRadius) {
+                    this.radius = this.minRadius + this.radiusChangeSpeed;
+                    this.radiusIncr = true;
                 }
             }
-            if (Math.random() < 1/3) {
-                this.y++;
-                if (this.y >= sides) {
-                    this.y -= 2;
-                }
-            } else if (Math.random() < 2/3) {
-                this.y--;
-                if (this.y < 0) {
-                    this.y += 2;
-                }
-            }*/
-            // $('#' + this.x + '-' + this.y).css({
-            //     'background-color': this.nextColor()//,
-            //     // 'transition': 'none'
-            // });
-            $('#zen').css({ 'background-color': this.nextColor() });
+            // increment theta value
+            this.theta = (this.theta + this.thetaChangeSpeed) % (2 * Math.PI);
+            // calculate x and y values
+            var sin = Math.sin(this.theta);
+            var cos = Math.cos(this.theta);
+            this.x1 = this.center + Math.floor(this.radius * cos);
+            this.y1 = this.center + Math.floor(this.radius * sin);
+            this.x2 = this.center - Math.floor(this.radius * cos);
+            this.y2 = this.center - Math.floor(this.radius * sin);
+            // update new tile
+            var color = this.nextColor(0.5);
+            var boxShadow = '0px 0px ' + Math.max(40, this.radius * 1.5) + 'px ' + Math.max(5, this.radius / 2) + 'px ' + color.fullAlpha;
+            css = {
+                'background-color': 'black',
+                'boxShadow': boxShadow,
+                'transition': 'none'
+            }
+            $('#' + this.x1 + '-' + this.y1).css(css);
+            $('#' + this.x2 + '-' + this.y2).css(css);
         },
         r: 255,
         g: 0,
@@ -70,11 +114,9 @@ var createMove = function(/*sides*/) {
             b: false
         },
         colorChangeSpeed: 1,
-        emitStrobe: true,
-        nextColor: function() {
-            var rgb = this.emitStrobe ? 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')' : 'black';
-            console.log(rgb)
-            this.emitStrobe = !this.emitStrobe;
+        nextColor: function(alpha) {
+            var rgba = 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + alpha + ')';
+            var rgba2 = 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + alpha / 2.5 + ')';
             if (this.incr.g) { // red to yellow
                 this.g += this.colorChangeSpeed;
                 if (this.g >= 255) {
@@ -118,7 +160,7 @@ var createMove = function(/*sides*/) {
                     this.incr.g = true;
                 }
             }
-            return rgb;
+            return { fullAlpha: rgba, lessAlpha: rgba2 };
         }
     };
 };
