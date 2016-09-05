@@ -9,18 +9,34 @@ url: https://developer.cnn.com/io-docs
 $(function() {
 
     $.ajax({
-        url: 'https://www.reddit.com/r/quotes/.json',
+        url: 'https://www.reddit.com/r/quotes/top.json?sort=top&t=month',
         type: 'GET',
         success: function(data) {
             var children = data.data.children;
-            console.log(children);
-            var index = Math.floor(Math.random() * 25) + 1;
+            var index = Math.floor(Math.random() * 25);
             var rawQuote = children[index].data.title;
-            rawQuote = rawQuote.trim().replace(/^["”]\s*/, '"').replace(/”/, '"');
-            $('#quote').html(rawQuote);
-            // for (var i = 1; i <= 25; i++) {
-            //     console.log(children[i].data.title);
-            // }
+            rawQuote = rawQuote
+                .replace(/[“”"]/g, '') // remove quotation marks
+                .replace(/\[\d+x\d+\]/g, '') // remove image data
+                .replace(/\s+/g, ' ') // normalize spaces
+                .trim();
+            // console.log(rawQuote)
+            var html = '';
+            ['-', '~', '-', '–', '—', '―'].forEach(function(separator) {
+                if (new RegExp(separator).test(rawQuote)) {
+                    var parts = rawQuote.split(separator);
+                    html = '<p>' + parts[0].trim() + '<span class="grey-text text-darken-1"><em><br>--' + parts[1].trim() + '<em></span></p>';
+                }
+            });
+            if (html === '') {
+                var quoteEndIndex = rawQuote.lastIndexOf('.') + 1;
+                var quote = rawQuote.substring(0, quoteEndIndex).trim();
+                var author = rawQuote.substring(quoteEndIndex , rawQuote.length).trim();
+                html = '<p>' + quote + '<span class="grey-text text-darken-1"><em><br>--' + (author ? author : 'Anonymous') + '<em></span></p>';
+            }
+            var quoteElement = $('#quote');
+            quoteElement.html(html);
+            quoteElement.addClass('center-align hoverable blue-grey lighten-3');
         },
         error: function(error) {
             console.error(error);
@@ -148,11 +164,6 @@ function showWeatherData(resultData) {
     // current weather --> resultData.current_observation
 
     var curr = resultData.current_observation;
-    $('#weather-header').html(`
-        <div class="city-title">
-            ${curr.display_location.city}: ${curr.temp_f}&deg;F ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}
-        </div>`);
-    $('#current-img').html(`<img src="${secureImg(curr.icon)}">`);
     var showReloadIconTimer;
     $('#current-img img').hover(
         function() {
@@ -181,7 +192,9 @@ function showWeatherData(resultData) {
         body += `
         <div class="col s6 m4 l2">
             <div class="card-panel hoverable">
-                <img src="${secureImg(curr.icon)}">
+                <div class="img-wrapper">
+                    <img src="${secureImg(curr.icon)}">
+                </div>
                 <div class="divider"></div>
                 <div class="card-content">
                     <p>${day.date.weekday}</p>
@@ -192,11 +205,23 @@ function showWeatherData(resultData) {
         </div>`;
     }
 
-        // <div id="weather-title"><a href="../forecast" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
+    // <div id="weather-title"><a href="../forecast" data-toggle="tooltip" data-placement="right" title="See Full Forecast">Forecast</a></div>
     $('#weather-forecast').html(`
     <div>
-        <div class="light-blue row">
-            ${body}
+        <div class="row light-blue accent-2">
+            <div class="card-panel hoverable inline-block">
+                <div id="weather-header">
+                    <div class="header-img-wrapper inline-block">
+                        <img src="${secureImg(curr.icon)}">
+                    </div>
+                    <div id="city" class="inline-block">
+                        ${curr.display_location.city}: ${curr.temp_f}&deg;F ${Math.abs(curr.temp_f - curr.feelslike_f) > 2 ? `(Feels like ${curr.feelslike_f}&deg;F)` : ''}
+                    </div>
+                </div>
+            </div>
+            <div>
+                ${body}
+            </div>
         </div>
     </div>`);
     
