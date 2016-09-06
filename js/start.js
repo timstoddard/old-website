@@ -36,7 +36,7 @@ $(function() {
             }
             var quoteElement = $('#quote');
             quoteElement.html(html);
-            quoteElement.addClass('center-align hoverable blue-grey lighten-3');
+            quoteElement.addClass('center-align blue-grey lighten-3');
         },
         error: function(error) {
             console.error(error);
@@ -209,7 +209,7 @@ function showWeatherData(resultData) {
     $('#weather-forecast').html(`
     <div>
         <div class="row light-blue accent-2">
-            <div class="card-panel hoverable inline-block">
+            <div class="card-panel inline-block">
                 <div id="weather-header">
                     <div class="header-img-wrapper inline-block">
                         <img src="${secureImg(curr.icon)}">
